@@ -33,5 +33,4 @@ and open the template in the editor.
     -fx-stroke: #777777;
     -fx-stroke-width: 2;
     -fx-stroke-type:outside;
-    /*-fx-effect:dropshadow(gaussian, #000000, 2, 0, 0, 0);*/
 }
