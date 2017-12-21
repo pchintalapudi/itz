@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itzfx.fxml;
+package itzfx.fxml.GameObjects;
 
 import itzfx.Hitbox;
+import itzfx.fxml.ScoreType;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.Scoreable;
 import java.io.IOException;

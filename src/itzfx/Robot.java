@@ -5,11 +5,11 @@
  */
 package itzfx;
 
-import itzfx.fxml.MobileGoal;
-import itzfx.fxml.StationaryGoal;
-import itzfx.fxml.RedMobileGoal;
-import itzfx.fxml.BlueMobileGoal;
-import itzfx.fxml.Cone;
+import itzfx.fxml.GameObjects.MobileGoal;
+import itzfx.fxml.GameObjects.StationaryGoal;
+import itzfx.fxml.GameObjects.RedMobileGoal;
+import itzfx.fxml.GameObjects.BlueMobileGoal;
+import itzfx.fxml.GameObjects.Cone;
 import itzfx.fxml.Field;
 import java.util.Arrays;
 import java.util.Iterator;

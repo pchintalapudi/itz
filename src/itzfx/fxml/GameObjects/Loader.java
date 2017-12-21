@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itzfx.fxml;
+package itzfx.fxml.GameObjects;
 
+import itzfx.fxml.GameObjects.Cone;
 import itzfx.Hitbox;
+import itzfx.fxml.Field;
 import java.io.IOException;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

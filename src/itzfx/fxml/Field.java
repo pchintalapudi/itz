@@ -5,6 +5,13 @@
  */
 package itzfx.fxml;
 
+import itzfx.ControlMode;
+import itzfx.fxml.GameObjects.MobileGoal;
+import itzfx.fxml.GameObjects.RedMobileGoal;
+import itzfx.fxml.GameObjects.Loader;
+import itzfx.fxml.GameObjects.BlueMobileGoal;
+import itzfx.fxml.GameObjects.Cone;
+import itzfx.fxml.GameObjects.StationaryGoal;
 import itzfx.Hitbox;
 import itzfx.KeyBuffer;
 import itzfx.KeyControl;

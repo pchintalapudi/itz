@@ -5,6 +5,7 @@
  */
 package itzfx.fxml;
 
+import itzfx.ControlMode;
 import itzfx.Hitbox;
 import java.util.Arrays;
 import javafx.fxml.FXML;
