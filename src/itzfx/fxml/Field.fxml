@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane fx:id="field" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#reset" prefHeight="730.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.Field">
+    <top>
+        <StackPane fx:id="top" BorderPane.alignment="CENTER">
+            <children>
+                <Rectangle height="5.0" strokeType="INSIDE" width="730.0">
+                    <effect>
+                        <DropShadow />
+                    </effect>
+                </Rectangle>
+            </children>
+        </StackPane>
+    </top>
+    <bottom>
+        <StackPane fx:id="bottom" BorderPane.alignment="CENTER">
+            <children>
+                <Rectangle height="5.0" strokeType="INSIDE" width="730.0">
+                    <effect>
+                        <DropShadow />
+                    </effect>
+                </Rectangle>
+            </children>
+        </StackPane>
+    </bottom>
+    <left>
+        <StackPane fx:id="left" BorderPane.alignment="CENTER">
+            <children>
+                <Rectangle height="730.0" strokeType="INSIDE" width="5.0">
+                    <effect>
+                        <DropShadow />
+                    </effect>
+                </Rectangle>
+            </children>
+        </StackPane>
+    </left>
+    <right>
+        <StackPane fx:id="right" BorderPane.alignment="CENTER">
+            <children>
+                <Rectangle height="730.0" strokeType="INSIDE" width="5.0">
+                    <effect>
+                        <DropShadow />
+                    </effect>
+                </Rectangle>
+            </children>
+        </StackPane>
+    </right>
+    <center>
+        <Pane fx:id="center" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" BorderPane.alignment="CENTER">
+            <fx:include source="Tiles.fxml" />
+            <StackPane fx:id="blue20" layoutX="653.0" layoutY="-17.0" rotate="-45.0">
+                <children>
+                    <Rectangle arcHeight="5.0" arcWidth="5.0" height="153.0" stroke="BLACK" strokeType="INSIDE" width="15.0">
+                  <fill>
+                     <LinearGradient cycleMethod="REFLECT" endX="0.4885495964807408" endY="1.0" startY="1.0">
+                        <stops>
+                           <Stop color="BLACK" />
+                           <Stop color="#4444ff" offset="0.75" />
+                           <Stop color="#4444ff" offset="1.0" />
+                        </stops>
+                     </LinearGradient>
+                  </fill>
+                  <effect>
+                     <InnerShadow height="100.0" radius="24.5" width="0.0" />
+                  </effect>
+                    </Rectangle>
+                </children>
+                <effect>
+                    <DropShadow />
+                </effect>
+            </StackPane>
+            <StackPane fx:id="red20" layoutX="52.0" layoutY="584.0" rotate="-45.0">
+                <children>
+                    <Rectangle arcHeight="5.0" arcWidth="5.0" height="153.0" stroke="BLACK" strokeType="INSIDE" width="15.0">
+                        <fill>
+                            <LinearGradient cycleMethod="REFLECT" endX="0.5000000218398698" endY="1.0" startY="1.0">
+                                <stops>
+                                    <Stop color="BLACK" />
+                                    <Stop color="#ff4444" offset="0.7" />
+                                    <Stop color="#ff4444" offset="0.9961832061068702" />
+                           <Stop color="#ff4444" offset="1.0" />
+                                </stops>
+                            </LinearGradient>
+                        </fill>
+                  <effect>
+                     <InnerShadow height="100.0" radius="24.5" width="0.0" />
+                  </effect>
+                    </Rectangle>
+                </children>
+                <effect>
+                    <DropShadow />
+                </effect>
+            </StackPane>
+            <StackPane fx:id="red10" layoutX="116.0" layoutY="438.0" rotate="-45.0">
+                <children>
+                    <Rectangle arcHeight="5.0" arcWidth="5.0" height="325.0" strokeType="INSIDE" width="5.0">
+                        <fill>
+                            <LinearGradient cycleMethod="REFLECT" endX="0.4885495964807408" endY="1.0" startY="1.0">
+                                <stops>
+                                    <Stop color="BLACK" />
+                                    <Stop color="#ff4545" offset="0.7" />
+                           <Stop color="#ff4545" offset="1.0" />
+                                </stops>
+                            </LinearGradient>
+                        </fill>
+                  <effect>
+                     <InnerShadow height="75.0" radius="18.25" width="0.0" />
+                  </effect>
+                    </Rectangle>
+                </children>
+                <effect>
+                    <DropShadow />
+                </effect>
+            </StackPane>
+            <StackPane fx:id="blue10" layoutX="598.0" layoutY="-43.0" rotate="-45.0">
+                <children>
+                    <Rectangle arcHeight="5.0" arcWidth="5.0" height="325.0" strokeType="INSIDE" width="5.0">
+                        <fill>
+                            <LinearGradient cycleMethod="REFLECT" endX="0.4885495964807408" endY="1.0" startY="1.0">
+                                <stops>
+                                    <Stop color="BLACK" />
+                                    <Stop color="#4444ff" offset="0.7" />
+                           <Stop color="#4444ff" offset="1.0" />
+                                </stops>
+                            </LinearGradient>
+                        </fill>
+                  <effect>
+                     <InnerShadow height="75.0" radius="18.25" width="0.0" />
+                  </effect>
+                    </Rectangle>
+                </children>
+                <effect>
+                    <DropShadow />
+                </effect>
+            </StackPane>
+            <Group>
+                <Rectangle fill="WHITE" height="160.0" layoutX="299.0" layoutY="221.0" rotate="45.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="160.0" layoutX="415.0" layoutY="338.0" rotate="45.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="160.0" layoutX="415.0" layoutY="221.0" rotate="-45.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="160.0" layoutX="299.0" layoutY="338.0" rotate="-45.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="120.0" layoutX="300.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="120.0" layoutX="420.0" layoutY="600.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="120.0" layoutX="60.0" layoutY="240.0" rotate="90.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="120.0" layoutX="660.0" layoutY="360.0" rotate="90.0" strokeType="INSIDE" width="5.0" />
+            </Group>
+            <StackPane fx:id="blue5" layoutX="536.0" layoutY="-71.0" rotate="-45.0">
+                <children>
+                    <Rectangle fill="WHITE" height="500.0" strokeType="INSIDE" width="5.0" />
+                </children>
+            </StackPane>
+            <StackPane fx:id="red5" layoutX="176.0" layoutY="292.0" rotate="-45.0">
+                <children>
+                    <Rectangle fill="WHITE" height="500.0" strokeType="INSIDE" width="5.0" />
+                </children>
+            </StackPane>
+        </Pane>
+    </center>
+</BorderPane>

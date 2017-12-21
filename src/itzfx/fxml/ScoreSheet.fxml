@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="376.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.ScoreSheetController">
+   <children>
+      <SplitPane dividerPositions="0.5" layoutX="-1.0" prefHeight="375.0" prefWidth="600.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox prefHeight="374.0" prefWidth="296.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <StackPane>
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="30.0" stroke="#ff4444" strokeType="INSIDE" strokeWidth="2.0" width="295.0" />
+                              <HBox prefHeight="29.0" prefWidth="296.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mobile Goals Scored In" textAlignment="CENTER" wrappingWidth="296.0">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                        <StackPane>
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="90.0" stroke="#ff4444" strokeType="INSIDE" strokeWidth="2.0" width="295.0" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5 pt. Zone" wrappingWidth="45.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="40.0" />
+                                          <Text fx:id="red5" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="10 pt. Zone" wrappingWidth="45.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="40.0" />
+                                          <Text fx:id="red10" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="20 pt. Zone" wrappingWidth="45.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="40.0" />
+                                          <Text fx:id="red20" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                        <StackPane>
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="90.0" stroke="#ff4444" strokeType="INSIDE" strokeWidth="2.0" width="295.0" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="9.0">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="# Cones on Goals" wrappingWidth="75.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="50.0" />
+                                          <Text fx:id="redCones" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="# Highest Stacks" wrappingWidth="80.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="50.0" />
+                                          <Text fx:id="redStacks" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                        <StackPane>
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="90.0" stroke="#ff4444" strokeType="INSIDE" strokeWidth="2.0" width="295.0" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="9.0">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Auton Winner" wrappingWidth="75.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="50.0" />
+                                          <Text fx:id="redAuton" strokeType="OUTSIDE" strokeWidth="0.0" text="X" textAlignment="CENTER" wrappingWidth="38.0">
+                                             <font>
+                                                <Font size="48.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="# Parked Robots" wrappingWidth="75.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="50.0" />
+                                          <Text fx:id="redPark" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox prefHeight="374.0" prefWidth="296.0" AnchorPane.leftAnchor="0.0">
+                     <children>
+                        <StackPane>
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="30.0" stroke="#4444ff" strokeType="INSIDE" strokeWidth="2.0" width="295.0" />
+                              <HBox prefHeight="29.0" prefWidth="296.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mobile Goals Scored In" textAlignment="CENTER" wrappingWidth="296.0">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                        <StackPane>
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="90.0" stroke="#4444ff" strokeType="INSIDE" strokeWidth="2.0" width="295.0" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5 pt. Zone" wrappingWidth="45.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="40.0" />
+                                          <Text fx:id="blue5" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="10 pt. Zone" wrappingWidth="45.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="40.0" />
+                                          <Text fx:id="blue10" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="20 pt. Zone" wrappingWidth="45.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="40.0" />
+                                          <Text fx:id="blue20" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                        <StackPane>
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="90.0" stroke="#4444ff" strokeType="INSIDE" strokeWidth="2.0" width="295.0" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="9.0">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="# Cones on Goals" wrappingWidth="75.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="50.0" />
+                                          <Text fx:id="blueCones" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="# Highest Stacks" wrappingWidth="80.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="50.0" />
+                                          <Text fx:id="blueStacks" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                        <StackPane>
+                           <children>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="90.0" stroke="#4444ff" strokeType="INSIDE" strokeWidth="2.0" width="295.0" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="9.0">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Auton Winner" wrappingWidth="75.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="50.0" />
+                                          <Text fx:id="blueAuton" strokeType="OUTSIDE" strokeWidth="0.0" text="X" textAlignment="CENTER" wrappingWidth="38.0">
+                                             <font>
+                                                <Font size="48.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="# Parked Robots" wrappingWidth="75.0">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                    <StackPane>
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="50.0" />
+                                          <Text fx:id="bluePark" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                             <font>
+                                                <Font size="36.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

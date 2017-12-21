@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.ScoringBoxController">
+    <children>
+        <SplitPane fx:id="root" dividerPositions="0.5" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="600.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="200.0" prefWidth="296.0">
+                            <items>
+                                <AnchorPane fx:id="back1" minHeight="0.0" minWidth="0.0" prefHeight="94.0" prefWidth="294.0">
+                                    <children>
+                                        <Text fill="WHITE" layoutX="-1.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Red Alliance" textAlignment="CENTER" wrappingWidth="296.0">
+                                            <font>
+                                                <Font name="System Bold" size="36.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                    <effect>
+                                        <InnerShadow />
+                                    </effect>
+                                </AnchorPane>
+                                <AnchorPane fx:id="rest1" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                    <children>
+                                        <Text fx:id="redScore" layoutX="136.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER">
+                                            <font>
+                                                <Font size="40.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="200.0" prefWidth="296.0">
+                            <items>
+                                <AnchorPane fx:id="back2" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                    <children>
+                                        <Text fill="WHITE" layoutX="-1.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blue Alliance" textAlignment="CENTER" wrappingWidth="295.99999990314245">
+                                            <font>
+                                                <Font name="System Bold" size="36.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                    <effect>
+                                        <InnerShadow />
+                                    </effect>
+                                </AnchorPane>
+                                <AnchorPane fx:id="rest2" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                    <children>
+                                        <Text fx:id="blueScore" layoutX="136.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER">
+                                            <font>
+                                                <Font size="40.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+        <HBox>
+            <children>
+            <StackPane>
+               <children>
+                      <Button mnemonicParsing="false" onAction="#generateReport" text="Generate Score Report" />
+               </children>
+            </StackPane>
+                <fx:include fx:id="timer" source="Timer.fxml" />
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+         <VBox.margin>
+            <Insets top="25.0" />
+         </VBox.margin>
+        </HBox>
+    </children>
+</VBox>

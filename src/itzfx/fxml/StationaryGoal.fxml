@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Circle layoutX="12.5" layoutY="12.5" radius="12.5" strokeType="INSIDE">
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop color="#666666" />
+                        <Stop color="#666666" offset="0.5" />
+                        <Stop color="BLACK" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </fill>
+            <effect>
+                <DropShadow />
+            </effect>
+        </Circle>
+        <Circle layoutX="12.5" layoutY="12.5" radius="7.0" strokeType="INSIDE">
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop color="#444444" />
+                        <Stop color="BLACK" offset="0.5389312977099237" />
+                        <Stop color="#4b4b4b" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </fill>
+        </Circle>
+    </children>
+</Pane>

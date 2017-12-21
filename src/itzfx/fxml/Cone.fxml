@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+
+<Pane fx:id="mobile" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onDragged" onMousePressed="#onPress" prefHeight="30.0" prefWidth="30.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.MobileController">
+    <children>
+        <Circle layoutX="15.0" layoutY="15.0" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+            <effect>
+                <DropShadow />
+            </effect>
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop color="YELLOW" />
+                        <Stop color="YELLOW" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </fill>
+        </Circle>
+        <Line endX="15.0" layoutX="15.0" layoutY="15.0" rotate="45.0" startX="-15.0" />
+        <Line endX="15.0" layoutX="15.0" layoutY="15.0" rotate="-45.0" startX="-15.0" />
+        <Circle layoutX="15.0" layoutY="15.0" radius="11.25" stroke="BLACK" strokeType="INSIDE">
+         <fill>
+            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop color="WHITE" />
+                  <Stop color="YELLOW" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </fill></Circle>
+        <Line endX="11.25" layoutX="15.0" layoutY="15.0" rotate="90.0" startX="-11.25" />
+        <Line endX="11.25" layoutX="15.0" layoutY="15.0" startX="-11.25" />
+        <Circle layoutX="15.0" layoutY="15.0" radius="7.5" stroke="BLACK" strokeType="INSIDE">
+         <fill>
+            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop color="WHITE" />
+                  <Stop color="YELLOW" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </fill></Circle>
+        <Line endX="7.5" layoutX="15.0" layoutY="15.0" rotate="45.0" startX="-7.5" />
+        <Line endX="7.5" layoutX="15.0" layoutY="15.0" rotate="-45.0" startX="-7.5" />
+        <Circle layoutX="15.0" layoutY="15.0" radius="3.25" stroke="BLACK" strokeType="INSIDE">
+         <fill>
+            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop color="WHITE" />
+                  <Stop color="YELLOW" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </fill></Circle>
+    </children>
+</Pane>
