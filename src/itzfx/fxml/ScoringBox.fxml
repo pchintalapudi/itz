@@ -33,7 +33,7 @@
                                 </AnchorPane>
                                 <AnchorPane fx:id="rest1" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <Text fx:id="redScore" layoutX="136.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER">
+                                        <Text fx:id="redScore" layoutX="72.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" wrappingWidth="150.0">
                                             <font>
                                                 <Font size="40.0" />
                                             </font>
@@ -62,7 +62,7 @@
                                 </AnchorPane>
                                 <AnchorPane fx:id="rest2" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                     <children>
-                                        <Text fx:id="blueScore" layoutX="136.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER">
+                                        <Text fx:id="blueScore" layoutX="72.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" wrappingWidth="150.0">
                                             <font>
                                                 <Font size="40.0" />
                                             </font>

@@ -28,14 +28,19 @@
                                 <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                  <MenuItem mnemonicParsing="false" onAction="#restart" text="Restart">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
-                     </accelerator>
-                  </MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#restart" text="Restart">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Field">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#reset" text="Reset">
                             <accelerator>
@@ -43,14 +48,39 @@
                             </accelerator>
                         </MenuItem>
                         <CheckMenuItem fx:id="showHitboxes" mnemonicParsing="false" text="Show Hitboxes">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
-                     </accelerator></CheckMenuItem>
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                            </accelerator>
+                        </CheckMenuItem>
+                        <Menu mnemonicParsing="false" text="Mode">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#auton" text="Autonomous" >
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="DIGIT1" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#dc" text="Driver Control" >
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="DIGIT2" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#ds" text="Driver Skills" >
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="DIGIT3" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#ps" text="Programming Skills" >
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="DIGIT4" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#fp" text="Free Play" >
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="DIGIT0" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                    </accelerator>
+                                </MenuItem>
+                            </items>
+                        </Menu>
                     </items>
                 </Menu>
             </menus>
@@ -61,9 +91,9 @@
             <children>
                 <fx:include source="ScoringBox.fxml" />
             </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
         </VBox>
     </right>
     <center>

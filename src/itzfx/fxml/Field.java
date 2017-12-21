@@ -468,10 +468,12 @@ public class Field {
         timer.getKeyFrames().clear();
         timer.getKeyFrames().add(new KeyFrame(Duration.seconds(cm.getTime()), this::lockout, new KeyValue(time, 0)));
         time.set(cm.getTime());
+        KeyBuffer.unlock();
     }
 
     private void lockout(ActionEvent e) {
         e.consume();
+        KeyBuffer.lock();
     }
 
     private final Timeline timer = new Timeline();

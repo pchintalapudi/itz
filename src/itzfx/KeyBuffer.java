@@ -19,9 +19,7 @@ import javafx.scene.input.KeyEvent;
  *
  * @author prem
  */
-public 
-
-final class KeyBuffer {
+public final class KeyBuffer {
 
     private static final Map<KeyCode, Boolean> KEYBUFFER;
 
@@ -34,8 +32,16 @@ final class KeyBuffer {
     }
 
     public static void initialize(Scene scene) {
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, k -> KEYBUFFER.put(k.getCode(), true));
-        scene.addEventHandler(KeyEvent.KEY_RELEASED, k -> KEYBUFFER.put(k.getCode(), false));
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, k -> {
+            if (!locked) {
+                KEYBUFFER.put(k.getCode(), true);
+            }
+        });
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, k -> {
+            if (!locked) {
+                KEYBUFFER.put(k.getCode(), false);
+            }
+        });
     }
 
     public static void register(KeyCode k, Consumer<KeyCode> c) {
@@ -57,5 +63,16 @@ final class KeyBuffer {
 
     public static boolean isActive(KeyCode k) {
         return KEYBUFFER.get(k);
+    }
+
+    private static boolean locked;
+
+    public static void lock() {
+        locked = true;
+        Arrays.stream(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
+    }
+
+    public static void unlock() {
+        locked = false;
     }
 }

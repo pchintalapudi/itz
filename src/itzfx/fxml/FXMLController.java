@@ -90,6 +90,31 @@ public class FXMLController {
     }
 
     @FXML
+    private void dc() {
+        field.setMode(ControlMode.DRIVER_CONTROL);
+    }
+
+    @FXML
+    private void auton() {
+        field.setMode(ControlMode.AUTON);
+    }
+
+    @FXML
+    private void ds() {
+        field.setMode(ControlMode.DRIVER_SKILLS);
+    }
+
+    @FXML
+    private void ps() {
+        field.setMode(ControlMode.PROGRAMMING_SKILLS);
+    }
+
+    @FXML
+    private void fp() {
+        field.setMode(ControlMode.FREE_PLAY);
+    }
+
+    @FXML
     private CheckMenuItem showHitboxes;
 
     public static WritableImage takeScreenshot(Node... nodes) {
