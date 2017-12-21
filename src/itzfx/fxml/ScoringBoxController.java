@@ -6,6 +6,7 @@
 package itzfx.fxml;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -44,6 +45,8 @@ public class ScoringBoxController {
     @FXML
     private Text blueScore;
 
+    private Timer timer;
+    
     private final IntegerProperty rScore;
     private final IntegerProperty bScore;
 
@@ -62,6 +65,7 @@ public class ScoringBoxController {
         rest2.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         back1.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
         back2.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
+        timer = (Timer) timerPane.getUserData();
     }
 
     public void setAggregator(ScoreAggregator sa) {
@@ -86,6 +90,10 @@ public class ScoringBoxController {
         sa.showReport();
     }
     
+    public DoubleProperty getInjection() {
+        return timer.timeProperty();
+    }
+    
     @FXML
-    private AnchorPane timer;
+    private AnchorPane timerPane;
 }

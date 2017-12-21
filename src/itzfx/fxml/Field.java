@@ -15,13 +15,18 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -40,7 +45,7 @@ public class Field {
     private BorderPane field;
     @FXML
     private Pane center;
-    
+
     private Future<?> scheduled;
 
     private final List<Robot> robots;
@@ -441,13 +446,56 @@ public class Field {
         this.sbc = sbc;
         sbc.setAggregator(scores);
     }
-    
+
     private DoubleProperty time;
-    
+
     public void inject(DoubleProperty time) {
         this.time = time;
     }
-    
+
+    private ControlMode mode;
+
+    private boolean clean = true;
+
+    public void setMode(ControlMode cm) {
+        clean = true;
+        this.mode = cm;
+        reregisterMode(cm);
+    }
+
+    private void reregisterMode(ControlMode cm) {
+        timer.stop();
+        timer.getKeyFrames().clear();
+        timer.getKeyFrames().add(new KeyFrame(Duration.seconds(cm.getTime()), this::lockout, new KeyValue(time, 0)));
+        time.set(cm.getTime());
+    }
+
+    private void lockout(ActionEvent e) {
+        e.consume();
+    }
+
+    private final Timeline timer = new Timeline();
+
+    public void play() {
+        if (mode != ControlMode.FREE_PLAY) {
+            if (!clean) {
+                timer.play();
+                clean = false;
+            } else {
+                reregisterMode(mode);
+            }
+        }
+    }
+
+    public void pause() {
+        timer.pause();
+    }
+
+    public void stop() {
+        timer.stop();
+        clean = true;
+    }
+
     public void close() {
         Hitbox.clear();
         scheduled.cancel(true);

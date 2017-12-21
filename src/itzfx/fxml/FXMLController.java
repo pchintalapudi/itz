@@ -59,6 +59,7 @@ public class FXMLController {
         right.getChildren().add(new StackPane(new ImageView(new Image(FXMLController.class.getResourceAsStream("VEXEDR-stacked-red-transp-1000px.png"),
                 500, 500, true, true))));
         field.inject(sbc);
+        field.inject(sbc.getInjection());
     }
 
     @FXML
@@ -80,7 +81,7 @@ public class FXMLController {
     public void inject(Start ignition) {
         this.ignition = ignition;
     }
-    
+
     @FXML
     private void restart() {
         Stage primaryStage = (Stage) root.getScene().getWindow();

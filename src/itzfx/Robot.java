@@ -217,27 +217,27 @@ public final class Robot extends Mobile {
 
     private void forward() {
         if (active.get() && driveBaseMovable.get()) {
-            super.shiftCenter(2 * Math.cos(Math.toRadians(node.getRotate())),
-                    2 * Math.sin(Math.toRadians(node.getRotate())));
+            super.shiftCenter(robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
+                    robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
         }
     }
 
     private void backward() {
         if (active.get() && driveBaseMovable.get()) {
-            super.shiftCenter(-2 * Math.cos(Math.toRadians(node.getRotate())),
-                    -2 * Math.sin(Math.toRadians(node.getRotate())));
+            super.shiftCenter(-robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
+                    -robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
         }
     }
 
     private void leftTurn() {
         if (active.get() && driveBaseMovable.get()) {
-            node.setRotate(node.getRotate() - 4 * Math.PI * 2 / robotSpeed);
+            node.setRotate(node.getRotate() - robotSpeed / (Math.PI * 7));
         }
     }
 
     private void rightTurn() {
         if (active.get() && driveBaseMovable.get()) {
-            node.setRotate(node.getRotate() + 4 * Math.PI * 2 / robotSpeed);
+            node.setRotate(node.getRotate() + robotSpeed / (Math.PI * 7));
         }
     }
 
@@ -432,8 +432,7 @@ public final class Robot extends Mobile {
     }
 
     /**
-     * @TreatAsPrivate
-     * @param cone the cone to intake
+     * @TreatAsPrivate @param cone the cone to intake
      * @deprecated only public for field reset
      */
     @Deprecated
