@@ -5,7 +5,6 @@
  */
 package itzfx;
 
-import itzfx.KeyBuffer;
 import itzfx.fxml.FXMLController;
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -63,7 +62,7 @@ public class Start extends Application {
 
     public static boolean SHUTDOWN;
 
-    public static final ScheduledExecutorService PULSER = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
+    public static final ScheduledExecutorService PULSER = Executors.newScheduledThreadPool(3);
 
     @Override
     public void stop() {

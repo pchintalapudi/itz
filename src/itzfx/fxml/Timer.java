@@ -45,7 +45,7 @@ public class Timer {
         int decaSeconds = (int) (seconds) / 10;
         double singles = seconds % 10;
         int secs = (int) singles;
-        int dsecs = new BigDecimal(String.valueOf(singles % 1)).movePointRight(3).toBigInteger().intValue();
+        int dsecs = new BigDecimal(String.valueOf(singles % 1)).movePointRight(0).toBigInteger().intValue();
         StringBuilder s = new StringBuilder(String.valueOf(minutes));
         s.append(":").append(decaSeconds).append(secs);
         s.append(".").append(dsecs);

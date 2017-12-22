@@ -24,18 +24,15 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -343,6 +340,10 @@ public class Field {
     }
 
     public void reset() {
+        if (mode == null) {
+            mode = ControlMode.FREE_PLAY;
+        }
+        setMode(mode);
         bStat.reset();
         rStat.reset();
         getRobots().forEach(r -> r.reset());
@@ -463,51 +464,42 @@ public class Field {
 
     public void inject(DoubleProperty time) {
         this.time = time;
+        time.addListener(timeout);
     }
 
     private ControlMode mode;
 
-    private boolean clean = true;
-
     public void setMode(ControlMode cm) {
-        clean = true;
         this.mode = cm;
         reregisterMode(cm);
     }
 
+    private final ChangeListener<Number> timeout = (ObservableValue<? extends Number> obs, Number old, Number next) -> {
+        if (mode != ControlMode.FREE_PLAY && next.intValue() == 0) {
+            lockout();
+        }
+    };
+    
+    private Future<?> timerTask;
+    
+    public void play() {
+        timerTask = Start.PULSER.scheduleAtFixedRate(() -> time.set(time.get() - .1), 0, 100, TimeUnit.MILLISECONDS);
+    }
+    
+    public void stop() {
+        lockout();
+        reregisterMode(mode);
+    }
+    
     private void reregisterMode(ControlMode cm) {
-        timer.stop();
-        timer.getKeyFrames().clear();
-        timer.getKeyFrames().add(new KeyFrame(Duration.seconds(cm.getTime()), this::lockout, new KeyValue(time, 0)));
         time.set(cm.getTime());
         KeyBuffer.unlock();
     }
 
-    private void lockout(ActionEvent e) {
-        e.consume();
+    private void lockout() {
         KeyBuffer.lock();
-    }
-
-    private final Timeline timer = new Timeline();
-
-    public void play() {
-        if (mode != ControlMode.FREE_PLAY) {
-            if (!clean) {
-                timer.play();
-                clean = false;
-            } else {
-                reregisterMode(mode);
-            }
-        }
-    }
-
-    public void pause() {
-        timer.pause();
-    }
-
-    public void stop() {
-        timer.stop();
-        clean = true;
+        timerTask.cancel(true);
+        getRobots().forEach(r -> r.pause());
     }
 
     public void close() {

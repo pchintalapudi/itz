@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -90,6 +91,8 @@ public final class Robot extends Mobile {
         robotMogoIntakeTime = 2.2;
         robotAutostackTime = 2;
         robotStatTime = 2.5;
+        robotMogoMaxStack = 12;
+        robotStatMaxStack = 5;
         active = new SimpleBooleanProperty(true);
         actions = new LinkedList<>();
         driveBaseMovable = new SimpleBooleanProperty(true);
@@ -251,18 +254,14 @@ public final class Robot extends Mobile {
     private final ObjectProperty<MobileGoal> heldMogo = new SimpleObjectProperty<>();
 
     public void mogo() {
-        try {
-            if (active.get()) {
-                if (!movingMogo.get()) {
-                    if (heldMogo.get() == null) {
-                        mogoIntake();
-                    } else {
-                        mogoOuttake();
-                    }
+        if (active.get()) {
+            if (!movingMogo.get()) {
+                if (heldMogo.get() == null) {
+                    mogoIntake();
+                } else {
+                    mogoOuttake();
                 }
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
@@ -321,19 +320,15 @@ public final class Robot extends Mobile {
     private long lastConeMove;
 
     public void cone() {
-        try {
-            if (active.get()) {
-                if (!movingCone.get() && System.currentTimeMillis() > 100 + lastConeMove) {
-                    lastConeMove = System.currentTimeMillis();
-                    if (heldCone.get() == null) {
-                        coneIntake();
-                    } else {
-                        coneOuttake();
-                    }
+        if (active.get()) {
+            if (!movingCone.get() && System.currentTimeMillis() > 100 + lastConeMove) {
+                lastConeMove = System.currentTimeMillis();
+                if (heldCone.get() == null) {
+                    coneIntake();
+                } else {
+                    coneOuttake();
                 }
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
@@ -357,7 +352,7 @@ public final class Robot extends Mobile {
     private final Timeline autostackAnimation = new Timeline();
 
     public void autostack() {
-        if (active.get() && heldMogo.get() != null && !movingCone.get()) {
+        if (active.get() && heldMogo.get() != null && !movingCone.get() && privateMogo.get().score() / 2 < this.robotMogoMaxStack) {
             if (heldCone.get() == null) {
                 coneIntake();
             }
@@ -386,21 +381,17 @@ public final class Robot extends Mobile {
     }
 
     public void statStack() {
-        try {
-            if (active.get()) {
-                if (!movingCone.get() && heldCone.get() != null) {
-                    runStatStack();
-                }
+        if (active.get()) {
+            if (!movingCone.get() && heldCone.get() != null) {
+                runStatStack();
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
     private void runStatStack() {
         StationaryGoal sg = Field.getOwner(this).huntStat(new Point2D(super.getCenterX(), super.getCenterY()), new Point2D(57.5 * Math.cos(Math.toRadians(node.getRotate())),
                 57.5 * Math.sin(Math.toRadians(node.getRotate()))));
-        if (sg != null) {
+        if (sg != null && sg.score() / 2 < robotStatMaxStack) {
             Point2D sgCenter = new Point2D(sg.getNode().getTranslateX() + 12.5, sg.getNode().getTranslateY() + 12.5);
             heldCone.get().setCenter(super.getCenterX() + 60 * Math.cos(Math.toRadians(node.getRotate())),
                     super.getCenterY() + 60 * Math.sin(Math.toRadians(node.getRotate())));
@@ -441,6 +432,33 @@ public final class Robot extends Mobile {
         cone.vanish();
         privateCone.setX(90);
         privateCone.reappear();
+    }
+
+    private boolean mogoWas;
+    private boolean stackWas;
+
+    public void pause() {
+        if (mogoAnimation.getStatus() == Animation.Status.RUNNING) {
+            mogoAnimation.pause();
+            mogoWas = true;
+        }
+        if (autostackAnimation.getStatus() == Animation.Status.RUNNING) {
+            autostackAnimation.pause();
+            stackWas = true;
+        }
+        active.set(false);
+    }
+
+    public void resume() {
+        if (mogoWas) {
+            mogoAnimation.play();
+            mogoWas = false;
+        }
+        if (stackWas) {
+            autostackAnimation.play();
+            stackWas = false;
+        }
+        active.set(true);
     }
 
     @Override
