@@ -56,9 +56,6 @@ public class FXMLController {
 
     private ScoringBoxController sbc;
 
-    @FXML
-    private ImageView logo;
-
     private Start ignition;
 
     @FXML
@@ -69,7 +66,6 @@ public class FXMLController {
         sbc = (ScoringBoxController) right.getChildren().get(0).getUserData();
         right.setSpacing(25);
         field.inject(sbc);
-        field.inject(sbc.getInjection());
         Button tempPlay = new Button("Play");
         root.setBottom(tempPlay);
         tempPlay.setOnAction((ActionEvent e) -> field.play());

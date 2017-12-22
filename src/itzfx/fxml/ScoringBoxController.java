@@ -45,8 +45,11 @@ public class ScoringBoxController {
 
     @FXML
     private Text blueScore;
-
-    private Timer timer;
+    
+    @FXML
+    private AnchorPane timerPane;
+    
+    private Clock clock;
     
     private final IntegerProperty rScore;
     private final IntegerProperty bScore;
@@ -66,7 +69,11 @@ public class ScoringBoxController {
         rest2.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         back1.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
         back2.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
-        timer = (Timer) timerPane.getUserData();
+        clock = (Clock) timerPane.getUserData();
+    }
+    
+    public DoubleProperty getTime() {
+        return clock.getTime();
     }
 
     public void setAggregator(ScoreAggregator sa) {
@@ -90,11 +97,4 @@ public class ScoringBoxController {
     public void generateReport() {
         sa.showReport();
     }
-    
-    public DoubleProperty getInjection() {
-        return timer.timeProperty();
-    }
-    
-    @FXML
-    private AnchorPane timerPane;
 }

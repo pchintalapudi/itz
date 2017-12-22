@@ -24,15 +24,17 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -53,7 +55,6 @@ public class Field {
     private Pane center;
 
     private Future<?> scheduled;
-    private Future<?> hitboxing;
 
     private final List<Robot> robots;
     private final List<Cone> onField;
@@ -87,14 +88,11 @@ public class Field {
         decorateScoringBars();
         scheduled = Start.PULSER.scheduleAtFixedRate(() -> {
             KeyBuffer.pulse();
+            Hitbox.pulse();
             if (sbc != null) {
                 sbc.pulse(true);
             }
         }, 0, 10, TimeUnit.MILLISECONDS);
-        hitboxing = Start.PULSER.scheduleAtFixedRate(() -> {
-            Hitbox.pulse();
-        }, 0, 10, TimeUnit.MILLISECONDS);
-        Start.PULSER.schedule(this::reset, 750, TimeUnit.MILLISECONDS);
     }
 
     private void decorateScoringBars() {
@@ -340,6 +338,7 @@ public class Field {
     }
 
     public void reset() {
+        stop();
         if (mode == null) {
             mode = ControlMode.FREE_PLAY;
         }
@@ -458,14 +457,10 @@ public class Field {
     public void inject(ScoringBoxController sbc) {
         this.sbc = sbc;
         sbc.setAggregator(scores);
+        time = sbc.getTime();
     }
 
     private DoubleProperty time;
-
-    public void inject(DoubleProperty time) {
-        this.time = time;
-        time.addListener(timeout);
-    }
 
     private ControlMode mode;
 
@@ -474,36 +469,35 @@ public class Field {
         reregisterMode(cm);
     }
 
-    private final ChangeListener<Number> timeout = (ObservableValue<? extends Number> obs, Number old, Number next) -> {
-        if (mode != ControlMode.FREE_PLAY && next.intValue() == 0) {
-            lockout();
-        }
-    };
-    
-    private Future<?> timerTask;
-    
-    public void play() {
-        timerTask = Start.PULSER.scheduleAtFixedRate(() -> time.set(time.get() - .1), 0, 100, TimeUnit.MILLISECONDS);
-    }
-    
+    private final Timeline timer = new Timeline();
+
     public void stop() {
-        lockout();
-        reregisterMode(mode);
+        timer.stop();
     }
-    
+
+    public void play() {
+        timer.play();
+    }
+
+    public void pause() {
+        timer.pause();
+    }
+
     private void reregisterMode(ControlMode cm) {
-        time.set(cm.getTime());
+        timer.stop();
+        timer.getKeyFrames().clear();
+        if (time != null && cm != null) {
+            time.set(cm.getTime());
+        }
+        timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), new KeyValue(time, 0)));
         KeyBuffer.unlock();
     }
 
-    private void lockout() {
-        KeyBuffer.lock();
-        timerTask.cancel(true);
-        getRobots().forEach(r -> r.pause());
-    }
+    private boolean close;
 
     public void close() {
-        hitboxing.cancel(true);
+        close = true;
+        timer.stop();
         Hitbox.clear();
         scheduled.cancel(true);
     }
