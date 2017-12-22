@@ -12,7 +12,7 @@ import javafx.scene.layout.Pane;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class MobileController {
 

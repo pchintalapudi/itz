@@ -17,7 +17,7 @@ import javafx.scene.input.KeyEvent;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public final class KeyBuffer {
 

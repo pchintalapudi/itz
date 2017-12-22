@@ -28,6 +28,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -39,7 +40,7 @@ import javafx.util.Duration;
 /**
  * FXML Controller class
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class Field {
 
@@ -458,6 +459,9 @@ public class Field {
         this.sbc = sbc;
         sbc.setAggregator(scores);
         time = sbc.getTime();
+        setMode(ControlMode.AUTON);
+        setMode(ControlMode.FREE_PLAY);
+        reset();
     }
 
     private DoubleProperty time;
@@ -471,12 +475,19 @@ public class Field {
 
     private final Timeline timer = new Timeline();
 
+    private void lockout(ActionEvent e) {
+        e.consume();
+        robots.forEach(r -> r.pause());
+    }
+
     public void stop() {
         timer.stop();
+        reregisterMode(mode);
     }
 
     public void play() {
         timer.play();
+        robots.forEach(r -> r.deprime());
     }
 
     public void pause() {
@@ -489,14 +500,12 @@ public class Field {
         if (time != null && cm != null) {
             time.set(cm.getTime());
         }
-        timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), new KeyValue(time, 0)));
+        timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), this::lockout, new KeyValue(time, 0)));
         KeyBuffer.unlock();
+        getRobots().forEach(r -> r.prime());
     }
 
-    private boolean close;
-
     public void close() {
-        close = true;
         timer.stop();
         Hitbox.clear();
         scheduled.cancel(true);
@@ -505,7 +514,7 @@ public class Field {
     /**
      * @return the robots
      */
-    protected List<Robot> getRobots() {
+    public List<Robot> getRobots() {
         return robots;
     }
 }

@@ -7,7 +7,7 @@ package itzfx.scoring;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public enum ScoreType {
 

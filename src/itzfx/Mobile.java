@@ -18,7 +18,7 @@ import javafx.scene.Node;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public abstract class Mobile {
 

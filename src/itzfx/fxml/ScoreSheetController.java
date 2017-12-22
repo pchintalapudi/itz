@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 /**
  * FXML Controller class
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class ScoreSheetController {
 

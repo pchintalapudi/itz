@@ -14,13 +14,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
@@ -42,7 +40,7 @@ import javafx.stage.Stage;
 /**
  * FXML Controller class
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class FXMLController {
 
@@ -66,9 +64,6 @@ public class FXMLController {
         sbc = (ScoringBoxController) right.getChildren().get(0).getUserData();
         right.setSpacing(25);
         field.inject(sbc);
-        Button tempPlay = new Button("Play");
-        root.setBottom(tempPlay);
-        tempPlay.setOnAction((ActionEvent e) -> field.play());
     }
 
     @FXML
@@ -77,9 +72,11 @@ public class FXMLController {
     }
 
     @FXML
-    private void close() {
+    public void close() {
         field.close();
-        root.getScene().getWindow().hide();
+        if (root.getScene() != null && root.getScene().getWindow() != null) {
+            root.getScene().getWindow().hide();
+        }
     }
 
     @FXML

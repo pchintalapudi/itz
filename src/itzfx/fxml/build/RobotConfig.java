@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
 /**
  * FXML Controller class
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class RobotConfig {
 

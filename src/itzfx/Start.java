@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class Start extends Application {
 
@@ -68,5 +68,6 @@ public class Start extends Application {
     public void stop() {
         PULSER.shutdownNow();
         SHUTDOWN = true;
+        fxml.close();
     }
 }

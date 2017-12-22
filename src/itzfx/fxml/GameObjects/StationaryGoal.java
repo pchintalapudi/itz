@@ -26,7 +26,7 @@ import javafx.scene.layout.StackPane;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public final class StationaryGoal implements Scoreable {
 

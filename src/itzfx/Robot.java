@@ -44,7 +44,7 @@ import javafx.util.Duration;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public final class Robot extends Mobile {
 
@@ -222,6 +222,10 @@ public final class Robot extends Mobile {
         if (active.get() && driveBaseMovable.get()) {
             super.shiftCenter(robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
                     robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
+            if (primed) {
+                Field.getOwner(this).play();
+                deprime();
+            }
         }
     }
 
@@ -229,18 +233,30 @@ public final class Robot extends Mobile {
         if (active.get() && driveBaseMovable.get()) {
             super.shiftCenter(-robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
                     -robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
+            if (primed) {
+                Field.getOwner(this).play();
+                deprime();
+            }
         }
     }
 
     private void leftTurn() {
         if (active.get() && driveBaseMovable.get()) {
             node.setRotate(node.getRotate() - robotSpeed / (Math.PI * 7));
+            if (primed) {
+                Field.getOwner(this).play();
+                deprime();
+            }
         }
     }
 
     private void rightTurn() {
         if (active.get() && driveBaseMovable.get()) {
             node.setRotate(node.getRotate() + robotSpeed / (Math.PI * 7));
+            if (primed) {
+                Field.getOwner(this).play();
+                deprime();
+            }
         }
     }
 
@@ -260,6 +276,10 @@ public final class Robot extends Mobile {
                     mogoIntake();
                 } else {
                     mogoOuttake();
+                }
+                if (primed) {
+                    Field.getOwner(this).play();
+                    deprime();
                 }
             }
         }
@@ -328,6 +348,10 @@ public final class Robot extends Mobile {
                 } else {
                     coneOuttake();
                 }
+                if (primed) {
+                    Field.getOwner(this).play();
+                    deprime();
+                }
             }
         }
     }
@@ -358,6 +382,10 @@ public final class Robot extends Mobile {
             }
             if (heldCone.get() != null) {
                 runAutostack();
+                if (primed) {
+                    Field.getOwner(this).play();
+                    deprime();
+                }
             }
         }
     }
@@ -384,6 +412,10 @@ public final class Robot extends Mobile {
         if (active.get()) {
             if (!movingCone.get() && heldCone.get() != null) {
                 runStatStack();
+                if (primed) {
+                    Field.getOwner(this).play();
+                    deprime();
+                }
             }
         }
     }
@@ -420,6 +452,10 @@ public final class Robot extends Mobile {
 
     public void load() {
         Field.getOwner(this).load(this);
+        if (primed) {
+            Field.getOwner(this).play();
+            deprime();
+        }
     }
 
     /**
@@ -432,6 +468,16 @@ public final class Robot extends Mobile {
         cone.vanish();
         privateCone.setX(90);
         privateCone.reappear();
+    }
+
+    private boolean primed;
+
+    public void prime() {
+        primed = true;
+    }
+
+    public void deprime() {
+        primed = false;
     }
 
     private boolean mogoWas;

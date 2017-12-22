@@ -9,7 +9,7 @@ import javafx.scene.input.KeyCode;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public final class KeyControl {
 

@@ -25,7 +25,7 @@ import javafx.scene.text.Text;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public abstract class MobileGoal extends Mobile implements Scoreable {
 

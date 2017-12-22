@@ -18,7 +18,7 @@ import javafx.scene.shape.Circle;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public final class Hitbox {
 

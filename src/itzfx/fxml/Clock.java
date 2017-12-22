@@ -16,7 +16,7 @@ import javafx.scene.shape.Circle;
 /**
  * FXML Controller class
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class Clock {
     

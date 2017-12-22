@@ -14,7 +14,7 @@ import javafx.scene.shape.Polygon;
 /**
  * FXML Controller class
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class Digit {
 
