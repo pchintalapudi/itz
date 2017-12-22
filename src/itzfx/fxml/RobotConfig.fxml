@@ -13,8 +13,7 @@
             </image>
         </ImageView>
         <TextField fx:id="robotSpeed" layoutX="14.0" layoutY="266.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="123.0" promptText="Drive Speed (in/sec)" />
-        <TextField fx:id="robotAutostackTime" layoutX="452.0" layoutY="266.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="141.0" promptText="Mobile Goal Stack Time" />
         <TextField fx:id="robotStatTime" layoutX="411.0" layoutY="29.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0" promptText="Stationary Goal Stack Time" />
-        <TextField fx:id="robotMogoIntakeTime" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Mobile Goal Intake Time" />
+        <TextField fx:id="robotAutostackTime" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Mobile Goal Stack Time" />
     </children>
 </Pane>

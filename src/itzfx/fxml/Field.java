@@ -138,7 +138,7 @@ public class Field {
         robot2();
         robot3();
         robot4();
-        robots.stream().peek(r -> r.registerMogos()).map(r -> r.getNode()).forEach(center.getChildren()::add);
+        getRobots().stream().peek(r -> r.registerMogos()).map(r -> r.getNode()).forEach(center.getChildren()::add);
     }
 
     @FXML
@@ -314,46 +314,46 @@ public class Field {
     private void robot1() {
         Robot r = new Robot(50, 485, 90);
         r.setController(KeyControl.Defaults.DUAL_1.getKC());
-        robots.add(r);
+        getRobots().add(r);
     }
 
     private void robot2() {
         Robot r = new Robot(675, 225, -90);
         r.setController(KeyControl.Defaults.DUAL_2.getKC());
         r.setRed(false);
-        robots.add(r);
+        getRobots().add(r);
     }
 
     private void robot3() {
         Robot r = new Robot(225, 675, 180);
         r.setController(KeyControl.Defaults.QUAD_3.getKC());
-        robots.add(r);
+        getRobots().add(r);
     }
 
     private void robot4() {
         Robot r = new Robot(485, 40, 0);
         r.setController(KeyControl.Defaults.QUAD_4.getKC());
         r.setRed(false);
-        robots.add(r);
+        getRobots().add(r);
     }
 
     public void reset() {
         bStat.reset();
         rStat.reset();
-        robots.forEach(r -> r.reset());
+        getRobots().forEach(r -> r.reset());
         mogos.forEach(m -> m.reset());
         redDriverLoads.stream().peek(onField::remove).forEach(c -> c.reset());
         blueDriverLoads.stream().peek(onField::remove).forEach(c -> c.reset());
         onField.forEach(c -> c.reset());
-        load(robots.get(0));
-        load(robots.get(1));
+        load(getRobots().get(0));
+        load(getRobots().get(1));
         List<Cone> c = new LinkedList<>(preloads);
-        robots.forEach(r -> r.forceIntake(preloads.remove(0)));
+        getRobots().forEach(r -> r.forceIntake(preloads.remove(0)));
         preloads.addAll(c);
     }
 
     public static final Field getOwner(Robot r) {
-        List<Field> fields = FIELDS.stream().filter(f -> f.robots.contains(r)).collect(Collectors.toList());
+        List<Field> fields = FIELDS.stream().filter(f -> f.getRobots().contains(r)).collect(Collectors.toList());
         return fields.size() > 0 ? fields.get(0) : null;
     }
 
@@ -370,7 +370,7 @@ public class Field {
     public static final Field getOwner(MobileGoal mg) {
         List<Field> field = FIELDS.stream().filter(f -> f.mogos.contains(mg)).limit(1).collect(Collectors.toList());
         if (field.isEmpty()) {
-            field = FIELDS.stream().filter(f -> f.robots.stream().anyMatch(r -> r.owner(mg))).limit(1).collect(Collectors.toList());
+            field = FIELDS.stream().filter(f -> f.getRobots().stream().anyMatch(r -> r.owner(mg))).limit(1).collect(Collectors.toList());
         }
         return field.isEmpty() ? null : field.get(0);
     }
@@ -508,5 +508,12 @@ public class Field {
     public void close() {
         Hitbox.clear();
         scheduled.cancel(true);
+    }
+
+    /**
+     * @return the robots
+     */
+    protected List<Robot> getRobots() {
+        return robots;
     }
 }

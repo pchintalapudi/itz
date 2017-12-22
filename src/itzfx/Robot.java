@@ -50,13 +50,13 @@ public final class Robot extends Mobile {
     private final StackPane node;
     private final StackPane realRobot;
 
-    private final double robotSpeed;
-    private final double robotMogoIntakeTime;
-    private final double robotAutostackTime;
-    private final double robotStatTime;
+    private double robotSpeed;
+    private double robotMogoIntakeTime;
+    private double robotAutostackTime;
+    private double robotStatTime;
     private int robotMogoMaxStack;
     private int robotStatMaxStack;
-    private boolean mogoIntakeFront;
+    private boolean robotMogoFront;
 
     private final Hitbox hb;
 
@@ -268,20 +268,20 @@ public final class Robot extends Mobile {
 
     private void mogoIntake() {
         MobileGoal mogo = Field.getOwner(this).huntMogo(new Point2D(super.getCenterX(), super.getCenterY()),
-                new Point2D(70 * Math.cos(Math.toRadians(node.getRotate())) * (mogoIntakeFront ? 1 : -1),
-                        70 * Math.sin(Math.toRadians(node.getRotate())) * (mogoIntakeFront ? 1 : -1)));
+                new Point2D(70 * Math.cos(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1),
+                        70 * Math.sin(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1)));
         if (mogo != null) {
             privateMogo.set(mogo instanceof RedMobileGoal ? redMogo : blueMogo);
             heldMogo.set(mogo);
             mogo.vanish();
             heldMogo.get().shiftStack(privateMogo.get());
-            privateMogo.get().getNode().setTranslateX(mogoIntakeFront ? 70 : -70);
+            privateMogo.get().getNode().setTranslateX(robotMogoFront ? 70 : -70);
             privateMogo.get().reappear();
             movingMogo.set(true);
             mogoAnimation.stop();
             mogoAnimation.getKeyFrames().clear();
             mogoAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotMogoIntakeTime), this::finishMogoIntake,
-                    new KeyValue(privateMogo.get().getNode().translateXProperty(), mogoIntakeFront ? 25 : -25)));
+                    new KeyValue(privateMogo.get().getNode().translateXProperty(), robotMogoFront ? 25 : -25)));
             mogoAnimation.play();
         }
     }
@@ -306,8 +306,8 @@ public final class Robot extends Mobile {
         mogoAnimation.stop();
         privateMogo.get().vanish();
         privateMogo.get().shiftStack(heldMogo.get());
-        heldMogo.get().setCenter(super.getCenterX() + 70 * Math.cos(Math.toRadians(node.getRotate())) * (mogoIntakeFront ? 1 : -1),
-                super.getCenterY() + 70 * Math.sin(Math.toRadians(node.getRotate())) * (mogoIntakeFront ? 1 : -1));
+        heldMogo.get().setCenter(super.getCenterX() + 70 * Math.cos(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1),
+                super.getCenterY() + 70 * Math.sin(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1));
         heldMogo.get().reappear();
         heldMogo.set(null);
         movingMogo.set(false);
@@ -467,5 +467,30 @@ public final class Robot extends Mobile {
     @Override
     public StackPane getNode() {
         return node;
+    }
+
+    public void acceptValues(Double robotSpeed, Double robotMogoIntakeTime, Double robotAutostackTime,
+            Double robotStatTime, Integer robotMaxMogo, Integer robotMaxStat, Boolean mogoIntakeFront) {
+        if (robotSpeed != null) {
+            this.robotSpeed = robotSpeed;
+        }
+        if (robotMogoIntakeTime != null) {
+            this.robotMogoIntakeTime = robotMogoIntakeTime;
+        }
+        if (robotAutostackTime != null) {
+            this.robotAutostackTime = robotAutostackTime;
+        }
+        if (robotStatTime != null) {
+            this.robotStatTime = robotStatTime;
+        }
+        if (robotMaxMogo != null) {
+            this.robotMogoMaxStack = robotMaxMogo;
+        }
+        if (robotMaxStat != null) {
+            this.robotStatMaxStack = robotMaxStat;
+        }
+        if (mogoIntakeFront != null) {
+            this.robotMogoFront = mogoIntakeFront;
+        }
     }
 }

@@ -35,11 +35,6 @@
                         </MenuItem>
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                    </items>
-                </Menu>
                 <Menu mnemonicParsing="false" text="Field">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#reset" text="Reset">
@@ -54,33 +49,62 @@
                         </CheckMenuItem>
                         <Menu mnemonicParsing="false" text="Mode">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#auton" text="Autonomous" >
+                                <MenuItem mnemonicParsing="false" onAction="#auton" text="Autonomous">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="DIGIT1" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                        <KeyCodeCombination alt="UP" code="DIGIT1" control="UP" meta="UP" shift="UP" shortcut="UP" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem mnemonicParsing="false" onAction="#dc" text="Driver Control" >
+                                <MenuItem mnemonicParsing="false" onAction="#dc" text="Driver Control">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="DIGIT2" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                        <KeyCodeCombination alt="UP" code="DIGIT2" control="UP" meta="UP" shift="UP" shortcut="UP" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem mnemonicParsing="false" onAction="#ds" text="Driver Skills" >
+                                <MenuItem mnemonicParsing="false" onAction="#ds" text="Driver Skills">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="DIGIT3" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                        <KeyCodeCombination alt="UP" code="DIGIT3" control="UP" meta="UP" shift="UP" shortcut="UP" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem mnemonicParsing="false" onAction="#ps" text="Programming Skills" >
+                                <MenuItem mnemonicParsing="false" onAction="#ps" text="Programming Skills">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="DIGIT4" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                        <KeyCodeCombination alt="UP" code="DIGIT4" control="UP" meta="UP" shift="UP" shortcut="UP" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem mnemonicParsing="false" onAction="#fp" text="Free Play" >
+                                <MenuItem mnemonicParsing="false" onAction="#fp" text="Free Play">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="DIGIT0" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+                                        <KeyCodeCombination alt="UP" code="DIGIT0" control="UP" meta="UP" shift="UP" shortcut="UP" />
                                     </accelerator>
                                 </MenuItem>
                             </items>
                         </Menu>
+                    </items>
+                </Menu>
+            <Menu mnemonicParsing="false" text="Robot">
+               <items>
+                  <Menu mnemonicParsing="false" text="Robot 1">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#buildR1" text="Build" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Robot 2">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#buildR2" text="Build" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Robot 3">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#buildR3" text="Build" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Robot 4">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#buildR4" text="Build" />
+                    </items>
+                  </Menu>
+               </items>
+            </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
                     </items>
                 </Menu>
             </menus>

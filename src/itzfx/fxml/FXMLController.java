@@ -7,11 +7,17 @@ package itzfx.fxml;
 
 import itzfx.ControlMode;
 import itzfx.Hitbox;
+import itzfx.Robot;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -113,6 +119,47 @@ public class FXMLController {
     @FXML
     private void fp() {
         field.setMode(ControlMode.FREE_PLAY);
+    }
+    
+    @FXML
+    private void buildR1() {
+        build(0);
+    }
+    
+    @FXML
+    private void buildR2() {
+        build(1);
+    }
+    
+    @FXML
+    private void buildR3() {
+        build(2);
+    }
+    
+    @FXML
+    private void buildR4() {
+        build(3);
+    }
+    
+    private void build(int index) {
+        Robot r = getRobot(index);
+        FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("RobotBuilder.fxml"));
+        try {
+            TabPane p = loader.load();
+            RobotBuilder rb = loader.getController();
+            Stage loaded = new Stage();
+            loaded.setScene(new Scene(p, 600, 350));
+            loaded.showAndWait();
+            if (rb.isSubmitted()) {
+                rb.fillRobot(r);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private Robot getRobot(int index) {
+        return field.getRobots().get(index);
     }
 
     @FXML

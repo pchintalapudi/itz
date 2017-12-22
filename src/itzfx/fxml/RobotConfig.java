@@ -23,19 +23,40 @@ public class RobotConfig {
     @FXML
     private TextField robotSpeed;
     @FXML
-    private TextField robotMogoIntakeTime;
-    @FXML
     private TextField robotAutostackTime;
     @FXML
     private TextField robotStatTime;
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         robotSpeed.setTextFormatter(new DecimalFormatter());
-        robotMogoIntakeTime.setTextFormatter(new DecimalFormatter());
         robotAutostackTime.setTextFormatter(new DecimalFormatter());
         robotStatTime.setTextFormatter(new DecimalFormatter());
         root.setUserData(this);
+    }
+
+    public Double getSpeed() {
+        if (robotSpeed.getText().isEmpty()) {
+            return null;
+        } else {
+            return Double.parseDouble(robotSpeed.getText());
+        }
+    }
+
+    public Double getAutostackTime() {
+        if (this.robotAutostackTime.getText().isEmpty()) {
+            return null;
+        } else {
+            return Double.parseDouble(this.robotAutostackTime.getText());
+        }
+    }
+
+    public Double getStatTime() {
+        if (this.robotStatTime.getText().isEmpty()) {
+            return null;
+        } else {
+            return Double.parseDouble(this.robotAutostackTime.getText());
+        }
     }
 
     private static class DecimalFormatter extends TextFormatter<Double> {

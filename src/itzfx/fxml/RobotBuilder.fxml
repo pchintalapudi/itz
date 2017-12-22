@@ -5,24 +5,29 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<TabPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.RobotBuilder">
     <tabs>
         <Tab text="Robot Configuration">
             <content>
                 <AnchorPane minHeight="330.0" minWidth="600.0" prefHeight="330.0" prefWidth="620.0">
-                    <fx:include source="RobotConfig.fxml" prefWidth="620.0" prefHeight="330.0"/>
-               <Button layoutX="490.0" layoutY="217.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="Submit" />
+                    <fx:include fx:id="rcPane" prefHeight="330.0" prefWidth="620.0" source="RobotConfig.fxml" />
+                    <Button layoutX="490.0" layoutY="217.0" mnemonicParsing="false" onAction="#submit" prefHeight="26.0" prefWidth="80.0" text="Submit" />
                 </AnchorPane>
             </content>
         </Tab>
         <Tab text="Mobile Goal Configuration">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="330.0" minWidth="600.0" prefHeight="330.0" prefWidth="620.0">
+                    <fx:include fx:id="mcPane" prefHeight="330.0" prefWidth="620.0" source="MogoConfig.fxml" />
+                    <Button layoutX="490.0" layoutY="217.0" mnemonicParsing="false" onAction="#submit" prefHeight="26.0" prefWidth="80.0" text="Submit" />
+                </AnchorPane>
             </content>
         </Tab>
         <Tab text="Stack Configuration">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane minHeight="330.0" minWidth="600.0" prefHeight="330.0" prefWidth="620.0">
+                    <fx:include fx:id="scPane" prefHeight="330.0" prefWidth="620.0" source="StackConfig.fxml" />
+                    <Button layoutX="490.0" layoutY="217.0" mnemonicParsing="false" onAction="#submit" prefHeight="26.0" prefWidth="80.0" text="Submit" />
                 </AnchorPane>
             </content>
         </Tab>
