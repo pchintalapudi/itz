@@ -130,7 +130,7 @@ public final class Robot extends Mobile {
         return Bindings.createDoubleBinding(() -> {
             Node n = realRobot;
             return super.centerXProperty().get() - (n.getBoundsInLocal().getWidth() / 2 + n.getBoundsInLocal().getMinX());
-        }, realRobot.boundsInLocalProperty(), super.centerXProperty());
+        }, super.centerXProperty());
     }
 
     @Override
@@ -138,7 +138,7 @@ public final class Robot extends Mobile {
         return Bindings.createDoubleBinding(() -> {
             Node n = realRobot;
             return super.centerYProperty().get() - (n.getBoundsInLocal().getHeight() / 2 + n.getBoundsInLocal().getMinY());
-        }, super.centerYProperty(), realRobot.boundsInLocalProperty());
+        }, super.centerYProperty());
     }
 
     private void hitboxing() {

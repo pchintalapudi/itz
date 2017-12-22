@@ -404,9 +404,9 @@ public class Field {
     }
 
     public StationaryGoal huntStat(Point2D center, Point2D pointingVector) {
-        if (Math.abs(227.5 - center.getX() - pointingVector.getX()) < 15 && Math.abs(467.5 - center.getY() - pointingVector.getY()) < 15) {
+        if (Math.abs(240 - center.getX() - pointingVector.getX()) < 20 && Math.abs(480 - center.getY() - pointingVector.getY()) < 20) {
             return rStat;
-        } else if (Math.abs(227.5 - center.getY() - pointingVector.getY()) < 15 && Math.abs(467.5 - center.getX() - pointingVector.getX()) < 15) {
+        } else if (Math.abs(240 - center.getY() - pointingVector.getY()) < 20 && Math.abs(480 - center.getX() - pointingVector.getX()) < 20) {
             return bStat;
         }
         return null;
@@ -427,8 +427,8 @@ public class Field {
     }
 
     public boolean hasCone(Loader l) {
-        Point2D center = l.getCenter();
-        return onField.stream().filter(c -> !c.isVanished()).anyMatch(c -> c.getCenterX() == center.getX() && c.getCenterY() == center.getY());
+        Point2D loadCenter = l.getCenter();
+        return onField.stream().filter(c -> !c.isVanished()).anyMatch(c -> c.getCenterX() == loadCenter.getX() && c.getCenterY() == loadCenter.getY());
     }
 
     public Cone getLoadableCone(boolean red) {
