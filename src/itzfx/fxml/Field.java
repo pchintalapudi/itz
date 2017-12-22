@@ -54,6 +54,7 @@ public class Field {
     private Pane center;
 
     private Future<?> scheduled;
+    private Future<?> hitboxing;
 
     private final List<Robot> robots;
     private final List<Cone> onField;
@@ -87,10 +88,12 @@ public class Field {
         decorateScoringBars();
         scheduled = Start.PULSER.scheduleAtFixedRate(() -> {
             KeyBuffer.pulse();
-            Hitbox.pulse();
             if (sbc != null) {
                 sbc.pulse(true);
             }
+        }, 0, 10, TimeUnit.MILLISECONDS);
+        hitboxing = Start.PULSER.scheduleAtFixedRate(() -> {
+            Hitbox.pulse();
         }, 0, 10, TimeUnit.MILLISECONDS);
         Start.PULSER.schedule(this::reset, 750, TimeUnit.MILLISECONDS);
     }
@@ -506,6 +509,7 @@ public class Field {
     }
 
     public void close() {
+        hitboxing.cancel(true);
         Hitbox.clear();
         scheduled.cancel(true);
     }
