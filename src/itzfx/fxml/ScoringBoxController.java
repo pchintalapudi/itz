@@ -5,6 +5,7 @@
  */
 package itzfx.fxml;
 
+import itzfx.scoring.ScoreAggregator;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;

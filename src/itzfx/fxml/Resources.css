@@ -14,17 +14,17 @@ and open the template in the editor.
     -fx-border-radius: 5;
 }
 .button:hover {
-    -fx-background-color: #ddeeff;
+    -fx-background-color: #ddeeff
 }
 .button:pressed {
     -fx-background-color: #87ceeb;
 }
 
-.text {
+.text1 {
     -fx-fill: #777777;
 }
 
-.text:hover {
+.text1:hover {
     -fx-fill: #000000;
 }
 

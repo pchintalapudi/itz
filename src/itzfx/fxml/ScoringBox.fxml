@@ -79,7 +79,7 @@
             <children>
             <StackPane>
                <children>
-                      <Button mnemonicParsing="false" onAction="#generateReport" text="Generate Score Report" />
+                      <Button mnemonicParsing="false" onAction="#generateReport" styleClass="text1" text="Generate Score Report" />
                </children>
             </StackPane>
                 <fx:include fx:id="timerPane" source="Timer.fxml" />

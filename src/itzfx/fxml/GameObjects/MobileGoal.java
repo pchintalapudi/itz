@@ -8,7 +8,7 @@ package itzfx.fxml.GameObjects;
 import itzfx.fxml.GameObjects.Cone;
 import itzfx.Hitbox;
 import itzfx.Mobile;
-import itzfx.fxml.ScoreType;
+import itzfx.scoring.ScoreType;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.Scoreable;
 import java.io.IOException;

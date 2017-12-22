@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itzfx.fxml;
+package itzfx.fxml.build;
 
 import itzfx.Robot;
 import javafx.fxml.FXML;
@@ -51,8 +51,7 @@ public class RobotBuilder {
         return submitted;
     }
 
-    @FXML
-    private void submit() {
+    public void submit() {
         speed = rc.getSpeed();
         autostack = rc.getAutostackTime();
         statstack = rc.getStatTime();
@@ -61,7 +60,6 @@ public class RobotBuilder {
         maxmogo = sc.getMogoStack();
         maxstat = sc.getStatStack();
         submitted = true;
-        root.getScene().getWindow().hide();
     }
 
     public void fillRobot(Robot r) {

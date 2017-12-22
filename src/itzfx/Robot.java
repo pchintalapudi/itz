@@ -75,7 +75,7 @@ public final class Robot extends Mobile {
         realRobot.setEffect(new DropShadow());
         node.getChildren().add(realRobot);
         node.setOnMouseDragged((MouseEvent m) -> super.setCenter(m.getSceneX() - 120, m.getSceneY() - 120 - 45));
-        ImageView iv = new ImageView(new Image(Robot.class.getResourceAsStream("topviewicon.png"), 90, 90, false, true));
+        ImageView iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/Images/topviewicon.png"), 90, 90, false, true));
         iv.setRotate(90);
         realRobot.getChildren().add(new Pane(iv));
         Rectangle cover = new Rectangle(90, 90);

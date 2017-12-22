@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itzfx.fxml;
+package itzfx;
 
 import itzfx.KeyBuffer;
+import itzfx.fxml.FXMLController;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,9 +43,9 @@ public class Start extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            FXMLLoader loader = new FXMLLoader(Start.class.getClassLoader().getResource("itzfx/fxml/FXML.fxml"));
+            FXMLLoader loader = new FXMLLoader(Start.class.getResource("/itzfx/fxml/FXML.fxml"));
             Parent p = loader.load();
-            p.getStylesheets().add("itzfx/fxml/Resources.css");
+            p.getStylesheets().add("/itzfx/fxml/Resources.css");
             Scene scene = new Scene(p);
             fxml = loader.getController();
             fxml.inject(this);

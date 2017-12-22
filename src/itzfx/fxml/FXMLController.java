@@ -5,6 +5,8 @@
  */
 package itzfx.fxml;
 
+import itzfx.fxml.build.RobotBuilder;
+import itzfx.Start;
 import itzfx.ControlMode;
 import itzfx.Hitbox;
 import itzfx.Robot;
@@ -16,6 +18,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
@@ -60,11 +65,8 @@ public class FXMLController {
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         field = (Field) ((Pane) ((BorderPane) ((Pane) root.getCenter()).getChildren().get(0)).getCenter()).getChildren().get(0).getUserData();
         Hitbox.VISIBLE.bind(showHitboxes.selectedProperty());
-        logo.setImage(new Image(FXMLController.class.getResourceAsStream("phoenixWlogo.png"), 120, 120, true, true));
         sbc = (ScoringBoxController) right.getChildren().get(0).getUserData();
         right.setSpacing(25);
-        right.getChildren().add(new StackPane(new ImageView(new Image(FXMLController.class.getResourceAsStream("VEXEDR-stacked-red-transp-1000px.png"),
-                500, 500, true, true))));
         field.inject(sbc);
         field.inject(sbc.getInjection());
     }
@@ -120,44 +122,45 @@ public class FXMLController {
     private void fp() {
         field.setMode(ControlMode.FREE_PLAY);
     }
-    
+
     @FXML
     private void buildR1() {
         build(0);
     }
-    
+
     @FXML
     private void buildR2() {
         build(1);
     }
-    
+
     @FXML
     private void buildR3() {
         build(2);
     }
-    
+
     @FXML
     private void buildR4() {
         build(3);
     }
-    
+
     private void build(int index) {
         Robot r = getRobot(index);
-        FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("RobotBuilder.fxml"));
+        FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("/itzfx/fxml/build/RobotBuilder.fxml"));
         try {
             TabPane p = loader.load();
             RobotBuilder rb = loader.getController();
-            Stage loaded = new Stage();
-            loaded.setScene(new Scene(p, 600, 350));
-            loaded.showAndWait();
-            if (rb.isSubmitted()) {
+            Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY);
+            show.getDialogPane().setContent(p);
+            show.getDialogPane().setPrefHeight(500);
+            show.showAndWait().filter(bt -> bt.getButtonData().equals(ButtonData.APPLY)).ifPresent(bt -> {
+                rb.submit();
                 rb.fillRobot(r);
-            }
+            });
         } catch (IOException ex) {
             Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private Robot getRobot(int index) {
         return field.getRobots().get(index);
     }

@@ -5,8 +5,6 @@
  */
 package itzfx.scoring;
 
-import itzfx.fxml.ScoreType;
-
 /**
  *
  * @author prem

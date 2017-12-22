@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itzfx.fxml;
+package itzfx.scoring;
 
-import itzfx.scoring.ScoreReport;
+import itzfx.fxml.FXMLController;
+import itzfx.fxml.ScoreSheetController;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -206,7 +207,7 @@ public class ScoreAggregator {
 
     public void showReport() {
         updateReport();
-        FXMLLoader loader = new FXMLLoader(ScoreAggregator.class.getResource("ScoreSheet.fxml"));
+        FXMLLoader loader = new FXMLLoader(ScoreAggregator.class.getResource("/itzfx/fxml/ScoreSheet.fxml"));
         try {
             Pane load = (loader.load());
             StackPane report = new StackPane(load);

@@ -5,6 +5,8 @@
  */
 package itzfx.fxml;
 
+import itzfx.Start;
+import itzfx.scoring.ScoreAggregator;
 import itzfx.ControlMode;
 import itzfx.fxml.GameObjects.MobileGoal;
 import itzfx.fxml.GameObjects.RedMobileGoal;

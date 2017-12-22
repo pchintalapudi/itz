@@ -5,7 +5,7 @@
  */
 package itzfx.fxml.GameObjects;
 
-import itzfx.fxml.ScoreType;
+import itzfx.scoring.ScoreType;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
