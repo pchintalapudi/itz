@@ -216,9 +216,10 @@ public class ScoreAggregator {
             ssc.update(new int[]{red20, blue20, red10, blue10, red5, blue5, redCones, blueCones, redStacks, blueStacks, auton, redPark, bluePark});
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
             show.getDialogPane().setContent(report);
+            show.getDialogPane().getChildren().forEach(n -> n.setStyle("-fx-background-color:#ffffff"));
             show.getButtonTypes().get(0);
             show.showAndWait().filter(bt -> bt.getButtonData() == ButtonData.OK_DONE)
-                    .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(report)));
+                    .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(show.getDialogPane())));
         } catch (IOException ex) {
             Logger.getLogger(ScoreAggregator.class.getName()).log(Level.SEVERE, null, ex);
         }

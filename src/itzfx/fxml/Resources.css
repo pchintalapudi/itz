@@ -8,6 +8,18 @@ and open the template in the editor.
     Author     : prem
 */
 
+.root {
+    -fx-background-color:#ffffff;
+}
+
+.background {
+    -fx-background-color:#ffffff;
+}
+
+.dialog-pane {
+    -fx-background-color:#ffffff;
+}
+
 .button {
     -fx-background-color: #ffffff;
     -fx-border-color: #87ceeb;

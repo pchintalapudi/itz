@@ -5,6 +5,7 @@
  */
 package itzfx.data;
 
+import itzfx.KeyControl;
 import itzfx.Robot;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,6 +53,26 @@ public class Retrieval {
         }
         try {
             Files.write(f.toPath(), Arrays.asList(r.fileData()));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static KeyControl readKeyControlFile(File f) {
+        try {
+            return KeyControl.getKeyControl(Files.readAllLines(f.toPath()).get(0));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static void writeToFile(KeyControl kc, File f) {
+        try (PrintWriter p = new PrintWriter(f)) {
+        } catch (FileNotFoundException fnfex) {
+            throw new RuntimeException(fnfex);
+        }
+        try {
+            Files.write(f.toPath(), Arrays.asList(kc.fileData()));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

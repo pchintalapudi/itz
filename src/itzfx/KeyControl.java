@@ -5,6 +5,9 @@
  */
 package itzfx;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.scene.input.KeyCode;
 
 /**
@@ -17,18 +20,16 @@ public final class KeyControl {
 
     private static final KeyControl SINGLE, DUAL_1, DUAL_2, QUAD_3, QUAD_4, BLANK;
 
-    private final String name;
-
     static {
-        SINGLE = new KeyControl("Single", (KeyCode[]) null);
-        DUAL_1 = new KeyControl("Dual 1", KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.Q, KeyCode.E, KeyCode.X, KeyCode.C, KeyCode.F);
-        DUAL_2 = new KeyControl("Dual 2", KeyCode.NUMPAD8, KeyCode.NUMPAD4, KeyCode.NUMPAD5, KeyCode.NUMPAD6, KeyCode.NUMPAD7, KeyCode.NUMPAD9, KeyCode.NUMPAD1, KeyCode.NUMPAD3, KeyCode.NUMPAD2);
-        QUAD_3 = new KeyControl("Quad 3", KeyCode.Y, KeyCode.G, KeyCode.H, KeyCode.J, KeyCode.T, KeyCode.U, KeyCode.B, KeyCode.M, KeyCode.N);
-        QUAD_4 = new KeyControl("Quad 4", KeyCode.P, KeyCode.L, KeyCode.SEMICOLON, KeyCode.QUOTE, KeyCode.O, KeyCode.OPEN_BRACKET, KeyCode.COMMA, KeyCode.SLASH, KeyCode.PERIOD);
-        BLANK = new KeyControl("Blank", KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED);
+        SINGLE = new KeyControl((KeyCode[]) null);
+        DUAL_1 = new KeyControl(KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.Q, KeyCode.E, KeyCode.X, KeyCode.C, KeyCode.F);
+        DUAL_2 = new KeyControl(KeyCode.NUMPAD8, KeyCode.NUMPAD4, KeyCode.NUMPAD5, KeyCode.NUMPAD6, KeyCode.NUMPAD7, KeyCode.NUMPAD9, KeyCode.NUMPAD1, KeyCode.NUMPAD3, KeyCode.NUMPAD2);
+        QUAD_3 = new KeyControl(KeyCode.Y, KeyCode.G, KeyCode.H, KeyCode.J, KeyCode.T, KeyCode.U, KeyCode.B, KeyCode.M, KeyCode.N);
+        QUAD_4 = new KeyControl(KeyCode.P, KeyCode.L, KeyCode.SEMICOLON, KeyCode.QUOTE, KeyCode.O, KeyCode.OPEN_BRACKET, KeyCode.COMMA, KeyCode.SLASH, KeyCode.PERIOD);
+        BLANK = new KeyControl(KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED);
     }
 
-    public KeyControl(String name, KeyCode... keys) {
+    public KeyControl(KeyCode... keys) {
         if (keys == null) {
             keys = new KeyCode[0];
         }
@@ -43,7 +44,6 @@ public final class KeyControl {
         cone = read[6] == null ? KeyCode.O : read[6];
         stat = read[7] == null ? KeyCode.K : read[7];
         load = read[8] == null ? KeyCode.L : read[8];
-        this.name = name;
     }
 
     public KeyCode[] keys() {
@@ -83,5 +83,13 @@ public final class KeyControl {
         public KeyControl getKC() {
             return kc;
         }
+    }
+
+    public String fileData() {
+        return Arrays.stream(keys()).map(k -> k.getName()).collect(Collectors.joining(" "));
+    }
+
+    public static KeyControl getKeyControl(String fileData) {
+        return new KeyControl(Arrays.stream(fileData.split(" ")).map(KeyCode::valueOf).toArray(KeyCode[]::new));
     }
 }
