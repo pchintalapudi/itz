@@ -11,6 +11,9 @@ import itzfx.fxml.GameObjects.RedMobileGoal;
 import itzfx.fxml.GameObjects.BlueMobileGoal;
 import itzfx.fxml.GameObjects.Cone;
 import itzfx.fxml.Field;
+import itzfx.scoring.ScoreReport;
+import itzfx.scoring.ScoreType;
+import itzfx.scoring.Scoreable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -46,7 +49,7 @@ import javafx.util.Duration;
  *
  * @author Prem Chintalapudi 5776E
  */
-public final class Robot extends Mobile {
+public final class Robot extends Mobile implements Scoreable {
 
     private final StackPane node;
     private final StackPane realRobot;
@@ -69,6 +72,8 @@ public final class Robot extends Mobile {
 
     private final BooleanProperty red;
 
+    private final ScoreReport sr;
+
     public Robot(double layoutX, double layoutY, double initRotate) {
         super(layoutX, layoutY, initRotate);
         node = new StackPane();
@@ -87,15 +92,11 @@ public final class Robot extends Mobile {
         filter.set(new Color(1, 0, 0, .03));
         red = new SimpleBooleanProperty(true);
         filter.bind(Bindings.createObjectBinding(() -> red.get() ? new Color(1, 0, 0, .05) : new Color(0, 0, 1, .05), red));
-        robotSpeed = 24;
-        robotMogoIntakeTime = 2.2;
-        robotAutostackTime = 2;
-        robotStatTime = 2.5;
-        robotMogoMaxStack = 12;
-        robotStatMaxStack = 5;
         active = new SimpleBooleanProperty(true);
         actions = new LinkedList<>();
         driveBaseMovable = new SimpleBooleanProperty(true);
+        sr = new ScoreReport(this);
+        sr.setScoreType(ScoreType.ZONE_NONE);
         redMogo = new RedMobileGoal(25, 45);
         blueMogo = new BlueMobileGoal(25, 45);
         node.getChildren().add(redMogo.getNode());
@@ -108,11 +109,26 @@ public final class Robot extends Mobile {
         mogoUndo();
         linkActions();
         setController(KeyControl.Defaults.SINGLE.getKC());
+        preassignValues();
+    }
+
+    private void register() {
+        Field.getOwner(this).getAggregator().registerReport(sr);
+    }
+    
+    private void preassignValues() {
+        robotSpeed = 24;
+        robotMogoIntakeTime = 2.2;
+        robotAutostackTime = 2;
+        robotStatTime = 2.5;
+        robotMogoMaxStack = 12;
+        robotStatMaxStack = 5;
     }
 
     public void registerMogos() {
         Field.getOwner(this).register(redMogo);
         Field.getOwner(this).register(blueMogo);
+        register();
     }
 
     public boolean owner(MobileGoal mogo) {
@@ -210,6 +226,7 @@ public final class Robot extends Mobile {
         this.red.set(red);
     }
 
+    @Override
     public boolean isRed() {
         return red.get();
     }
@@ -531,6 +548,22 @@ public final class Robot extends Mobile {
     @Override
     public StackPane getNode() {
         return node;
+    }
+
+    @Override
+    public int score() {
+        sr.setScoreType(inParkOne() || inParkTwo() ? ScoreType.PARKING : ScoreType.ZONE_NONE);
+        return 0;
+    }
+
+    private boolean inParkOne() {
+        return isRed() ? super.getCenterX() < 165 && super.getCenterY() > 75 && super.getCenterY() < 285
+                : super.getCenterY() < 165 && super.getCenterX() > 75 && super.getCenterX() < 285;
+    }
+
+    private boolean inParkTwo() {
+        return isRed() ? super.getCenterY() > 555 && super.getCenterX() > 425 && super.getCenterX() < 645
+                : super.getCenterX() > 555 && super.getCenterY() > 425 && super.getCenterY() < 645;
     }
 
     public void acceptValues(Double robotSpeed, Double robotMogoIntakeTime, Double robotAutostackTime,

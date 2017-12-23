@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -32,6 +33,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -462,6 +464,9 @@ public class Field {
         setMode(ControlMode.AUTON);
         setMode(ControlMode.FREE_PLAY);
         reset();
+        KeyBuffer.registerMulti(k -> play_pause(), KeyCode.SPACE, System.getProperty("os.name").toLowerCase()
+                .contains("windows") ? KeyCode.CONTROL : KeyCode.META);
+        System.out.println(System.getProperty("os.name"));
     }
 
     private DoubleProperty time;
@@ -485,12 +490,27 @@ public class Field {
         reregisterMode(mode);
     }
 
+    private long lastPlay_Pause;
+
+    private void play_pause() {
+        if (lastPlay_Pause + 200 < System.currentTimeMillis()) {
+            if (timer.getStatus() == Animation.Status.RUNNING) {
+                pause();
+            } else {
+                play();
+            }
+            lastPlay_Pause = System.currentTimeMillis();
+        }
+    }
+
     public void play() {
+        robots.forEach(r -> r.resume());
         timer.play();
         robots.forEach(r -> r.deprime());
     }
 
     public void pause() {
+        robots.forEach(r -> r.pause());
         timer.pause();
     }
 

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -24,11 +25,13 @@ public final class KeyBuffer {
     private static final Map<KeyCode, Boolean> KEYBUFFER;
 
     private static final Map<KeyCode, List<Consumer<KeyCode>>> ONACTION;
+    private static final Map<KeyCode[], List<Consumer<KeyCode[]>>> ONMULTI;
 
     static {
         KEYBUFFER = new HashMap<>();
         Arrays.stream(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
         ONACTION = new HashMap<>();
+        ONMULTI = new TreeMap<>((k1, k2) -> k1.length > k2.length ? 1 : k1.length < k2.length ? -1 : 0);
     }
 
     public static void initialize(Scene scene) {
@@ -53,8 +56,24 @@ public final class KeyBuffer {
     }
 
     public static void pulse() {
-        KEYBUFFER.entrySet().parallelStream().filter(e -> e.getValue()).filter(e -> ONACTION.containsKey(e.getKey()))
-                .forEach(e -> ONACTION.get(e.getKey()).forEach(c -> c.accept(e.getKey())));
+        ONACTION.entrySet().parallelStream().filter(e -> KEYBUFFER.get(e.getKey()))
+                .forEach(e -> e.getValue().forEach(c -> c.accept(e.getKey())));
+        if (!ONMULTI.isEmpty()) {
+            pulseMulti();
+        }
+    }
+
+    public static void registerMulti(Consumer<KeyCode[]> c, KeyCode... k) {
+        if (ONMULTI.containsKey(k)) {
+            ONMULTI.get(k).add(c);
+        } else {
+            ONMULTI.put(k, new LinkedList<>(Arrays.asList(c)));
+        }
+    }
+
+    private static void pulseMulti() {
+        ONMULTI.entrySet().parallelStream().filter(e -> Arrays.stream(e.getKey()).allMatch(k -> KEYBUFFER.get(k)))
+                .forEach(e -> e.getValue().forEach(c -> c.accept(e.getKey())));
     }
 
     public static void remove(KeyCode k, Consumer<KeyCode> c) {
