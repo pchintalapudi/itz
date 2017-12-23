@@ -26,13 +26,7 @@ public class FileUI {
     }
 
     public static void fillRobot(Robot r, Window owner) {
-        FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(Retrieval.getDataDirectory());
-        fc.getExtensionFilters().add(new ExtensionFilter("Robot", "*.rbt"));
-        File f = fc.showOpenDialog(owner);
-        if (f != null) {
-            Retrieval.readFile(r, f);
-        }
+        load("Robot", "*.rbt", owner, f -> Retrieval.readFile(r, f));
     }
 
     public static void saveKeyControl(KeyControl kc, Window owner) {
@@ -40,13 +34,7 @@ public class FileUI {
     }
 
     public static void getKeyControl(Robot r, Window owner) {
-        FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(Retrieval.getDataDirectory());
-        fc.getExtensionFilters().add(new ExtensionFilter("Robot", "*.rbt"));
-        File f = fc.showOpenDialog(owner);
-        if (f != null) {
-            r.setController(Retrieval.readKeyControlFile(f));
-        }
+        load("Controller", "*.kcl", owner, f -> r.setController(Retrieval.readKeyControlFile(f)));
     }
 
     private static void save(String descriptor, String extension, Window owner, Consumer<File> action) {
@@ -67,7 +55,7 @@ public class FileUI {
     private static void load(String descriptor, String extension, Window owner, Consumer<File> action) {
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(Retrieval.getDataDirectory());
-        fc.getExtensionFilters().add(new ExtensionFilter("Robot", "*.rbt"));
+        fc.getExtensionFilters().add(new ExtensionFilter(descriptor, extension));
         File f = fc.showOpenDialog(owner);
         if (f != null) {
             action.accept(f);
