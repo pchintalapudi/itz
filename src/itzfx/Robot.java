@@ -316,7 +316,7 @@ public final class Robot extends Mobile {
         mogoAnimation.stop();
         mogoAnimation.getKeyFrames().clear();
         mogoAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotMogoIntakeTime), this::finishMogoOuttake,
-                new KeyValue(privateMogo.get().getNode().translateXProperty(), -70)));
+                new KeyValue(privateMogo.get().getNode().translateXProperty(), robotMogoFront ? 70 : -70)));
         mogoAnimation.play();
     }
 
@@ -395,7 +395,7 @@ public final class Robot extends Mobile {
         autostackAnimation.getKeyFrames().clear();
         movingCone.set(true);
         autostackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotAutostackTime), this::finishAutostack,
-                new KeyValue(privateCone.centerXProperty(), 25)));
+                new KeyValue(privateCone.centerXProperty(), robotMogoFront ? 70 : 25)));
         autostackAnimation.play();
     }
 
