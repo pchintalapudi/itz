@@ -115,7 +115,7 @@ public final class Robot extends Mobile implements Scoreable {
     private void register() {
         Field.getOwner(this).getAggregator().registerReport(sr);
     }
-    
+
     private void preassignValues() {
         robotSpeed = 24;
         robotMogoIntakeTime = 2.2;
@@ -589,5 +589,24 @@ public final class Robot extends Mobile implements Scoreable {
         if (mogoIntakeFront != null) {
             this.robotMogoFront = mogoIntakeFront;
         }
+    }
+
+    public String fileData() {
+        return "" + robotSpeed + " " + robotMogoIntakeTime + " "
+                + robotAutostackTime + " " + robotStatTime + " "
+                + robotMogoMaxStack + " " + robotStatMaxStack + " "
+                + robotMogoFront;
+    }
+
+    public static void fillRobot(Robot r, String fileData) {
+        String[] values = fileData.split(" ");
+        double rs = Double.parseDouble(values[0]);
+        double rmit = Double.parseDouble(values[1]);
+        double rat = Double.parseDouble(values[2]);
+        double rst = Double.parseDouble(values[3]);
+        int rmms = Integer.parseInt(values[4]);
+        int rsms = Integer.parseInt(values[5]);
+        boolean rmf = Boolean.parseBoolean(values[6]);
+        r.acceptValues(rs, rmit, rat, rst, rmms, rsms, rmf);
     }
 }

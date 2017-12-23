@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
@@ -85,21 +85,25 @@
                   <Menu mnemonicParsing="false" text="Robot 1">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#buildR1" text="Build" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadR1" text="Load" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Robot 2">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#buildR2" text="Build" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadR2" text="Load" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Robot 3">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#buildR3" text="Build" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadR3" text="Load" />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Robot 4">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#buildR4" text="Build" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadR4" text="Load" />
                     </items>
                   </Menu>
                </items>

@@ -10,6 +10,7 @@ import itzfx.Start;
 import itzfx.ControlMode;
 import itzfx.Hitbox;
 import itzfx.Robot;
+import itzfx.data.FileUI;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -152,10 +153,36 @@ public class FXMLController {
             show.showAndWait().filter(bt -> bt.getButtonData().equals(ButtonData.APPLY)).ifPresent(bt -> {
                 rb.submit();
                 rb.fillRobot(r);
+                FileUI.saveRobot(r, root.getScene().getWindow());
             });
         } catch (IOException ex) {
             Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    private void loadR1() {
+        load(0);
+    }
+
+    @FXML
+    private void loadR2() {
+        load(1);
+    }
+
+    @FXML
+    private void loadR3() {
+        load(2);
+    }
+
+    @FXML
+    private void loadR4() {
+        load(3);
+    }
+
+    private void load(int index) {
+        Robot r = getRobot(index);
+        FileUI.fillRobot(r, root.getScene().getWindow());
     }
 
     private Robot getRobot(int index) {
