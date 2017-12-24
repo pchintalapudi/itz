@@ -76,6 +76,26 @@ public class ScoreAggregator {
         return new AtomicInteger[]{aiR, aiB};
     }
 
+    public int[] calculateAuton() {
+        AtomicInteger aiR = new AtomicInteger();
+        AtomicInteger aiB = new AtomicInteger();
+        reports.stream().peek(sr -> {
+            if (sr.getOwner().isRed()) {
+                aiR.addAndGet(sr.getOwner().score());
+            } else {
+                aiB.addAndGet(sr.getOwner().score());
+            }
+        }).filter(sr -> sr.getType() != ScoreType.PARKING)
+                .forEach(sr -> {
+                    if (sr.getOwner().isRed()) {
+                        aiR.addAndGet(sr.getType().getScore());
+                    } else {
+                        aiB.addAndGet(sr.getType().getScore());
+                    }
+                });
+        return new int[]{aiR.get(), aiB.get()};
+    }
+
     private Boolean[] highStack(AtomicInteger aiR, AtomicInteger aiB) {
         MaxableInt r20 = new MaxableInt();
         MaxableInt b20 = new MaxableInt();

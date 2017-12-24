@@ -97,7 +97,11 @@ public class Field {
             KeyBuffer.pulse();
             Hitbox.pulse();
             if (sbc != null) {
-                sbc.pulse(true);
+                if (mode == ControlMode.DRIVER_CONTROL || mode == ControlMode.FREE_PLAY) {
+                    sbc.pulseMatch();
+                } else if (mode == ControlMode.AUTON) {
+                    sbc.pulseAuton();
+                }
             }
         }, 0, 10, TimeUnit.MILLISECONDS);
     }
@@ -346,6 +350,7 @@ public class Field {
 
     public void reset() {
         stop();
+        clearAdded();
         if (mode == null) {
             mode = ControlMode.FREE_PLAY;
         }
@@ -526,7 +531,7 @@ public class Field {
         }
         timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), this::lockout, new KeyValue(time, 0)));
         KeyBuffer.unlock();
-        getRobots().forEach(r -> r.prime());
+        getRobots().stream().peek(r -> r.resume()).forEach(r -> r.prime());
     }
 
     public void close() {
@@ -540,6 +545,18 @@ public class Field {
         added.add(c);
         center.getChildren().add(c.getNode());
         return c;
+    }
+
+    public MobileGoal generateMobileGoal(double sceneX, double sceneY, boolean red) {
+        Point2D centerMogo = center.sceneToLocal(sceneX, sceneY);
+        MobileGoal mg = red ? new RedMobileGoal(centerMogo.getX(), centerMogo.getY()) : new BlueMobileGoal(centerMogo.getX(), centerMogo.getY());
+        added.add(mg);
+        center.getChildren().add(mg.getNode());
+        return mg;
+    }
+
+    public void clearAdded() {
+        added.stream().peek(m -> m.reset()).map(m -> m.getNode()).forEach(center.getChildren()::remove);
     }
 
     /**

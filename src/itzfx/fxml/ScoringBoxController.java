@@ -14,9 +14,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -30,28 +27,16 @@ public class ScoringBoxController {
     private SplitPane root;
 
     @FXML
-    private AnchorPane back1;
-
-    @FXML
-    private AnchorPane back2;
-
-    @FXML
-    private AnchorPane rest1;
-
-    @FXML
-    private AnchorPane rest2;
-
-    @FXML
     private Text redScore;
 
     @FXML
     private Text blueScore;
-    
+
     @FXML
     private AnchorPane timerPane;
-    
+
     private Clock clock;
-    
+
     private final IntegerProperty rScore;
     private final IntegerProperty bScore;
 
@@ -66,13 +51,9 @@ public class ScoringBoxController {
         redScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(rScore.get()), rScore));
         blueScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(bScore.get()), bScore));
         root.getParent().setUserData(this);
-        rest1.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-        rest2.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-        back1.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
-        back2.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
         clock = (Clock) timerPane.getUserData();
     }
-    
+
     public DoubleProperty getTime() {
         return clock.getTime();
     }
@@ -85,16 +66,18 @@ public class ScoringBoxController {
         return sa;
     }
 
-    public void pulse(boolean match) {
-        if (match) {
-            int[] temp = sa.calculateMatch();
-            rScore.set(temp[0]);
-            bScore.set(temp[1]);
-        } else {
-            sa.calculateSkills();
-        }
+    public void pulseAuton() {
+        int[] temp = sa.calculateAuton();
+        rScore.set(temp[0]);
+        bScore.set(temp[1]);
     }
-    
+
+    public void pulseMatch() {
+        int[] temp = sa.calculateMatch();
+        rScore.set(temp[0]);
+        bScore.set(temp[1]);
+    }
+
     public void generateReport() {
         sa.showReport();
     }
