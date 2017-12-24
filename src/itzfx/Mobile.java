@@ -15,6 +15,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -49,7 +52,22 @@ public abstract class Mobile {
         getNode().translateXProperty().bind(translateXBind());
         getNode().translateYProperty().bind(translateYBind());
         getNode().setUserData(this);
+        ContextMenu rightClick = new ContextMenu();
+        MenuItem delete = new MenuItem("Delete");
+        delete.setOnAction(e -> vanish());
+        rightClick.getItems().add(delete);
+        rightClickOptions(rightClick);
+        getNode().addEventHandler(MouseEvent.MOUSE_PRESSED, m -> {
+            if (m.isSecondaryButtonDown()) {
+                rightClick.show(getNode(), m.getScreenX(), m.getScreenY());
+            } else {
+                rightClick.hide();
+            }
+        });
         reset();
+    }
+
+    protected void rightClickOptions(ContextMenu rightClick) {
     }
 
     protected DoubleBinding translateXBind() {
@@ -129,6 +147,7 @@ public abstract class Mobile {
             disableCollision();
             getNode().setVisible(false);
             vanished.set(true);
+            cleanUp();
         });
     }
 
@@ -148,6 +167,9 @@ public abstract class Mobile {
 
     public BooleanProperty vanishedProperty() {
         return vanished;
+    }
+
+    protected void cleanUp() {
     }
 
     public abstract Node getNode();

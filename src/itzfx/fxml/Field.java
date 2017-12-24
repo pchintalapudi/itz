@@ -17,6 +17,7 @@ import itzfx.fxml.GameObjects.StationaryGoal;
 import itzfx.Hitbox;
 import itzfx.KeyBuffer;
 import itzfx.KeyControl;
+import itzfx.Mobile;
 import itzfx.Robot;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -70,6 +71,8 @@ public class Field {
     private StationaryGoal rStat;
     private StationaryGoal bStat;
 
+    private final List<Mobile> added;
+
     public Field() {
         robots = new LinkedList<>();
         onField = new LinkedList<>();
@@ -77,6 +80,7 @@ public class Field {
         blueDriverLoads = new LinkedList<>();
         preloads = new LinkedList<>();
         mogos = new LinkedList<>();
+        added = new LinkedList<>();
     }
 
     @FXML
@@ -529,6 +533,13 @@ public class Field {
         timer.stop();
         Hitbox.clear();
         scheduled.cancel(true);
+    }
+
+    public Cone generateCone(double sceneX, double sceneY) {
+        Cone c = new Cone(center.sceneToLocal(sceneX, sceneY).getX(), center.sceneToLocal(sceneX, sceneY).getY());
+        added.add(c);
+        center.getChildren().add(c.getNode());
+        return c;
     }
 
     /**

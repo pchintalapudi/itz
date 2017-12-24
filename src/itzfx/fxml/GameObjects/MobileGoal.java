@@ -5,7 +5,6 @@
  */
 package itzfx.fxml.GameObjects;
 
-import itzfx.fxml.GameObjects.Cone;
 import itzfx.Hitbox;
 import itzfx.Mobile;
 import itzfx.scoring.ScoreType;
@@ -14,10 +13,14 @@ import itzfx.scoring.Scoreable;
 import java.io.IOException;
 import java.util.LinkedList;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -30,6 +33,7 @@ import javafx.scene.text.Text;
 public abstract class MobileGoal extends Mobile implements Scoreable {
 
     private final ObservableList<Cone> stacked;
+    private final IntegerProperty countModifier;
     private Hitbox hitbox;
     private final Text stackLabel;
 
@@ -40,6 +44,7 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
         this.stacked = FXCollections.observableList(new LinkedList<>());
         this.stackLabel = new Text();
         sr = new ScoreReport(this);
+        countModifier = new SimpleIntegerProperty();
     }
 
     @Override
@@ -49,11 +54,10 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
             cone.visibleProperty().bind(stackLabel.visibleProperty());
             getNode().getChildren().add(cone);
         } catch (IOException ex) {
-            ex.printStackTrace();
         }
         stackLabel.setEffect(new InnerShadow());
-        stackLabel.visibleProperty().bind(Bindings.createBooleanBinding(() -> stacked.size() > 0, stacked));
-        stackLabel.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(stacked.size()), stacked));
+        stackLabel.visibleProperty().bind(Bindings.createBooleanBinding(() -> stacked.size() + countModifier.intValue() > 0, stacked, countModifier));
+        stackLabel.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(stacked.size() + countModifier.intValue()), stacked, countModifier));
         stacked.addListener((Change<? extends Cone> change) -> {
             change.next();
             if (change.wasAdded()) {
@@ -70,6 +74,16 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
         super.centerYProperty().addListener(Mobile.limitToField(25, super.centerYProperty()));
         super.centerXProperty().addListener(super.exclude20(25));
         super.centerYProperty().addListener(super.exclude20(25));
+    }
+
+    @Override
+    protected void rightClickOptions(ContextMenu rightClick) {
+        MenuItem stack = new MenuItem("Stack");
+        stack.setOnAction(e -> countModifier.set(countModifier.get() + 1));
+        rightClick.getItems().add(stack);
+        MenuItem destack = new MenuItem("Destack");
+        destack.setOnAction(e -> countModifier.set(countModifier.get() + stacked.size() > 0 ? countModifier.get() - 1 : -stacked.size()));
+        rightClick.getItems().add(destack);
     }
 
     public ScoreReport getReporter() {
@@ -115,6 +129,7 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
         while (stacked.size() > 0) {
             destack().reset();
         }
+        countModifier.set(0);
     }
 
     @Override

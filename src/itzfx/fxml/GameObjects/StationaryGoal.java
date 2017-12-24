@@ -15,12 +15,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -33,6 +37,7 @@ public final class StationaryGoal implements Scoreable {
     private final StackPane statGoal;
 
     private final ObservableList<Cone> stacked;
+    private final IntegerProperty countModifier;
     private final Hitbox hitbox;
 
     private final boolean red;
@@ -41,10 +46,19 @@ public final class StationaryGoal implements Scoreable {
 
     public StationaryGoal(double layoutX, double layoutY, boolean red) {
         this.stacked = FXCollections.observableList(new LinkedList<>());
+        this.countModifier = new SimpleIntegerProperty();
         Label stackLabel = new Label();
         statGoal = new StackPane();
-        stackLabel.visibleProperty().bind(Bindings.createBooleanBinding(() -> stacked.size() > 0, stacked));
-        stackLabel.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(stacked.size()), stacked));
+        ContextMenu rightClick = rightClick();
+        statGoal.setOnMousePressed(m -> {
+            if (m.isSecondaryButtonDown()) {
+                rightClick.show(statGoal, m.getScreenX(), m.getScreenY());
+            } else {
+                rightClick.hide();
+            }
+        });
+        stackLabel.visibleProperty().bind(Bindings.createBooleanBinding(() -> stacked.size() + countModifier.get() > 0, stacked, countModifier));
+        stackLabel.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(stacked.size() + countModifier.intValue()), stacked, countModifier));
         this.hitbox = new Hitbox(12.5, Hitbox.CollisionType.STRONG, statGoal, Double.POSITIVE_INFINITY);
         Hitbox.register(hitbox);
         try {
@@ -71,6 +85,17 @@ public final class StationaryGoal implements Scoreable {
         sr.setScoreType(ScoreType.STAT_GOAL);
     }
 
+    private ContextMenu rightClick() {
+        ContextMenu rightClick = new ContextMenu();
+        MenuItem stack = new MenuItem("Stack");
+        stack.setOnAction(e -> countModifier.set(countModifier.get() + 1));
+        rightClick.getItems().add(stack);
+        MenuItem destack = new MenuItem("Destack");
+        destack.setOnAction(e -> countModifier.set(countModifier.get() + stacked.size() > 0 ? countModifier.get() - 1 : -stacked.size()));
+        rightClick.getItems().add(destack);
+        return rightClick;
+    }
+
     public ScoreReport getReporter() {
         return sr;
     }
@@ -94,6 +119,7 @@ public final class StationaryGoal implements Scoreable {
             while (stacked.size() > 0) {
                 destack().reset();
             }
+            countModifier.set(0);
         });
     }
 

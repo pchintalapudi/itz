@@ -160,6 +160,24 @@ public final class Robot extends Mobile implements Scoreable {
         }, super.centerYProperty());
     }
 
+    @Override
+    protected void cleanUp() {
+        mogoAnimation.stop();
+        autostackAnimation.stop();
+        if (heldMogo.get() != null) {
+            heldMogo.get().setCenter(super.getCenterX() + privateMogo.get().getNode().getTranslateX() * Math.cos(Math.toRadians(node.getRotate())),
+                    super.getCenterY() + privateMogo.get().getNode().getTranslateX() * Math.sin(Math.toRadians(node.getRotate())));
+            heldMogo.get().reappear();
+            heldMogo.set(null);
+        }
+        if (heldCone.get() != null) {
+            heldCone.get().setCenter(super.getCenterX() + privateCone.getCenterX() * Math.cos(Math.toRadians(node.getRotate())),
+                    super.getCenterY() + privateCone.getCenterX() * Math.sin(Math.toRadians(node.getRotate())));
+            heldCone.get().reappear();
+            heldCone.set(null);
+        }
+    }
+
     private void hitboxing() {
         hb.setXSupplier(super.centerXProperty()::get);
         hb.setYSupplier(super.centerYProperty()::get);
@@ -194,7 +212,7 @@ public final class Robot extends Mobile implements Scoreable {
     public KeyControl getController() {
         return controller;
     }
-    
+
     public void setController(KeyControl controller) {
         Iterator<KeyCode> iteratorNew = Arrays.asList(controller.keys()).iterator();
         if (this.controller != null) {
