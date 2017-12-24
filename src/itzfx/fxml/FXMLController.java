@@ -11,6 +11,7 @@ import itzfx.ControlMode;
 import itzfx.Hitbox;
 import itzfx.Robot;
 import itzfx.data.FileUI;
+import itzfx.fxml.controller.KeyBinder;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -29,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -187,6 +189,68 @@ public class FXMLController {
 
     private Robot getRobot(int index) {
         return field.getRobots().get(index);
+    }
+
+    @FXML
+    private void create1() {
+        create(0);
+    }
+
+    @FXML
+    private void create2() {
+        create(1);
+    }
+
+    @FXML
+    private void create3() {
+        create(2);
+    }
+
+    @FXML
+    private void create4() {
+        create(3);
+    }
+
+    private void create(int index) {
+        Robot r = getRobot(index);
+        FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("/itzfx/fxml/controller/KeyBinder.fxml"));
+        KeyBinder kb = new KeyBinder(r.getController());
+        loader.setController(kb);
+        try {
+            AnchorPane load = loader.load();
+            Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY);
+            show.getDialogPane().setContent(load);
+            show.showAndWait().filter(bt -> bt.getButtonData().equals(ButtonData.APPLY)).ifPresent(bt -> {
+                r.setController(kb.getKC());
+                FileUI.saveKeyControl(kb.getKC(), root.getScene().getWindow());
+            });
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void load1() {
+        loadKC(0);
+    }
+
+    @FXML
+    private void load2() {
+        loadKC(1);
+    }
+
+    @FXML
+    private void load3() {
+        loadKC(2);
+    }
+
+    @FXML
+    private void load4() {
+        loadKC(3);
+    }
+
+    private void loadKC(int index) {
+        FileUI.getKeyControl(getRobot(index), root.getScene().getWindow());
     }
 
     @FXML

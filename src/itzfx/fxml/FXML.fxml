@@ -86,24 +86,48 @@
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#buildR1" text="Build" />
                         <MenuItem mnemonicParsing="false" onAction="#loadR1" text="Load" />
+                        <Menu mnemonicParsing="false" text="Controller">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#create1" text="Create" />
+                              <MenuItem mnemonicParsing="false" onAction="#load1" text="Load" />
+                          </items>
+                        </Menu>
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Robot 2">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#buildR2" text="Build" />
                         <MenuItem mnemonicParsing="false" onAction="#loadR2" text="Load" />
+                        <Menu mnemonicParsing="false" text="Controller">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#create2" text="Create" />
+                              <MenuItem mnemonicParsing="false" onAction="#load2" text="Load" />
+                           </items>
+                        </Menu>
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Robot 3">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#buildR3" text="Build" />
                         <MenuItem mnemonicParsing="false" onAction="#loadR3" text="Load" />
+                        <Menu mnemonicParsing="false" text="Controller">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#create3" text="Create" />
+                              <MenuItem mnemonicParsing="false" onAction="#load3" text="Load" />
+                           </items>
+                        </Menu>
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Robot 4">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#buildR4" text="Build" />
                         <MenuItem mnemonicParsing="false" onAction="#loadR4" text="Load" />
+                        <Menu mnemonicParsing="false" text="Controller">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#create4" text="Create" />
+                              <MenuItem mnemonicParsing="false" onAction="#load4" text="Load" />
+                           </items>
+                        </Menu>
                     </items>
                   </Menu>
                </items>

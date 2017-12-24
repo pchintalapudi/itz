@@ -191,7 +191,11 @@ public final class Robot extends Mobile implements Scoreable {
 
     private KeyControl controller;
 
-    public final void setController(KeyControl controller) {
+    public KeyControl getController() {
+        return controller;
+    }
+    
+    public void setController(KeyControl controller) {
         Iterator<KeyCode> iteratorNew = Arrays.asList(controller.keys()).iterator();
         if (this.controller != null) {
             Iterator<KeyCode> iteratorOld = Arrays.asList(this.controller.keys()).iterator();
