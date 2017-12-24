@@ -71,6 +71,10 @@ public class ScoringBoxController {
         rScore.set(temp[0]);
         bScore.set(temp[1]);
     }
+    
+    public void determineAutonWinner() {
+        sa.determineAutonWinner();
+    }
 
     public void pulseMatch() {
         int[] temp = sa.calculateMatch();

@@ -43,6 +43,8 @@ public class ScoreAggregator {
     private int redPark;
     private int bluePark;
 
+    private Boolean autonomous;
+
     public ScoreAggregator() {
         reports = new LinkedList<>();
     }
@@ -93,6 +95,7 @@ public class ScoreAggregator {
                         aiB.addAndGet(sr.getType().getScore());
                     }
                 });
+        highStack(aiR, aiB);
         return new int[]{aiR.get(), aiB.get()};
     }
 
@@ -137,6 +140,15 @@ public class ScoreAggregator {
             }
         });
         return new Boolean[]{add(r20, b20, aiR, aiB), add(r10, b10, aiR, aiB), add(r5, b5, aiR, aiB), add(redStat, blueStat, aiR, aiB)};
+    }
+
+    public void determineAutonWinner() {
+        int[] temp = calculateAuton();
+        autonomous = temp[0] > temp[1] ? true : temp[1] > temp[0] ? false : null;
+    }
+    
+    public void clearAuton() {
+        autonomous = null;
     }
 
     private static Boolean add(MaxableInt red, MaxableInt blue, AtomicInteger aiR, AtomicInteger aiB) {
@@ -222,6 +234,9 @@ public class ScoreAggregator {
                     blueStacks++;
                 }
             }
+        }
+        if (autonomous != null) {
+            auton = autonomous ? 1 : -1;
         }
     }
 

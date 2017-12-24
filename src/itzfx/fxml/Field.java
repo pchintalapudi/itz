@@ -491,6 +491,9 @@ public class Field {
 
     private void lockout(ActionEvent e) {
         e.consume();
+        if (mode == ControlMode.AUTON) {
+            sbc.determineAutonWinner();
+        }
         robots.forEach(r -> r.pause());
     }
 
