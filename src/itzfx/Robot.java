@@ -11,6 +11,7 @@ import itzfx.fxml.GameObjects.RedMobileGoal;
 import itzfx.fxml.GameObjects.BlueMobileGoal;
 import itzfx.fxml.GameObjects.Cone;
 import itzfx.fxml.Field;
+import itzfx.rerun.Command;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.ScoreType;
 import itzfx.scoring.Scoreable;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -194,15 +196,15 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     private void linkActions() {
-        actions.add(k -> Platform.runLater(this::forward));
-        actions.add(k -> Platform.runLater(this::leftTurn));
-        actions.add(k -> Platform.runLater(this::backward));
-        actions.add(k -> Platform.runLater(this::rightTurn));
-        actions.add(k -> Platform.runLater(this::mogo));
-        actions.add(k -> Platform.runLater(this::autostack));
-        actions.add(k -> Platform.runLater(this::cone));
-        actions.add(k -> Platform.runLater(this::statStack));
-        actions.add(k -> Platform.runLater(this::load));
+        actions.add(k -> forward());
+        actions.add(k -> leftTurn());
+        actions.add(k -> backward());
+        actions.add(k -> rightTurn());
+        actions.add(k -> mogo());
+        actions.add(k -> autostack());
+        actions.add(k -> cone());
+        actions.add(k -> statStack());
+        actions.add(k -> load());
     }
 
     private final List<Consumer<KeyCode>> actions;
@@ -211,6 +213,11 @@ public final class Robot extends Mobile implements Scoreable {
 
     public KeyControl getController() {
         return controller;
+    }
+
+    private void eraseController() {
+        Iterator<KeyCode> iteratorOld = Arrays.asList(this.controller.keys()).iterator();
+        actions.stream().forEach(a -> KeyBuffer.remove(iteratorOld.next(), a));
     }
 
     public void setController(KeyControl controller) {
@@ -257,45 +264,88 @@ public final class Robot extends Mobile implements Scoreable {
         return red;
     }
 
+    private final BooleanProperty recording = new SimpleBooleanProperty();
+
+    public void pulse() {
+        if (recording.get()) {
+            if (pulse.isEmpty()) {
+                pulse.add(Command.NONE);
+            }
+            saved.add(pulse);
+            pulse = new LinkedList<>();
+        }
+    }
+
+    public void record() {
+        recording.set(true);
+    }
+
+    public void stopRecording() {
+        recording.set(false);
+    }
+
+    public List<String> saveRecording() {
+        if (!saved.isEmpty()) {
+            while (saved.peek().get(0) == Command.NONE) {
+                saved.poll();
+            }
+        }
+        List<String> recorded = Command.encode(saved);
+        saved.clear();
+        return recorded;
+    }
+
     private void forward() {
         if (active.get() && driveBaseMovable.get()) {
-            super.shiftCenter(robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
-                    robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
+            Platform.runLater(() -> {
+                super.shiftCenter(robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
+                        robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
+            });
             if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
             }
+            pulse.add(Command.FORWARD);
         }
     }
 
     private void backward() {
         if (active.get() && driveBaseMovable.get()) {
-            super.shiftCenter(-robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
-                    -robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
+            Platform.runLater(() -> {
+                super.shiftCenter(-robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
+                        -robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
+            });
             if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
             }
+            pulse.add(Command.BACKWARD);
         }
     }
 
     private void leftTurn() {
         if (active.get() && driveBaseMovable.get()) {
-            node.setRotate(node.getRotate() - robotSpeed / (Math.PI * 7));
+            Platform.runLater(() -> {
+                node.setRotate(node.getRotate() - robotSpeed / (Math.PI * 7));
+            });
             if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
             }
+            pulse.add(Command.LEFT_TURN);
         }
     }
 
     private void rightTurn() {
         if (active.get() && driveBaseMovable.get()) {
-            node.setRotate(node.getRotate() + robotSpeed / (Math.PI * 7));
+            Platform.runLater(() -> {
+                node.setRotate(node.getRotate() + robotSpeed / (Math.PI * 7));
+            });
             if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
             }
+            pulse.add(Command.RIGHT_TURN);
         }
     }
 
@@ -312,14 +362,19 @@ public final class Robot extends Mobile implements Scoreable {
         if (active.get()) {
             if (!movingMogo.get()) {
                 if (heldMogo.get() == null) {
-                    mogoIntake();
+                    Platform.runLater(() -> {
+                        mogoIntake();
+                    });
                 } else {
-                    mogoOuttake();
+                    Platform.runLater(() -> {
+                        mogoOuttake();
+                    });
                 }
                 if (isPrimed()) {
                     Field.getOwner(this).play();
                     deprime();
                 }
+                pulse.add(Command.MOGO);
             }
         }
     }
@@ -383,14 +438,19 @@ public final class Robot extends Mobile implements Scoreable {
             if (!movingCone.get() && System.currentTimeMillis() > 100 + lastConeMove) {
                 lastConeMove = System.currentTimeMillis();
                 if (heldCone.get() == null) {
-                    coneIntake();
+                    Platform.runLater(() -> {
+                        coneIntake();
+                    });
                 } else {
-                    coneOuttake();
+                    Platform.runLater(() -> {
+                        coneOuttake();
+                    });
                 }
                 if (isPrimed()) {
                     Field.getOwner(this).play();
                     deprime();
                 }
+                pulse.add(Command.CONE);
             }
         }
     }
@@ -417,15 +477,20 @@ public final class Robot extends Mobile implements Scoreable {
     public void autostack() {
         if (active.get() && heldMogo.get() != null && !movingCone.get() && privateMogo.get().score() / 2 < this.robotMogoMaxStack) {
             if (heldCone.get() == null) {
-                coneIntake();
+                Platform.runLater(() -> {
+                    coneIntake();
+                });
             }
             if (heldCone.get() != null) {
-                runAutostack();
+                Platform.runLater(() -> {
+                    runAutostack();
+                });
                 if (isPrimed()) {
                     Field.getOwner(this).play();
                     deprime();
                 }
             }
+            pulse.add(Command.AUTOSTACK);
         }
     }
 
@@ -450,12 +515,15 @@ public final class Robot extends Mobile implements Scoreable {
     public void statStack() {
         if (active.get()) {
             if (!movingCone.get() && heldCone.get() != null) {
-                runStatStack();
+                Platform.runLater(() -> {
+                    runStatStack();
+                });
                 if (isPrimed()) {
                     Field.getOwner(this).play();
                     deprime();
                 }
             }
+            pulse.add(Command.STATSTACK);
         }
     }
 
@@ -490,11 +558,14 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     public void load() {
-        Field.getOwner(this).load(this);
+        Platform.runLater(() -> {
+            Field.getOwner(this).load(this);
+        });
         if (isPrimed()) {
             Field.getOwner(this).play();
             deprime();
         }
+        pulse.add(Command.LOAD);
     }
 
     /**
@@ -635,4 +706,8 @@ public final class Robot extends Mobile implements Scoreable {
         boolean rmf = Boolean.parseBoolean(values[6]);
         r.acceptValues(rs, rmit, rat, rst, rmms, rsms, rmf);
     }
+
+    private final Queue<List<Command>> saved = new LinkedList<>();
+
+    private List<Command> pulse = new LinkedList<>();
 }

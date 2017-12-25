@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +39,7 @@ public class Retrieval {
         return DATADIR;
     }
 
-    public static void readFile(Robot r, File f) {
+    public static void readRobot(Robot r, File f) {
         try {
             Robot.fillRobot(r, Files.readAllLines(f.toPath()).get(0));
         } catch (IOException ex) {
@@ -46,19 +47,11 @@ public class Retrieval {
         }
     }
 
-    public static void writeToFile(Robot r, File f) {
-        try (PrintWriter p = new PrintWriter(f)) {
-        } catch (FileNotFoundException fnfex) {
-            throw new RuntimeException(fnfex);
-        }
-        try {
-            Files.write(f.toPath(), Arrays.asList(r.fileData()));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+    public static void writeRobot(Robot r, File f) {
+        writeToFile(Arrays.asList(r.fileData()), f);
     }
 
-    public static KeyControl readKeyControlFile(File f) {
+    public static KeyControl readKeyControl(File f) {
         try {
             return KeyControl.getKeyControl(Files.readAllLines(f.toPath()).get(0));
         } catch (IOException ex) {
@@ -66,13 +59,21 @@ public class Retrieval {
         }
     }
 
-    public static void writeToFile(KeyControl kc, File f) {
+    public static void writeKeyControl(KeyControl kc, File f) {
+        writeToFile(Arrays.asList(kc.fileData()), f);
+    }
+
+    public static void writeRerun(List<String> commands, File f) {
+        writeToFile(commands, f);
+    }
+
+    private static void writeToFile(Iterable<? extends CharSequence> lines, File f) {
         try (PrintWriter p = new PrintWriter(f)) {
         } catch (FileNotFoundException fnfex) {
             throw new RuntimeException(fnfex);
         }
         try {
-            Files.write(f.toPath(), Arrays.asList(kc.fileData()));
+            Files.write(f.toPath(), lines);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

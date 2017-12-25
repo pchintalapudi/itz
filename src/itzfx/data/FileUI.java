@@ -22,19 +22,23 @@ import javafx.stage.Window;
 public class FileUI {
 
     public static void saveRobot(Robot r, Window owner) {
-        save("Robot", "*.rbt", owner, f -> Retrieval.writeToFile(r, f));
+        save("Robot", "*.rbt", owner, f -> Retrieval.writeRobot(r, f));
     }
 
     public static void fillRobot(Robot r, Window owner) {
-        load("Robot", "*.rbt", owner, f -> Retrieval.readFile(r, f));
+        load("Robot", "*.rbt", owner, f -> Retrieval.readRobot(r, f));
     }
 
     public static void saveKeyControl(KeyControl kc, Window owner) {
-        save("Controller", "*.kcl", owner, f -> Retrieval.writeToFile(kc, f));
+        save("Controller", "*.kcl", owner, f -> Retrieval.writeKeyControl(kc, f));
     }
 
     public static void getKeyControl(Robot r, Window owner) {
-        load("Controller", "*.kcl", owner, f -> r.setController(Retrieval.readKeyControlFile(f)));
+        load("Controller", "*.kcl", owner, f -> r.setController(Retrieval.readKeyControl(f)));
+    }
+
+    public static void saveRerun(Robot r, Window owner) {
+        save("Rerun", "*.rrn", owner, f -> Retrieval.writeRerun(r.saveRecording(), f));
     }
 
     private static void save(String descriptor, String extension, Window owner, Consumer<File> action) {
