@@ -62,6 +62,14 @@ public class Retrieval {
     public static void writeKeyControl(KeyControl kc, File f) {
         writeToFile(Arrays.asList(kc.fileData()), f);
     }
+    
+    public static void readRerun(Robot r, File f) {
+        try {
+            r.setAuton(Files.readAllLines(f.toPath()));
+        } catch (IOException ex) {
+            Logger.getLogger(Retrieval.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public static void writeRerun(List<String> commands, File f) {
         writeToFile(commands, f);

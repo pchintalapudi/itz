@@ -5,6 +5,7 @@
  */
 package itzfx;
 
+import itzfx.data.FileUI;
 import itzfx.fxml.GameObjects.MobileGoal;
 import itzfx.fxml.GameObjects.StationaryGoal;
 import itzfx.fxml.GameObjects.RedMobileGoal;
@@ -20,6 +21,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -35,6 +38,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -221,14 +226,16 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     public void setController(KeyControl controller) {
-        Iterator<KeyCode> iteratorNew = Arrays.asList(controller.keys()).iterator();
-        if (this.controller != null) {
-            Iterator<KeyCode> iteratorOld = Arrays.asList(this.controller.keys()).iterator();
-            actions.stream().peek(a -> KeyBuffer.remove(iteratorOld.next(), a)).forEach(a -> KeyBuffer.register(iteratorNew.next(), a));
-        } else {
-            actions.stream().forEach(a -> KeyBuffer.register(iteratorNew.next(), a));
+        if (controller != null) {
+            Iterator<KeyCode> iteratorNew = Arrays.asList(controller.keys()).iterator();
+            if (this.controller != null) {
+                Iterator<KeyCode> iteratorOld = Arrays.asList(this.controller.keys()).iterator();
+                actions.stream().peek(a -> KeyBuffer.remove(iteratorOld.next(), a)).forEach(a -> KeyBuffer.register(iteratorNew.next(), a));
+            } else {
+                actions.stream().forEach(a -> KeyBuffer.register(iteratorNew.next(), a));
+            }
+            this.controller = controller;
         }
-        this.controller = controller;
     }
 
     @Override
@@ -301,6 +308,67 @@ public final class Robot extends Mobile implements Scoreable {
         List<String> recorded = Command.encode(saved);
         saved.clear();
         return recorded;
+    }
+
+    private List<String> commands;
+
+    public void setAuton(List<String> commands) {
+        this.commands = commands;
+        readBack();
+    }
+
+    private Future<?> readBackTask;
+
+    private void readBack() {
+        if (commands != null) {
+            Queue<List<Command>> decoded = Command.decode(this.commands);
+            if (decoded != null && !decoded.isEmpty()) {
+                eraseController();
+                readBackTask = Start.PULSER.scheduleAtFixedRate(() -> decoded.poll().forEach(this::translate), 0, 10, TimeUnit.MILLISECONDS);
+            }
+        }
+    }
+
+    private void translate(Command command) {
+        switch (command) {
+            case FORWARD:
+                forward();
+                break;
+            case LEFT_TURN:
+                leftTurn();
+                break;
+            case BACKWARD:
+                backward();
+                break;
+            case RIGHT_TURN:
+                rightTurn();
+                break;
+            case MOGO:
+                mogo();
+                break;
+            case AUTOSTACK:
+                autostack();
+                break;
+            case CONE:
+                cone();
+                break;
+            case STATSTACK:
+                statStack();
+                break;
+            case LOAD:
+                load();
+                break;
+        }
+    }
+
+    @Override
+    protected void rightClickOptions(ContextMenu rightClick) {
+        MenuItem setAuton = new MenuItem("Set Autonomous");
+        setAuton.setOnAction(e -> {
+            e.consume();
+            FileUI.getRerun(this, node.getScene().getWindow());
+        });
+        rightClick.getItems().add(setAuton);
     }
 
     private void forward() {
@@ -647,6 +715,10 @@ public final class Robot extends Mobile implements Scoreable {
         blueMogo.vanish();
         movingMogo.set(false);
         movingCone.set(false);
+        if (readBackTask != null) {
+            readBackTask.cancel(true);
+        }
+        setController(controller);
         active.set(true);
     }
 

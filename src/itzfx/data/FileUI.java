@@ -36,9 +36,13 @@ public class FileUI {
     public static void getKeyControl(Robot r, Window owner) {
         load("Controller", "*.kcl", owner, f -> r.setController(Retrieval.readKeyControl(f)));
     }
-
+    
     public static void saveRerun(Robot r, Window owner) {
         save("Rerun", "*.rrn", owner, f -> Retrieval.writeRerun(r.saveRecording(), f));
+    }
+
+    public static void getRerun(Robot r, Window owner) {
+        load("Autonomous", "*.rrn", owner, f -> Retrieval.readRerun(r, f));
     }
 
     private static void save(String descriptor, String extension, Window owner, Consumer<File> action) {
