@@ -485,9 +485,22 @@ public class Field {
     public void setMode(ControlMode cm) {
         this.mode = cm;
         reregisterMode(cm);
+        switchToDriver = false;
+    }
+
+    public void preMatch() {
+        reset();
+        setMode(ControlMode.FREE_PLAY);
+    }
+
+    public void startMatch() {
+        setMode(ControlMode.AUTON);
+        switchToDriver = true;
     }
 
     private final Timeline timer = new Timeline();
+
+    private boolean switchToDriver;
 
     private void lockout(ActionEvent e) {
         e.consume();
@@ -495,6 +508,11 @@ public class Field {
             sbc.determineAutonWinner();
         }
         robots.forEach(r -> r.pause());
+        if (switchToDriver) {
+            setMode(ControlMode.DRIVER_CONTROL);
+            robots.stream().peek(r -> r.pause()).forEach(r -> r.prime());
+            Start.PULSER.schedule(() -> robots.forEach(r -> r.resume()), 5000, TimeUnit.MILLISECONDS);
+        }
     }
 
     public void stop() {

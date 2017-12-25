@@ -261,7 +261,7 @@ public final class Robot extends Mobile implements Scoreable {
         if (active.get() && driveBaseMovable.get()) {
             super.shiftCenter(robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
                     robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
-            if (primed) {
+            if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
             }
@@ -272,7 +272,7 @@ public final class Robot extends Mobile implements Scoreable {
         if (active.get() && driveBaseMovable.get()) {
             super.shiftCenter(-robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
                     -robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
-            if (primed) {
+            if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
             }
@@ -282,7 +282,7 @@ public final class Robot extends Mobile implements Scoreable {
     private void leftTurn() {
         if (active.get() && driveBaseMovable.get()) {
             node.setRotate(node.getRotate() - robotSpeed / (Math.PI * 7));
-            if (primed) {
+            if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
             }
@@ -292,7 +292,7 @@ public final class Robot extends Mobile implements Scoreable {
     private void rightTurn() {
         if (active.get() && driveBaseMovable.get()) {
             node.setRotate(node.getRotate() + robotSpeed / (Math.PI * 7));
-            if (primed) {
+            if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
             }
@@ -316,7 +316,7 @@ public final class Robot extends Mobile implements Scoreable {
                 } else {
                     mogoOuttake();
                 }
-                if (primed) {
+                if (isPrimed()) {
                     Field.getOwner(this).play();
                     deprime();
                 }
@@ -387,7 +387,7 @@ public final class Robot extends Mobile implements Scoreable {
                 } else {
                     coneOuttake();
                 }
-                if (primed) {
+                if (isPrimed()) {
                     Field.getOwner(this).play();
                     deprime();
                 }
@@ -421,7 +421,7 @@ public final class Robot extends Mobile implements Scoreable {
             }
             if (heldCone.get() != null) {
                 runAutostack();
-                if (primed) {
+                if (isPrimed()) {
                     Field.getOwner(this).play();
                     deprime();
                 }
@@ -451,7 +451,7 @@ public final class Robot extends Mobile implements Scoreable {
         if (active.get()) {
             if (!movingCone.get() && heldCone.get() != null) {
                 runStatStack();
-                if (primed) {
+                if (isPrimed()) {
                     Field.getOwner(this).play();
                     deprime();
                 }
@@ -491,7 +491,7 @@ public final class Robot extends Mobile implements Scoreable {
 
     public void load() {
         Field.getOwner(this).load(this);
-        if (primed) {
+        if (isPrimed()) {
             Field.getOwner(this).play();
             deprime();
         }
@@ -509,14 +509,18 @@ public final class Robot extends Mobile implements Scoreable {
         privateCone.reappear();
     }
 
-    private boolean primed;
+    private final BooleanProperty primed = new SimpleBooleanProperty();
 
     public void prime() {
-        primed = true;
+        primed.set(true);
+    }
+
+    public boolean isPrimed() {
+        return primed.get();
     }
 
     public void deprime() {
-        primed = false;
+        primed.set(false);
     }
 
     private boolean mogoWas;

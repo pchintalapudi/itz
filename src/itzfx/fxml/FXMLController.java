@@ -254,6 +254,16 @@ public class FXMLController {
     }
 
     @FXML
+    private void prematch() {
+        field.preMatch();
+    }
+
+    @FXML
+    private void match() {
+        field.startMatch();
+    }
+
+    @FXML
     private CheckMenuItem showHitboxes;
 
     public static WritableImage takeScreenshot(Node... nodes) {
