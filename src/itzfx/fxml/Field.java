@@ -103,6 +103,7 @@ public class Field {
                     sbc.pulseAuton();
                 }
             }
+            getRobots().forEach(r -> r.pulse());
         }, 0, 10, TimeUnit.MILLISECONDS);
     }
 

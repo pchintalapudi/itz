@@ -280,6 +280,14 @@ public final class Robot extends Mobile implements Scoreable {
         recording.set(true);
     }
 
+    public boolean isRecording() {
+        return recording.get();
+    }
+
+    public BooleanProperty recordingProperty() {
+        return recording;
+    }
+
     public void stopRecording() {
         recording.set(false);
     }
