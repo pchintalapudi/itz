@@ -314,7 +314,6 @@ public final class Robot extends Mobile implements Scoreable {
 
     public void setAuton(List<String> commands) {
         this.commands = commands;
-        readBack();
     }
 
     private Future<?> readBackTask;
@@ -324,8 +323,16 @@ public final class Robot extends Mobile implements Scoreable {
             Queue<List<Command>> decoded = Command.decode(this.commands);
             if (decoded != null && !decoded.isEmpty()) {
                 eraseController();
-                readBackTask = Start.PULSER.scheduleAtFixedRate(() -> decoded.poll().forEach(this::translate), 0, 10, TimeUnit.MILLISECONDS);
+                readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(decoded), 0, 10, TimeUnit.MILLISECONDS);
             }
+        }
+    }
+
+    private void interpret(Queue<List<Command>> commands) {
+        try {
+            commands.poll().forEach(this::translate);
+        } catch (Exception ex) {
+            readBackTask.cancel(true);
         }
     }
 
@@ -361,6 +368,17 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
+    public void runProgram() {
+        readBack();
+    }
+
+    public void driverControl() {
+        if (readBackTask != null) {
+            readBackTask.cancel(true);
+        }
+        setController(controller);
+    }
+
     @Override
     protected void rightClickOptions(ContextMenu rightClick) {
         MenuItem setAuton = new MenuItem("Set Autonomous");
@@ -369,6 +387,18 @@ public final class Robot extends Mobile implements Scoreable {
             FileUI.getRerun(this, node.getScene().getWindow());
         });
         rightClick.getItems().add(setAuton);
+        MenuItem runAuton = new MenuItem("Run Autonomous");
+        runAuton.setOnAction(e -> {
+            e.consume();
+            runProgram();
+        });
+        rightClick.getItems().add(runAuton);
+        MenuItem dc = new MenuItem("Enable Driver Control");
+        dc.setOnAction(e -> {
+            e.consume();
+            driverControl();
+        });
+        rightClick.getItems().add(dc);
     }
 
     private void forward() {

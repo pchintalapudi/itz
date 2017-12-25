@@ -554,6 +554,11 @@ public class Field {
         timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), this::lockout, new KeyValue(time, 0)));
         KeyBuffer.unlock();
         getRobots().stream().peek(r -> r.resume()).forEach(r -> r.prime());
+        if (cm == ControlMode.AUTON || cm == ControlMode.PROGRAMMING_SKILLS) {
+            getRobots().forEach(r -> r.runProgram());
+        } else {
+            getRobots().forEach(r -> r.driverControl());
+        }
     }
 
     public void close() {
