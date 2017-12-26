@@ -89,7 +89,7 @@ public final class Translate {
             case STATSTACK:
                 return "startTask(statTask);";
             case NONE:
-                return "wait10Msec(" + s.length * 10 + ")";
+                return "wait10Msec(" + s.length * 10 + ");";
         }
         return null;
     }
