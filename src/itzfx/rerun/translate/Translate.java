@@ -37,7 +37,7 @@ public final class Translate {
     }
 
     public static List<String> translateTime(Queue<List<Command>> commands) {
-        return translate(commands).stream().filter(Translate::filterZeroes).map(Translate::toMillis).collect(Collectors.toCollection(LinkedList::new));
+        return translate(commands).stream().filter(Translate::filterZeroes).map(Translate::to10Millis).collect(Collectors.toCollection(LinkedList::new));
     }
 
     public static List<String> translateDistance(Queue<List<Command>> commands, Robot r) {
@@ -62,7 +62,7 @@ public final class Translate {
         return true;
     }
 
-    private static String toMillis(Segment s) {
+    private static String to10Millis(Segment s) {
         switch (s.c) {
             case FORWARD:
                 return "drive(127, 127, " + s.length * 100 + ");";
@@ -89,7 +89,7 @@ public final class Translate {
             case STATSTACK:
                 return "startTask(statTask);";
             case NONE:
-                return "wait(" + s.length * 100 + ")";
+                return "wait10Msec(" + s.length * 10 + ")";
         }
         return null;
     }
@@ -121,11 +121,11 @@ public final class Translate {
             case STATSTACK:
                 return "startTask(statTask);";
             case NONE:
-                return "wait(" + s.length * 100 + ");";
+                return "wait10Msec(" + s.length * 10 + ");";
         }
         return null;
     }
-    
+
     private static double truncate(double in) {
         return new BigDecimal(String.valueOf(in)).movePointRight(3).intValue() / 1000.0;
     }
