@@ -13,6 +13,7 @@ import itzfx.fxml.GameObjects.BlueMobileGoal;
 import itzfx.fxml.GameObjects.Cone;
 import itzfx.fxml.Field;
 import itzfx.rerun.Command;
+import itzfx.rerun.translate.Translate;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.ScoreType;
 import itzfx.scoring.Scoreable;
@@ -24,6 +25,7 @@ import java.util.Queue;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -323,6 +325,9 @@ public final class Robot extends Mobile implements Scoreable {
             Queue<List<Command>> decoded = Command.decode(this.commands);
             if (decoded != null && !decoded.isEmpty()) {
                 eraseController();
+                System.out.println(Translate.translateTime(decoded).stream().collect(Collectors.joining("\n")));
+                System.out.println("break\nbreak\nbreak");
+                System.out.println(Translate.translateDistance(decoded, this).stream().collect(Collectors.joining("\n")));
                 readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(decoded), 0, 10, TimeUnit.MILLISECONDS);
             }
         }
@@ -453,6 +458,10 @@ public final class Robot extends Mobile implements Scoreable {
             }
             pulse.add(Command.RIGHT_TURN);
         }
+    }
+    
+    public double getSpeed() {
+        return robotSpeed;
     }
 
     private final BooleanProperty movingMogo = new SimpleBooleanProperty();
