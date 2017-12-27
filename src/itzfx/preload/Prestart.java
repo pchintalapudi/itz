@@ -13,11 +13,18 @@ import javafx.application.Preloader.ProgressNotification;
 import javafx.application.Preloader.StateChangeNotification;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -33,17 +40,26 @@ public class Prestart extends Preloader {
 
     private Scene createPreloaderScene() {
         bar = new ProgressBar(0);
-        BorderPane p = new BorderPane();
-        Label loading = new Label("Loading 'In The Zone'...");
-        loading.setFont(Font.font(24));
-        p.setTop(new StackPane(loading));
-        p.setCenter(bar);
+        Text loading = new Text("Loading 'In The Zone'...");
+        loading.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+        loading.setFill(Color.BLACK);
+        HBox parent = new HBox();
+        parent.setSpacing(50);
+        parent.setStyle("-fx-background-color:#ffffff");
+        VBox left = new VBox();
+        left.setStyle("-fx-background-color:#ffffff");
+        left.setSpacing(20);
+        left.setTranslateY(50);
+        parent.getChildren().add(left);
+        parent.getChildren().add(new ImageView(new Image(Prestart.class.getResourceAsStream("/itzfx/Images/VEXEDR-stacked-red-transp-1000px.png"), 200, 200, true, true)));
+        left.getChildren().add(new StackPane(loading));
+        left.getChildren().add(new StackPane(bar));
         bar.setPrefWidth(200);
-        p.setPadding(new Insets(25));
+        parent.setPadding(new Insets(25));
         Timeline tl = new Timeline();
         tl.getKeyFrames().add(new KeyFrame(Duration.millis(4800), e -> tl.stop(), new KeyValue(bar.progressProperty(), 1)));
         tl.play();
-        return new Scene(p, 300, 150);
+        return new Scene(parent, 650, 200);
     }
 
     @Override
