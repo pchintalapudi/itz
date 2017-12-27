@@ -103,7 +103,7 @@ public class Field {
                     sbc.pulseAuton();
                 }
             }
-            getRobots().forEach(r -> r.pulse());
+            getRobots().forEach(Robot::pulse);
         }, 0, 10, TimeUnit.MILLISECONDS);
         Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
     }
@@ -120,15 +120,15 @@ public class Field {
         dropPreloads();
         dropRedDriverLoads();
         dropBlueDriverLoads();
-        onField.stream().map(c -> c.getNode()).forEach(center.getChildren()::add);
-        redDriverLoads.stream().map(c -> c.getNode()).forEach(center.getChildren()::add);
-        blueDriverLoads.stream().map(c -> c.getNode()).forEach(center.getChildren()::add);
+        onField.stream().map(Cone::getNode).forEach(center.getChildren()::add);
+        redDriverLoads.stream().map(Cone::getNode).forEach(center.getChildren()::add);
+        blueDriverLoads.stream().map(Cone::getNode).forEach(center.getChildren()::add);
     }
 
     private void dropMogos() {
         dropBlueMogos();
         dropRedMogos();
-        mogos.stream().peek(this::register).map(m -> m.getNode()).forEach(center.getChildren()::add);
+        mogos.stream().peek(this::register).map(MobileGoal::getNode).forEach(center.getChildren()::add);
     }
 
     private void addLoaders() {
@@ -151,7 +151,7 @@ public class Field {
         robot2();
         robot3();
         robot4();
-        getRobots().stream().peek(r -> r.registerMogos()).map(r -> r.getNode()).forEach(center.getChildren()::add);
+        getRobots().stream().peek(Robot::registerMogos).map(Robot::getNode).forEach(center.getChildren()::add);
     }
 
     @FXML
@@ -359,11 +359,11 @@ public class Field {
         setMode(mode);
         bStat.reset();
         rStat.reset();
-        getRobots().forEach(r -> r.reset());
-        mogos.forEach(m -> m.reset());
-        redDriverLoads.stream().peek(onField::remove).forEach(c -> c.reset());
-        blueDriverLoads.stream().peek(onField::remove).forEach(c -> c.reset());
-        onField.forEach(c -> c.reset());
+        getRobots().forEach(Robot::reset);
+        mogos.forEach(MobileGoal::reset);
+        redDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
+        blueDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
+        onField.forEach(Cone::reset);
         load(getRobots().get(0));
         load(getRobots().get(1));
         List<Cone> c = new LinkedList<>(preloads);
@@ -512,8 +512,8 @@ public class Field {
         robots.forEach(r -> r.pause());
         if (switchToDriver) {
             setMode(ControlMode.DRIVER_CONTROL);
-            robots.stream().peek(r -> r.pause()).forEach(r -> r.prime());
-            Start.PULSER.schedule(() -> robots.forEach(r -> r.resume()), 5000, TimeUnit.MILLISECONDS);
+            robots.stream().peek(Robot::pause).forEach(Robot::prime);
+            Start.PULSER.schedule(() -> robots.forEach(Robot::resume), 5000, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -536,13 +536,13 @@ public class Field {
     }
 
     public void play() {
-        robots.forEach(r -> r.resume());
+        robots.forEach(Robot::resume);
         timer.play();
-        robots.forEach(r -> r.deprime());
+        robots.forEach(Robot::deprime);
     }
 
     public void pause() {
-        robots.forEach(r -> r.pause());
+        robots.forEach(Robot::pause);
         timer.pause();
     }
 
@@ -554,11 +554,11 @@ public class Field {
         }
         timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), this::lockout, new KeyValue(time, 0)));
         KeyBuffer.unlock();
-        getRobots().stream().peek(r -> r.resume()).forEach(r -> r.prime());
+        getRobots().stream().peek(Robot::resume).forEach(Robot::prime);
         if (cm == ControlMode.AUTON || cm == ControlMode.PROGRAMMING_SKILLS) {
-            getRobots().forEach(r -> r.runProgram());
+            getRobots().forEach(Robot::runProgram);
         } else {
-            getRobots().forEach(r -> r.driverControl());
+            getRobots().forEach(Robot::driverControl);
         }
     }
 
@@ -584,7 +584,7 @@ public class Field {
     }
 
     public void clearAdded() {
-        added.stream().peek(m -> m.reset()).map(m -> m.getNode()).forEach(center.getChildren()::remove);
+        added.stream().peek(Mobile::reset).map(Mobile::getNode).forEach(center.getChildren()::remove);
     }
 
     /**
