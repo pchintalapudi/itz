@@ -254,7 +254,7 @@ public class ScoreAggregator {
             show.getDialogPane().getChildren().forEach(n -> n.setStyle("-fx-background-color:#ffffff"));
             show.getButtonTypes().get(0);
             show.showAndWait().filter(bt -> bt.getButtonData() == ButtonData.OK_DONE)
-                    .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(show.getDialogPane())));
+                    .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(report)));
         } catch (IOException ex) {
             Logger.getLogger(ScoreAggregator.class.getName()).log(Level.SEVERE, null, ex);
         }

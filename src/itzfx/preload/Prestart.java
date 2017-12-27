@@ -14,10 +14,8 @@ import javafx.application.Preloader.StateChangeNotification;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -74,7 +72,7 @@ public class Prestart extends Preloader {
         stage.show();
     }
 
-    private boolean suddenClose;
+    private boolean suddenClose = true;
 
     @Override
     public void handleStateChangeNotification(StateChangeNotification scn) {

@@ -8,6 +8,7 @@ package itzfx.rerun.translate;
 import itzfx.Robot;
 import itzfx.data.FileUI;
 import itzfx.data.Retrieval;
+import itzfx.fxml.FXMLController;
 import itzfx.rerun.Command;
 import java.math.BigDecimal;
 import java.util.Deque;
@@ -16,9 +17,10 @@ import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.stage.Window;
 
 /**
@@ -220,32 +222,29 @@ public final class Translate {
 
     public static void userTranslateToTime(Window owner) {
         FileUI.load("Autonomous", "*.rrn", owner, f -> {
-            Alert info = new Alert(Alert.AlertType.INFORMATION);
             String text = (translateTime(Command.decode(Retrieval.read(f))).stream().collect(Collectors.joining("\n")));
-            Hyperlink hl = new Hyperlink();
-            hl.setOnAction(e -> {
-                ClipboardContent cc = new ClipboardContent();
-                cc.putString(text);
-                Clipboard.getSystemClipboard().setContent(cc);
-            });
-            hl.setText(text);
-            info.getDialogPane().setContent(hl);
-            info.showAndWait();
+            Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonBar.ButtonData.OK_DONE), ButtonType.CANCEL);
+            ScrollPane s = new ScrollPane(new Label(text));
+            s.setPrefViewportHeight(300);
+            show.getDialogPane().setContent(s);
+            show.getDialogPane().getChildren().stream().forEach(n -> n.setStyle("-fx-background-color:#ffffff"));
+            show.getButtonTypes().get(0);
+            show.showAndWait().filter(bt -> bt.getButtonData() == ButtonBar.ButtonData.OK_DONE)
+                    .ifPresent(bt -> FXMLController.copy(text));
         });
     }
 
-    public static void userTranslateToDistance(Window owner, Robot r) {FileUI.load("Autonomous", "*.rrn", owner, f -> {
-            Alert info = new Alert(Alert.AlertType.INFORMATION);
+    public static void userTranslateToDistance(Window owner, Robot r) {
+        FileUI.load("Autonomous", "*.rrn", owner, f -> {
             String text = (translateDistance(Command.decode(Retrieval.read(f)), r).stream().collect(Collectors.joining("\n")));
-            Hyperlink hl = new Hyperlink();
-            hl.setOnAction(e -> {
-                ClipboardContent cc = new ClipboardContent();
-                cc.putString(text);
-                Clipboard.getSystemClipboard().setContent(cc);
-            });
-            hl.setText(text);
-            info.getDialogPane().setContent(hl);
-            info.showAndWait();
+            Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonBar.ButtonData.OK_DONE), ButtonType.CANCEL);
+            ScrollPane s = new ScrollPane(new Label(text));
+            s.setPrefViewportHeight(300);
+            show.getDialogPane().setContent(s);
+            show.getDialogPane().getChildren().stream().forEach(n -> n.setStyle("-fx-background-color:#ffffff"));
+            show.getButtonTypes().get(0);
+            show.showAndWait().filter(bt -> bt.getButtonData() == ButtonBar.ButtonData.OK_DONE)
+                    .ifPresent(bt -> FXMLController.copy(text));
         });
     }
 }

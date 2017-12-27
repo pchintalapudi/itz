@@ -169,4 +169,10 @@ public class FXMLController {
         cc.putImage(i);
         Clipboard.getSystemClipboard().setContent(cc);
     }
+
+    public static void copy(String text) {
+        ClipboardContent cc = new ClipboardContent();
+        cc.putString(text);
+        Clipboard.getSystemClipboard().setContent(cc);
+    }
 }
