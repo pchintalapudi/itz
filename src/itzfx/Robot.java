@@ -13,7 +13,6 @@ import itzfx.fxml.GameObjects.BlueMobileGoal;
 import itzfx.fxml.GameObjects.Cone;
 import itzfx.fxml.Field;
 import itzfx.rerun.Command;
-import itzfx.rerun.translate.Translate;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.ScoreType;
 import itzfx.scoring.Scoreable;
@@ -25,7 +24,6 @@ import java.util.Queue;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -800,6 +798,9 @@ public final class Robot extends Mobile implements Scoreable {
             this.robotStatMaxStack = robotMaxStat;
         }
         if (mogoIntakeFront != null) {
+            if (this.robotMogoFront ^ mogoIntakeFront) {
+                node.setRotate(node.getRotate() + 180);
+            }
             this.robotMogoFront = mogoIntakeFront;
         }
     }
