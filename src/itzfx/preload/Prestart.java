@@ -6,6 +6,9 @@
 
 package itzfx.preload;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Preloader;
 import javafx.application.Preloader.ProgressNotification;
 import javafx.application.Preloader.StateChangeNotification;
@@ -17,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Simple Preloader Using the ProgressBar Control
@@ -29,7 +33,7 @@ public class Prestart extends Preloader {
     Stage stage;
 
     private Scene createPreloaderScene() {
-        bar = new ProgressBar();
+        bar = new ProgressBar(0);
         BorderPane p = new BorderPane();
         Label loading = new Label("Loading 'In The Zone'...");
         loading.setFont(Font.font(24));
@@ -37,6 +41,9 @@ public class Prestart extends Preloader {
         p.setCenter(bar);
         bar.setPrefWidth(200);
         p.setPadding(new Insets(25));
+        Timeline tl = new Timeline();
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(4800), e -> tl.stop(), new KeyValue(bar.progressProperty(), 1)));
+        tl.play();
         return new Scene(p, 300, 150);        
     }
     
@@ -56,7 +63,6 @@ public class Prestart extends Preloader {
 
     @Override
     public void handleProgressNotification(ProgressNotification pn) {
-        bar.setProgress(pn.getProgress());
+        //Nothing really happens
     }   
-
 }
