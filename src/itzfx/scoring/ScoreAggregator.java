@@ -60,6 +60,13 @@ public class ScoreAggregator {
     public int[] calculateMatch() {
         AtomicInteger[] initial = calculate();
         highStack(initial[0], initial[1]);
+        if (autonomous != null) {
+            if (autonomous) {
+                initial[0].addAndGet(10);
+            } else {
+                initial[1].addAndGet(10);
+            }
+        }
         return new int[]{initial[0].get(), initial[1].get()};
     }
 
@@ -146,7 +153,7 @@ public class ScoreAggregator {
         int[] temp = calculateAuton();
         autonomous = temp[0] > temp[1] ? true : temp[1] > temp[0] ? false : null;
     }
-    
+
     public void clearAuton() {
         autonomous = null;
     }

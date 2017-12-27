@@ -220,7 +220,7 @@ public final class Robot extends Mobile implements Scoreable {
         return controller;
     }
 
-    private void eraseController() {
+    public void eraseController() {
         Iterator<KeyCode> iteratorOld = Arrays.asList(this.controller.keys()).iterator();
         actions.stream().forEach(a -> KeyBuffer.remove(iteratorOld.next(), a));
     }

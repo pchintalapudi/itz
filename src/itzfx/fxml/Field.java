@@ -556,7 +556,7 @@ public class Field {
         KeyBuffer.unlock();
         getRobots().stream().peek(Robot::resume).forEach(Robot::prime);
         if (cm == ControlMode.AUTON || cm == ControlMode.PROGRAMMING_SKILLS) {
-            getRobots().forEach(Robot::runProgram);
+            getRobots().stream().peek(Robot::eraseController).forEach(Robot::runProgram);
         } else {
             getRobots().forEach(Robot::driverControl);
         }
