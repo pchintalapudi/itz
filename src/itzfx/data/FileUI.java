@@ -45,7 +45,7 @@ public class FileUI {
         load("Autonomous", "*.rrn", owner, f -> Retrieval.readRerun(r, f));
     }
 
-    private static void save(String descriptor, String extension, Window owner, Consumer<File> action) {
+    public static void save(String descriptor, String extension, Window owner, Consumer<File> action) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
         alert.setHeaderText("Save " + descriptor);
         alert.setContentText("Would you like to save this " + descriptor.toLowerCase() + "?");
@@ -60,7 +60,7 @@ public class FileUI {
         });
     }
 
-    private static void load(String descriptor, String extension, Window owner, Consumer<File> action) {
+    public static void load(String descriptor, String extension, Window owner, Consumer<File> action) {
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(Retrieval.getDataDirectory());
         fc.getExtensionFilters().add(new ExtensionFilter(descriptor, extension));

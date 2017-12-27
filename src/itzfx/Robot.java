@@ -325,9 +325,6 @@ public final class Robot extends Mobile implements Scoreable {
             Queue<List<Command>> decoded = Command.decode(this.commands);
             if (decoded != null && !decoded.isEmpty()) {
                 eraseController();
-                System.out.println(Translate.translateTime(decoded).stream().collect(Collectors.joining("\n")));
-                System.out.println("break\nbreak\nbreak");
-                System.out.println(Translate.translateDistance(decoded, this).stream().collect(Collectors.joining("\n")));
                 readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(decoded), 0, 10, TimeUnit.MILLISECONDS);
             }
         }
@@ -459,7 +456,7 @@ public final class Robot extends Mobile implements Scoreable {
             pulse.add(Command.RIGHT_TURN);
         }
     }
-    
+
     public double getSpeed() {
         return robotSpeed;
     }

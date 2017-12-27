@@ -6,6 +6,8 @@
 package itzfx.rerun.translate;
 
 import itzfx.Robot;
+import itzfx.data.FileUI;
+import itzfx.data.Retrieval;
 import itzfx.rerun.Command;
 import java.math.BigDecimal;
 import java.util.Deque;
@@ -13,6 +15,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.stage.Window;
 
 /**
  *
@@ -209,5 +216,36 @@ public final class Translate {
             this.start = start;
             length = 1;
         }
+    }
+
+    public static void userTranslateToTime(Window owner) {
+        FileUI.load("Autonomous", "*.rrn", owner, f -> {
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+            String text = (translateTime(Command.decode(Retrieval.read(f))).stream().collect(Collectors.joining("\n")));
+            Hyperlink hl = new Hyperlink();
+            hl.setOnAction(e -> {
+                ClipboardContent cc = new ClipboardContent();
+                cc.putString(text);
+                Clipboard.getSystemClipboard().setContent(cc);
+            });
+            hl.setText(text);
+            info.getDialogPane().setContent(hl);
+            info.showAndWait();
+        });
+    }
+
+    public static void userTranslateToDistance(Window owner, Robot r) {FileUI.load("Autonomous", "*.rrn", owner, f -> {
+            Alert info = new Alert(Alert.AlertType.INFORMATION);
+            String text = (translateDistance(Command.decode(Retrieval.read(f)), r).stream().collect(Collectors.joining("\n")));
+            Hyperlink hl = new Hyperlink();
+            hl.setOnAction(e -> {
+                ClipboardContent cc = new ClipboardContent();
+                cc.putString(text);
+                Clipboard.getSystemClipboard().setContent(cc);
+            });
+            hl.setText(text);
+            info.getDialogPane().setContent(hl);
+            info.showAndWait();
+        });
     }
 }

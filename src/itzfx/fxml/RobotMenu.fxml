@@ -5,13 +5,15 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 
-<MenuBar xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <menus>
       <Menu fx:id="menu" mnemonicParsing="false" text="Robot">
         <items>
             <MenuItem mnemonicParsing="false" onAction="#load" text="Load" />
           <MenuItem mnemonicParsing="false" onAction="#build" text="Build" />
             <CheckMenuItem mnemonicParsing="false" onAction="#record" text="Record" />
+            <MenuItem mnemonicParsing="false" onAction="#distance" text="Autonomous (Distance)" />
+            <MenuItem mnemonicParsing="false" onAction="#time" text="Autonomous (Time)" />
             <Menu mnemonicParsing="false" text="Controller">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#create" text="Create" />

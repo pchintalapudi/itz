@@ -9,6 +9,7 @@ import itzfx.Robot;
 import itzfx.data.FileUI;
 import itzfx.fxml.build.RobotBuilder;
 import itzfx.fxml.controller.KeyBinder;
+import itzfx.rerun.translate.Translate;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,7 +92,7 @@ public class RobotMenu {
     private void loadKC() {
         FileUI.getKeyControl(r, r.getNode().getScene().getWindow());
     }
-    
+
     @FXML
     private void record() {
         if (!r.isRecording()) {
@@ -100,5 +101,15 @@ public class RobotMenu {
             r.stopRecording();
             FileUI.saveRerun(r, r.getNode().getScene().getWindow());
         }
+    }
+
+    @FXML
+    private void distance() {
+        Translate.userTranslateToDistance(r.getNode().getScene().getWindow(), r);
+    }
+
+    @FXML
+    private void time() {
+        Translate.userTranslateToTime(r.getNode().getScene().getWindow());
     }
 }

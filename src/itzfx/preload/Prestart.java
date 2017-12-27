@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package itzfx.preload;
 
 import javafx.animation.KeyFrame;
@@ -44,19 +43,27 @@ public class Prestart extends Preloader {
         Timeline tl = new Timeline();
         tl.getKeyFrames().add(new KeyFrame(Duration.millis(4800), e -> tl.stop(), new KeyValue(bar.progressProperty(), 1)));
         tl.play();
-        return new Scene(p, 300, 150);        
+        return new Scene(p, 300, 150);
     }
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
-        stage.setScene(createPreloaderScene());        
+        stage.setScene(createPreloaderScene());
+        stage.setOnHidden(w -> {
+            if (suddenClose) {
+                System.exit(0);
+            }
+        });
         stage.show();
     }
-    
+
+    private boolean suddenClose;
+
     @Override
     public void handleStateChangeNotification(StateChangeNotification scn) {
         if (scn.getType() == StateChangeNotification.Type.BEFORE_START) {
+            suddenClose = false;
             stage.hide();
         }
     }
@@ -64,5 +71,5 @@ public class Prestart extends Preloader {
     @Override
     public void handleProgressNotification(ProgressNotification pn) {
         //Nothing really happens
-    }   
+    }
 }
