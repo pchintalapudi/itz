@@ -29,8 +29,8 @@ import javafx.util.Duration;
  */
 public class Prestart extends Preloader {
 
-    ProgressBar bar;
-    Stage stage;
+    private ProgressBar bar;
+    private Stage stage;
 
     private Scene createPreloaderScene() {
         bar = new ProgressBar(0);
