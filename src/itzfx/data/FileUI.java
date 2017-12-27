@@ -17,7 +17,7 @@ import javafx.stage.Window;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class FileUI {
 

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public enum Command {
     FORWARD, BACKWARD, LEFT_TURN, RIGHT_TURN, MOGO, AUTOSTACK, CONE, STATSTACK, LOAD, NONE,//Everything after here is just for itzfx.rerun.translate.Translate purposes only.

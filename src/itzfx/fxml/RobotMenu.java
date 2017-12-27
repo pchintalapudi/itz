@@ -24,7 +24,7 @@ import javafx.scene.layout.AnchorPane;
 /**
  * FXML Controller class
  *
- * @author prem
+ * @author Prem Chintalapudi 5776E
  */
 public class RobotMenu {
 

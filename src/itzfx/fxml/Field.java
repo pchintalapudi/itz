@@ -105,6 +105,7 @@ public class Field {
             }
             getRobots().forEach(r -> r.pulse());
         }, 0, 10, TimeUnit.MILLISECONDS);
+        Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
     }
 
     private void decorateScoringBars() {

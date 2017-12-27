@@ -5,13 +5,18 @@
  */
 package itzfx;
 
+import com.sun.javafx.application.LauncherImpl;
 import itzfx.fxml.FXMLController;
+import itzfx.preload.Prestart;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.application.Preloader.ProgressNotification;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -39,25 +44,39 @@ public class Start extends Application {
 //            throw new RuntimeException();
 //        }
 //    }
+    private Parent p;
+
     @Override
-    public void start(Stage primaryStage) {
+    public void init() {
         try {
+            super.notifyPreloader(new ProgressNotification(0));
             FXMLLoader loader = new FXMLLoader(Start.class.getResource("/itzfx/fxml/FXML.fxml"));
-            Parent p = loader.load();
+            p = loader.load();
             p.getStylesheets().add("/itzfx/fxml/Resources.css");
-            Scene scene = new Scene(p);
             fxml = loader.getController();
             fxml.inject(this);
-            KeyBuffer.initialize(scene);
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            Thread current = Thread.currentThread();
+            super.notifyPreloader(new ProgressNotification(.3));
+            PULSER.schedule(() -> LockSupport.unpark(current), 3, TimeUnit.SECONDS);
+            LockSupport.park();
+            super.notifyPreloader(new ProgressNotification(1));
+            PULSER.schedule(() -> LockSupport.unpark(current), 500, TimeUnit.MILLISECONDS);
+            LockSupport.park();
         } catch (IOException ex) {
             Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    @Override
+    public void start(Stage primaryStage) {
+        Scene scene = new Scene(p);
+        KeyBuffer.initialize(scene);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
-        launch(Start.class, args);
+        LauncherImpl.launchApplication(Start.class, Prestart.class, args);
     }
 
     public static boolean SHUTDOWN;
