@@ -72,7 +72,7 @@ public class FXMLController {
             }
         }));
         List<Robot> robots = field.getRobots();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < robots.size(); i++) {
             RobotMenu controller = new RobotMenu(robots.get(i), "Robot " + (i + 1));
             FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("RobotMenu.fxml"));
             loader.setController(controller);

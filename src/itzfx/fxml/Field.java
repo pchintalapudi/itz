@@ -351,24 +351,28 @@ public class Field {
     }
 
     public void reset() {
-        stop();
-        clearAdded();
-        if (mode == null) {
-            mode = ControlMode.FREE_PLAY;
+        try {
+            stop();
+            clearAdded();
+            if (mode == null) {
+                mode = ControlMode.FREE_PLAY;
+            }
+            setMode(mode);
+            bStat.reset();
+            rStat.reset();
+            getRobots().forEach(Robot::reset);
+            mogos.forEach(MobileGoal::reset);
+            redDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
+            blueDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
+            onField.forEach(Cone::reset);
+            load(getRobots().get(0));
+            load(getRobots().get(1));
+            List<Cone> c = new LinkedList<>(preloads);
+            getRobots().forEach(r -> r.forceIntake(preloads.remove(0)));
+            preloads.addAll(c);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        setMode(mode);
-        bStat.reset();
-        rStat.reset();
-        getRobots().forEach(Robot::reset);
-        mogos.forEach(MobileGoal::reset);
-        redDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
-        blueDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
-        onField.forEach(Cone::reset);
-        load(getRobots().get(0));
-        load(getRobots().get(1));
-        List<Cone> c = new LinkedList<>(preloads);
-        getRobots().forEach(r -> r.forceIntake(preloads.remove(0)));
-        preloads.addAll(c);
     }
 
     public static final Field getOwner(Robot r) {
