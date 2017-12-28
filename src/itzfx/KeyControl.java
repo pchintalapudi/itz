@@ -11,7 +11,8 @@ import javafx.scene.input.KeyCode;
 
 /**
  * This class represents a controller format for the user. It determines which
- * keys correspond to actions taken by the controlling robot.
+ * keys correspond to actions taken by the controlling robot. Objects of this
+ * type are immutable.
  *
  * @author Prem Chintalapudi 5776E
  */
