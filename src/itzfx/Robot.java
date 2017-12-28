@@ -127,6 +127,7 @@ public final class Robot extends Mobile implements Scoreable {
         setController(KeyControl.Defaults.SINGLE.getKC());
         preassignValues();
     }
+
     private void register() {
         Field.getOwner(this).getAggregator().registerReport(sr);
     }
@@ -141,7 +142,8 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * Registers the mobile goals. This method should only be called once, after
+     * the robot has been added to the field.
      */
     public void registerMogos() {
         Field.getOwner(this).register(redMogo);
@@ -150,9 +152,14 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
+     * Determines whether this robot has the specified mobile goal. This is
+     * generally invoked by the
+     * {@link Field#getOwner(itzfx.fxml.GameObjects.MobileGoal)} method to check
+     * whether the mobile goal seeking an owner is in fact held by this robot on
+     * a certain field.
      *
-     * @param mogo
-     * @return
+     * @param mogo the {@link MobileGoal} to test
+     * @return true if this robot is holding the specified Mobile Goal
      */
     public boolean owner(MobileGoal mogo) {
         return mogo == redMogo || mogo == blueMogo;
@@ -168,8 +175,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
-     * @return
+     * @inheritDoc
      */
     @Override
     protected DoubleBinding translateXBind() {
@@ -180,8 +186,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
-     * @return
+     * @inheritDoc
      */
     @Override
     protected DoubleBinding translateYBind() {
@@ -192,7 +197,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * @inheritDoc
      */
     @Override
     protected void cleanUp() {
@@ -244,15 +249,20 @@ public final class Robot extends Mobile implements Scoreable {
     private KeyControl controller;
 
     /**
+     * Gets the control format used by this Robot. A control format consists of
+     * a set of {@link KeyCode KeyCodes} linked to specific actions. This robot
+     * accepts a {@link KeyControl} as a valid control format.
      *
-     * @return
+     * @return a KeyControl that represents this robot's control format
      */
     public KeyControl getController() {
         return controller;
     }
 
     /**
-     *
+     * Temporarily erases the control format associated with this robot. The
+     * intent of this method is to disable driver control during autonomous and
+     * programming skills.
      */
     public void eraseController() {
         Iterator<KeyCode> iteratorOld = Arrays.asList(this.controller.keys()).iterator();
@@ -260,8 +270,11 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
+     * Sets the control format used by this Robot. A control format consists of
+     * a set of {@link KeyCode KeyCodes} linked to specific actions. This robot
+     * accepts a {@link KeyControl} as a valid control format.
      *
-     * @param controller
+     * @param controller the KeyControl to set as a control format
      */
     public void setController(KeyControl controller) {
         if (controller != null) {
@@ -277,7 +290,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * @inheritDoc
      */
     @Override
     public void disableCollision() {
@@ -285,7 +298,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * @inheritDoc
      */
     @Override
     public void enableCollision() {
@@ -293,8 +306,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
-     * @return
+     * @inheritDoc
      */
     @Override
     public boolean canCollide() {
@@ -302,7 +314,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * @inheritDoc
      */
     @Override
     public void permaDisableCollisions() {
@@ -310,16 +322,17 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
+     * Sets this robot to the specified alliance.
      *
-     * @param red
+     * @param red is true if this robot is meant to be red, false if it is meant
+     * to be blue
      */
     public void setRed(boolean red) {
         this.red.set(red);
     }
 
     /**
-     *
-     * @return
+     * @inheritDoc
      */
     @Override
     public boolean isRed() {
@@ -327,8 +340,9 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
+     * Returns the {@link BooleanProperty} monitoring the color of this robot.
      *
-     * @return
+     * @return the property determining the color of this robot
      */
     public BooleanProperty redProperty() {
         return red;
@@ -337,7 +351,8 @@ public final class Robot extends Mobile implements Scoreable {
     private final BooleanProperty recording = new SimpleBooleanProperty();
 
     /**
-     *
+     * Every call, if this robot is recording a rerun, a new set of commands is
+     * buffered to the rerun.
      */
     public void pulse() {
         if (recording.get()) {
@@ -350,38 +365,44 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * Begins recording a rerun.
      */
     public void record() {
         recording.set(true);
     }
 
     /**
+     * Determines if the robot is currently recording a rerun or not.
      *
-     * @return
+     * @return true if the robot is currently recording
      */
     public boolean isRecording() {
         return recording.get();
     }
 
     /**
+     * Returns the {@link BooleanProperty} monitoring the recording state of
+     * this robot.
      *
-     * @return
+     * @return the property determining whether or not this robot is recording
      */
     public BooleanProperty recordingProperty() {
         return recording;
     }
 
     /**
-     *
+     * Stops recording the current rerun.
      */
     public void stopRecording() {
         recording.set(false);
     }
 
     /**
+     * Gets a list of strings that can be saved in a file that encode the last
+     * recorded rerun.
      *
-     * @return
+     * @return a file-worthy list of strings that can be decoded later into a
+     * robot-friendly rerun code
      */
     public List<String> saveRecording() {
         if (!saved.isEmpty()) {
@@ -397,8 +418,10 @@ public final class Robot extends Mobile implements Scoreable {
     private List<String> commands;
 
     /**
+     * Sets the autonomous program to run from a list of strings representing a
+     * past rerun. This is generally pulled from a rerun file (*.rrn).
      *
-     * @param commands
+     * @param commands the past rerun, represented as a list of encoded strings
      */
     public void setAuton(List<String> commands) {
         this.commands = commands;
@@ -457,14 +480,14 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * Runs the saved autonomous routine.
      */
     public void runProgram() {
         readBack();
     }
 
     /**
-     *
+     * Enables driver control of the robot.
      */
     public void driverControl() {
         if (readBackTask != null) {
@@ -474,8 +497,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
-     * @param rightClick
+     * @inheritDoc
      */
     @Override
     protected void rightClickOptions(ContextMenu rightClick) {
@@ -554,8 +576,9 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
+     * Gets the robot's movement speed.
      *
-     * @return
+     * @return the speed of the robot
      */
     public double getSpeed() {
         return robotSpeed;
@@ -571,7 +594,7 @@ public final class Robot extends Mobile implements Scoreable {
     private final ObjectProperty<MobileGoal> heldMogo = new SimpleObjectProperty<>();
 
     /**
-     *
+     * Toggles intake/outtake of mobile goal, and attempts to do so.
      */
     public void mogo() {
         if (active.get()) {
@@ -649,7 +672,7 @@ public final class Robot extends Mobile implements Scoreable {
     private long lastConeMove;
 
     /**
-     *
+     * Toggles intake/outtake of a cone, and attempts to do so.
      */
     public void cone() {
         if (active.get()) {
@@ -693,7 +716,8 @@ public final class Robot extends Mobile implements Scoreable {
     private final Timeline autostackAnimation = new Timeline();
 
     /**
-     *
+     * Tries to intake a cone if none are held, and autostacks it if one is held
+     * following the check.
      */
     public void autostack() {
         if (active.get() && heldMogo.get() != null && !movingCone.get() && privateMogo.get().score() / 2 < this.robotMogoMaxStack) {
@@ -734,7 +758,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * Tries to stack a cone on a nearby stationary goal.
      */
     public void statStack() {
         if (active.get()) {
@@ -782,7 +806,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * Tries to load a driver load cone onto this robot's alliance loader.
      */
     public void load() {
         Platform.runLater(() -> {
@@ -810,22 +834,25 @@ public final class Robot extends Mobile implements Scoreable {
     private final BooleanProperty primed = new SimpleBooleanProperty();
 
     /**
-     *
+     * Lets the robot know to tell the field to start its timer when this robot
+     * moves.
      */
     public void prime() {
         primed.set(true);
     }
 
     /**
+     * Determines if this robot is primed to notify the field.
      *
-     * @return
+     * @return true if this robot is primed
      */
     public boolean isPrimed() {
         return primed.get();
     }
 
     /**
-     *
+     * Lets the robot know that it is unnecessary to notify the field when this
+     * robot moves.
      */
     public void deprime() {
         primed.set(false);
@@ -835,7 +862,8 @@ public final class Robot extends Mobile implements Scoreable {
     private boolean stackWas;
 
     /**
-     *
+     * Pauses the movement of this robot, including stack and mobile goal
+     * animations.
      */
     public void pause() {
         if (mogoAnimation.getStatus() == Animation.Status.RUNNING) {
@@ -850,7 +878,8 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * Resumes movement of this robot, including stack and mobile goal
+     * animations.
      */
     public void resume() {
         if (mogoWas) {
@@ -865,7 +894,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * @inheritDoc
      */
     @Override
     public void resetProperties() {
@@ -893,8 +922,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
-     * @return
+     * @inheritDoc
      */
     @Override
     public StackPane getNode() {
@@ -902,8 +930,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
-     * @return
+     * @inheritDoc
      */
     @Override
     public int score() {
@@ -922,14 +949,23 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
+     * Sets the values of this robot to the specified values. This is meant for
+     * quickly updating this robot after a robot build session. If any values
+     * are null, the previous values for those quantities are used.
      *
-     * @param robotSpeed
-     * @param robotMogoIntakeTime
-     * @param robotAutostackTime
-     * @param robotStatTime
-     * @param robotMaxMogo
-     * @param robotMaxStat
-     * @param mogoIntakeFront
+     * @param robotSpeed the new speed of the robot
+     * @param robotMogoIntakeTime the time taken to intake or outtake a mobile
+     * goal
+     * @param robotAutostackTime the time taken to autostack a cone on a mobile
+     * goal, on average
+     * @param robotStatTime the time taken to stack a cone on a stationary goal,
+     * on average
+     * @param robotMaxMogo the maximum number of cones that can be stacked on a
+     * mobile goal
+     * @param robotMaxStat the maximum number of cones that can be stacked on a
+     * stationary goal
+     * @param mogoIntakeFront true if the robot intakes the mobile goal from the
+     * front, false if it intakes from the back
      */
     public void acceptValues(Double robotSpeed, Double robotMogoIntakeTime, Double robotAutostackTime,
             Double robotStatTime, Integer robotMaxMogo, Integer robotMaxStat, Boolean mogoIntakeFront) {
@@ -960,8 +996,9 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
+     * Gets a string that can be decoded later for the purposes of file saving.
      *
-     * @return
+     * @return a string with all the data of this robot
      */
     public String fileData() {
         return "" + robotSpeed + " " + robotMogoIntakeTime + " "
@@ -971,9 +1008,11 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
+     * Fills the robot with the given data, encoded in a string originally
+     * created by the {@link Robot#fileData()} method.
      *
-     * @param r
-     * @param fileData
+     * @param r the robot to set the values of
+     * @param fileData the encoded string
      */
     public static void fillRobot(Robot r, String fileData) {
         String[] values = fileData.split(" ");
