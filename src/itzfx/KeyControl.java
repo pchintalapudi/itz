@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import javafx.scene.input.KeyCode;
 
 /**
+ * This class represents a controller format for the user. It determines which
+ * keys correspond to actions taken by the controlling robot.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -29,8 +31,11 @@ public final class KeyControl {
     }
 
     /**
+     * Constructs a new KeyControl with the given keys. It automatically fills
+     * in defaults if not enough keys are specified, or if the passed array
+     * itself is null.
      *
-     * @param keys
+     * @param keys the keys to link to actions
      */
     public KeyControl(KeyCode... keys) {
         if (keys == null) {
@@ -50,135 +55,59 @@ public final class KeyControl {
     }
 
     /**
+     * Gets the keys that are linked in this KeyControl to specified actions.
+     * The keys are listed in the order of FORWARD, LEFT_TURN, BACKWARD,
+     * RIGHT_TURN, MOBILE_GOAL_TOGGLE, AUTOSTACK, CONE_TOGGLE, STATIONARY_GOAL,
+     * LOAD_DRIVER LOAD.
      *
-     * @return
+     * @return an array of keys that are linked to specified actions
      */
     public KeyCode[] keys() {
         return new KeyCode[]{forward, left, backward, right, mogo, autostack, cone, stat, load};
     }
 
     /**
-     *
-     * @param k
-     * @return
-     */
-    public Action interpret(KeyCode k) {
-        int index = indexOf(keys(), k);
-        if (index == -1) {
-            return Action.NONE;
-        }
-        return Action.values()[index];
-    }
-
-    private <T> int indexOf(T[] array, T element) {
-        for (int i = 0; i < array.length; i++) {
-            if (element == null ? array[i] == null : element.equals(array[i])) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     *
-     */
-    public static enum Action {
-
-        /**
-         *
-         */
-        FORWARD,
-
-        /**
-         *
-         */
-        LEFT,
-
-        /**
-         *
-         */
-        BACKWARD,
-
-        /**
-         *
-         */
-        RIGHT,
-
-        /**
-         *
-         */
-        MOGO,
-
-        /**
-         *
-         */
-        AUTOSTACK,
-
-        /**
-         *
-         */
-        CONE,
-
-        /**
-         *
-         */
-        STAT,
-
-        /**
-         *
-         */
-        LOAD,
-
-        /**
-         *
-         */
-        NONE;
-    }
-
-    /**
-     *
+     * A predefined set of KeyControls, best suited for multiplayer on a single
+     * keyboard. Included are a single-player version and a blank version, to
+     * remove controls for the linked robot.
      */
     public static enum Defaults {
 
         /**
-         *
+         * A control format for single player on a single keyboard.
          */
         SINGLE(KeyControl.SINGLE),
-
         /**
-         *
+         * A control format for player 1 on a keyboard with up to 4 players.
          */
         DUAL_1(KeyControl.DUAL_1),
-
         /**
-         *
+         * A control format for player 2 on a keyboard with up to 4 players.
          */
         DUAL_2(KeyControl.DUAL_2),
-
         /**
-         *
+         * A control format for player 3 on a keyboard with up to 4 players.
          */
         QUAD_3(KeyControl.QUAD_3),
-
         /**
-         *
+         * A control format for player 4 on a keyboard with up to 4 players.
          */
         QUAD_4(KeyControl.QUAD_4),
-
         /**
-         *
+         * A blank control format to remove any control of a robot.
          */
         BLANK(KeyControl.BLANK);
 
         private final KeyControl kc;
 
-        Defaults(KeyControl kc) {
+        private Defaults(KeyControl kc) {
             this.kc = kc;
         }
 
         /**
+         * Gets the control format for this Default.
          *
-         * @return
+         * @return the control format
          */
         public KeyControl getKC() {
             return kc;
@@ -186,17 +115,19 @@ public final class KeyControl {
     }
 
     /**
+     * Gets a string that can be decoded later for the purposes of file saving.
      *
-     * @return
+     * @return a string with all the data of this control format
      */
     public String fileData() {
         return Arrays.stream(keys()).map(k -> k.getName()).collect(Collectors.joining(" "));
     }
 
     /**
+     * Converts data from a file into a recognizable control format.
      *
-     * @param fileData
-     * @return
+     * @param fileData the data to convert
+     * @return the new KeyControl representing a control format
      */
     public static KeyControl getKeyControl(String fileData) {
         return new KeyControl(Arrays.stream(fileData.split(" ")).map(KeyCode::valueOf).toArray(KeyCode[]::new));

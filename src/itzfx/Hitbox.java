@@ -17,13 +17,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 /**
+ * The class that determines whether collisions should take place and how they
+ * take place, to be implemented by all collidable objects.
  *
  * @author Prem Chintalapudi 5776E
  */
 public final class Hitbox {
 
     /**
-     *
+     * Whether or not the hitboxes are visible on the field. They show up as
+     * green circles.
      */
     public static final BooleanProperty VISIBLE;
 
@@ -35,7 +38,9 @@ public final class Hitbox {
     }
 
     /**
-     *
+     * Checks the list of hitboxes for any intersecting ones, then resolves the
+     * collisions as set out in
+     * {@link Hitbox#resolveCollision(itzfx.Hitbox, itzfx.Hitbox)}.
      */
     public static void pulse() {
         for (int i = COLLIDABLE.size() - 1; i > -1; i--) {
@@ -82,7 +87,6 @@ public final class Hitbox {
                     hb2.movableOwner.shiftCenter(rr2 * approach0.getX() * collisionFactor, rr2 * approach0.getY() * collisionFactor);
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
             }
         });
     }
@@ -96,31 +100,34 @@ public final class Hitbox {
     }
 
     /**
+     * Registers a hitbox in a list of hitboxes to check for collisions. This
+     * method <b>must</b> be called for a hitbox to exhibit proper collision
+     * behavior.
      *
-     * @param hb
+     * @param hb the hitbox to register
      */
     public static void register(Hitbox hb) {
         try {
             COLLIDABLE.add(hb);
         } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
     /**
+     * Removes a hitbox from a list of hitboxes checked for collisions.
      *
-     * @param hb
+     * @param hb the hitbox to remove
      */
     public static void unregister(Hitbox hb) {
         try {
             COLLIDABLE.remove(hb);
         } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
-    
+
     /**
-     *
+     * Clears the hitbox list such that no collisions are checked among
+     * registered hitboxes ever.
      */
     public static void clear() {
         COLLIDABLE.clear();
@@ -142,22 +149,25 @@ public final class Hitbox {
     }
 
     /**
+     * Constructs a hitbox with the given properties.
      *
-     * @param radius
-     * @param cType
-     * @param check
-     * @param mass
+     * @param radius the radius of the hitbox
+     * @param cType the type of collision this hitbox will perform
+     * @param check the node to check to prevent hitboxes of the same owner from
+     * colliding with each other.
+     * @param mass the relative mass of the object
      */
     public Hitbox(double radius, CollisionType cType, Node check, double mass) {
         this(radius, cType, null, check, mass);
     }
 
     /**
+     * Constructs a hitbox with the given properties.
      *
-     * @param radius
-     * @param cType
-     * @param movableOwner
-     * @param mass
+     * @param radius the radius of the hitbox
+     * @param cType the type of collision this hitbox will perform
+     * @param movableOwner the {@link Mobile mobile object} to shift in response
+     * @param mass the relative mass of the object
      */
     public Hitbox(double radius, CollisionType cType, Mobile movableOwner, double mass) {
         this(radius, cType, movableOwner, movableOwner.getNode(), mass);
@@ -167,16 +177,20 @@ public final class Hitbox {
     private Supplier<Double> yPos;
 
     /**
+     * Sets the supplier of the x coordinate of a hitbox during collision
+     * determination.
      *
-     * @param xPos
+     * @param xPos the x coordinate supplier
      */
     public void setXSupplier(Supplier<Double> xPos) {
         this.xPos = xPos;
     }
 
     /**
+     * Sets the supplier of the y coordinate of a hitbox during collision
+     * determination.
      *
-     * @param yPos
+     * @param yPos the y coordinate supplier
      */
     public void setYSupplier(Supplier<Double> yPos) {
         this.yPos = yPos;
@@ -195,68 +209,80 @@ public final class Hitbox {
     private final double mass;
 
     /**
+     * Whether or not this hitbox is allowed to collide. This is used for
+     * temporary collision prevention.
      *
-     * @return
+     * @return true if this hitbox will collide, false if not.
      */
     public boolean canCollide() {
         return collisionEnabled.get();
     }
 
     /**
-     *
+     * Temporarily disables this hitbox's collision properties.
      */
     public void disable() {
         collisionEnabled.set(false);
     }
 
     /**
-     *
+     * Enables this hitbox's collision properties.
      */
     public void enable() {
         collisionEnabled.set(true);
     }
 
     /**
+     * Gets the mobile object that spawned this hitbox. If this is null, the
+     * object that spawned this hitbox is not mobile.
      *
-     * @return
+     * @return the mobile owner
      */
     public Mobile getMovable() {
         return this.movableOwner;
     }
 
     /**
+     * Determines whether this hitbox can move or not. If this hitbox has a
+     * movable owner, it is movable. If not, it is not.
      *
-     * @return
+     * @return true if this hitbox can be moved.
      */
     public boolean isMoveable() {
         return movableOwner != null;
     }
 
     /**
+     * Returns a circle that represents the activity of a hitbox. The circle's
+     * visibility is controlled by {@link Hitbox#VISIBLE}, so any changes to the
+     * state of that {@link BooleanProperty} are reflected in whether or not
+     * this hitbox renders. In addition, disabled hitboxes are not rendered.
      *
-     * @return
+     * @return the visual circle representing this hitbox's area.
      */
     public Circle getVisual() {
         return visual;
     }
 
     /**
-     *
+     * An enumeration dictating the types of collisions that can occur.
      */
     public static enum CollisionType {
 
         /**
-         *
+         * Another STRONG hitbox must attempt to avoid intersecting this one at
+         * all costs. This is meant to prevent phasing of objects.
          */
         STRONG,
-
         /**
-         *
+         * Another STRONG hitbox must attempt to avoid intersecting this one,
+         * but may pass through given enough effort. This is meant to allow
+         * resistance to objects, but not total motion prevention.
          */
         WEAK,
-
         /**
-         *
+         * No collision at all. This is rarely used, as it is simpler to either
+         * disable the hitbox or to unregister it altogether.
          */
         PHANTOM;
     }

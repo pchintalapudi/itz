@@ -76,20 +76,21 @@ public class Start extends Application {
     }
 
     /**
+     * Program start point.
      *
-     * @param args
+     * @param args the command line arguments
      */
     public static void main(String[] args) {
         LauncherImpl.launchApplication(Start.class, Prestart.class, args);
     }
 
     /**
-     *
+     * Signal boolean to check if this program has shut down or not.
      */
     public static boolean SHUTDOWN;
 
     /**
-     *
+     * Main thread pool for scheduling tasks.
      */
     public static final ScheduledExecutorService PULSER = Executors.newScheduledThreadPool(3);
 
