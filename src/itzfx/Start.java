@@ -46,6 +46,9 @@ public class Start extends Application {
 //    }
     private Parent p;
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void init() {
         try {
@@ -67,6 +70,9 @@ public class Start extends Application {
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void start(Stage primaryStage) {
         Scene scene = new Scene(p);
