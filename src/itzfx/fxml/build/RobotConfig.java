@@ -35,6 +35,10 @@ public class RobotConfig {
         root.setUserData(this);
     }
 
+    /**
+     *
+     * @return
+     */
     public Double getSpeed() {
         if (robotSpeed.getText().isEmpty()) {
             return null;
@@ -43,6 +47,10 @@ public class RobotConfig {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Double getAutostackTime() {
         if (this.robotAutostackTime.getText().isEmpty()) {
             return null;
@@ -51,6 +59,10 @@ public class RobotConfig {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Double getStatTime() {
         if (this.robotStatTime.getText().isEmpty()) {
             return null;

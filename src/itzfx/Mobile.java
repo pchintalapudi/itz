@@ -34,10 +34,21 @@ public abstract class Mobile {
 
     private boolean reset;
 
+    /**
+     *
+     * @param layoutX
+     * @param layoutY
+     */
     protected Mobile(double layoutX, double layoutY) {
         this(layoutX, layoutY, 0);
     }
 
+    /**
+     *
+     * @param layoutX
+     * @param layoutY
+     * @param initRotate
+     */
     protected Mobile(double layoutX, double layoutY, double initRotate) {
         centerX = new SimpleDoubleProperty();
         centerY = new SimpleDoubleProperty();
@@ -48,6 +59,9 @@ public abstract class Mobile {
         centerY.addListener((ObservableValue<? extends Number> obs, Number old, Number next) -> reset = false);
     }
 
+    /**
+     *
+     */
     protected void registerProperties() {
         getNode().translateXProperty().bind(translateXBind());
         getNode().translateYProperty().bind(translateYBind());
@@ -67,9 +81,17 @@ public abstract class Mobile {
         reset();
     }
 
+    /**
+     *
+     * @param rightClick
+     */
     protected void rightClickOptions(ContextMenu rightClick) {
     }
 
+    /**
+     *
+     * @return
+     */
     protected DoubleBinding translateXBind() {
         return Bindings.createDoubleBinding(() -> {
             Node n = getNode();
@@ -77,6 +99,10 @@ public abstract class Mobile {
         }, centerX);
     }
 
+    /**
+     *
+     * @return
+     */
     protected DoubleBinding translateYBind() {
         return Bindings.createDoubleBinding(() -> {
             Node n = getNode();
@@ -84,48 +110,93 @@ public abstract class Mobile {
         }, centerY);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public final void shiftCenter(double x, double y) {
         centerX.set(centerX.get() + x);
         centerY.set(centerY.get() + y);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public final void setCenter(double x, double y) {
         centerX.set(x);
         centerY.set(y);
     }
 
+    /**
+     *
+     * @param x
+     */
     public final void setX(double x) {
         centerX.set(x);
     }
 
+    /**
+     *
+     * @param y
+     */
     public final void setY(double y) {
         centerY.set(y);
     }
 
+    /**
+     *
+     * @param x
+     */
     public final void shiftRight(double x) {
         centerX.set(centerX.get() + x);
     }
 
+    /**
+     *
+     * @param y
+     */
     public final void shiftDown(double y) {
         centerY.set(centerY.get() + y);
     }
 
+    /**
+     *
+     * @return
+     */
     public final double getCenterX() {
         return centerX.get();
     }
 
+    /**
+     *
+     * @return
+     */
     public final double getCenterY() {
         return centerY.get();
     }
 
+    /**
+     *
+     * @return
+     */
     public final DoubleProperty centerXProperty() {
         return this.centerX;
     }
 
+    /**
+     *
+     * @return
+     */
     public final DoubleProperty centerYProperty() {
         return this.centerY;
     }
 
+    /**
+     *
+     */
     public final void reset() {
         resetProperties();
         centerX.set(layoutX);
@@ -135,13 +206,23 @@ public abstract class Mobile {
         reset = true;
     }
 
+    /**
+     *
+     * @return
+     */
     public final boolean isReset() {
         return reset;
     }
 
+    /**
+     *
+     */
     protected void resetProperties() {
     }
 
+    /**
+     *
+     */
     public final void vanish() {
         Platform.runLater(() -> {
             disableCollision();
@@ -151,6 +232,9 @@ public abstract class Mobile {
         });
     }
 
+    /**
+     *
+     */
     public final void reappear() {
         Platform.runLater(() -> {
             enableCollision();
@@ -161,27 +245,61 @@ public abstract class Mobile {
 
     private final BooleanProperty vanished = new SimpleBooleanProperty();
 
+    /**
+     *
+     * @return
+     */
     public boolean isVanished() {
         return vanished.get();
     }
 
+    /**
+     *
+     * @return
+     */
     public BooleanProperty vanishedProperty() {
         return vanished;
     }
 
+    /**
+     *
+     */
     protected void cleanUp() {
     }
 
+    /**
+     *
+     * @return
+     */
     public abstract Node getNode();
 
+    /**
+     *
+     */
     public abstract void enableCollision();
 
+    /**
+     *
+     */
     public abstract void disableCollision();
 
+    /**
+     *
+     */
     public abstract void permaDisableCollisions();
 
+    /**
+     *
+     * @return
+     */
     public abstract boolean canCollide();
 
+    /**
+     *
+     * @param radius
+     * @param limit
+     * @return
+     */
     protected static ChangeListener<Number> limitToField(double radius, DoubleProperty limit) {
         return (ObservableValue<? extends Number> obs, Number old, Number next) -> {
             if (next.doubleValue() < radius && next.doubleValue() > -50) {
@@ -192,6 +310,11 @@ public abstract class Mobile {
         };
     }
 
+    /**
+     *
+     * @param radius
+     * @return
+     */
     protected final ChangeListener<Number> exclude20(double radius) {
         return (ObservableValue<? extends Number> obs, Number old, Number next) -> {
             if (getCenterX() - radius < 120 && getCenterY() - getCenterX() > 600 - radius && getCenterY() - getCenterX() < 615 - radius) {

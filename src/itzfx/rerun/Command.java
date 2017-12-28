@@ -17,13 +17,91 @@ import java.util.stream.Collectors;
  * @author Prem Chintalapudi 5776E
  */
 public enum Command {
-    FORWARD, BACKWARD, LEFT_TURN, RIGHT_TURN, MOGO, AUTOSTACK, CONE, STATSTACK, LOAD, NONE,//Everything after here is just for itzfx.rerun.translate.Translate purposes only.
-    FL, FR, BL, BR;
 
+    /**
+     *
+     */
+    FORWARD, 
+
+    /**
+     *
+     */
+    BACKWARD, 
+
+    /**
+     *
+     */
+    LEFT_TURN, 
+
+    /**
+     *
+     */
+    RIGHT_TURN, 
+
+    /**
+     *
+     */
+    MOGO, 
+
+    /**
+     *
+     */
+    AUTOSTACK, 
+
+    /**
+     *
+     */
+    CONE, 
+
+    /**
+     *
+     */
+    STATSTACK, 
+
+    /**
+     *
+     */
+    LOAD, 
+
+    /**
+     *
+     */
+    NONE,//Everything after here is just for itzfx.rerun.translate.Translate purposes only.
+
+    /**
+     *
+     */
+    FL,
+
+    /**
+     *
+     */
+    FR,
+
+    /**
+     *
+     */
+    BL,
+
+    /**
+     *
+     */
+    BR;
+
+    /**
+     *
+     * @param commands
+     * @return
+     */
     public static List<String> encode(Queue<List<Command>> commands) {
         return commands.stream().map(pulse -> pulse.stream().map(Objects::toString).collect(Collectors.joining(" "))).collect(Collectors.toList());
     }
 
+    /**
+     *
+     * @param commands
+     * @return
+     */
     public static Queue<List<Command>> decode(List<String> commands) {
         return commands.stream().map(s -> s.split(" ")).map(Arrays::asList).map(l -> l.stream().map(Command::valueOf).collect(Collectors.toList())).collect(Collectors.toCollection(LinkedList::new));
     }

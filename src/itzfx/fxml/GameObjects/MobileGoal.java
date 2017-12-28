@@ -39,6 +39,11 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
 
     private final ScoreReport sr;
 
+    /**
+     *
+     * @param layoutX
+     * @param layoutY
+     */
     protected MobileGoal(double layoutX, double layoutY) {
         super(layoutX, layoutY);
         this.stacked = FXCollections.observableList(new LinkedList<>());
@@ -47,6 +52,9 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
         countModifier = new SimpleIntegerProperty();
     }
 
+    /**
+     *
+     */
     @Override
     protected void registerProperties() {
         try {
@@ -76,6 +84,10 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
         super.centerYProperty().addListener(super.exclude20(25));
     }
 
+    /**
+     *
+     * @param rightClick
+     */
     @Override
     protected void rightClickOptions(ContextMenu rightClick) {
         MenuItem stack = new MenuItem("Stack");
@@ -86,44 +98,76 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
         rightClick.getItems().add(destack);
     }
 
+    /**
+     *
+     * @return
+     */
     public ScoreReport getReporter() {
         return sr;
     }
 
+    /**
+     *
+     * @param cone
+     */
     public void stack(Cone cone) {
         stacked.add(cone);
     }
 
+    /**
+     *
+     * @return
+     */
     public Cone destack() {
         return stacked.size() > 0 ? stacked.remove(0) : null;
     }
 
+    /**
+     *
+     * @param other
+     */
     public void shiftStack(MobileGoal other) {
         while (stacked.size() > 0) {
             other.stack(stacked.remove(0));
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void disableCollision() {
         hitbox.disable();
     }
 
+    /**
+     *
+     */
     @Override
     public void enableCollision() {
         hitbox.enable();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canCollide() {
         return hitbox.canCollide();
     }
 
+    /**
+     *
+     */
     @Override
     public void permaDisableCollisions() {
         Hitbox.unregister(hitbox);
     }
 
+    /**
+     *
+     */
     @Override
     protected void resetProperties() {
         while (stacked.size() > 0) {
@@ -132,14 +176,26 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
         countModifier.set(0);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public abstract StackPane getNode();
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int score() {
         sr.setScoreType(determineScoringZone());
         return stacked.size() * 2;
     }
 
+    /**
+     *
+     * @return
+     */
     protected abstract ScoreType determineScoringZone();
 }

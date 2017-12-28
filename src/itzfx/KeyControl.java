@@ -28,6 +28,10 @@ public final class KeyControl {
         BLANK = new KeyControl(KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED, KeyCode.UNDEFINED);
     }
 
+    /**
+     *
+     * @param keys
+     */
     public KeyControl(KeyCode... keys) {
         if (keys == null) {
             keys = new KeyCode[0];
@@ -45,10 +49,19 @@ public final class KeyControl {
         load = read[8] == null ? KeyCode.L : read[8];
     }
 
+    /**
+     *
+     * @return
+     */
     public KeyCode[] keys() {
         return new KeyCode[]{forward, left, backward, right, mogo, autostack, cone, stat, load};
     }
 
+    /**
+     *
+     * @param k
+     * @return
+     */
     public Action interpret(KeyCode k) {
         int index = indexOf(keys(), k);
         if (index == -1) {
@@ -66,12 +79,96 @@ public final class KeyControl {
         return -1;
     }
 
+    /**
+     *
+     */
     public static enum Action {
-        FORWARD, LEFT, BACKWARD, RIGHT, MOGO, AUTOSTACK, CONE, STAT, LOAD, NONE;
+
+        /**
+         *
+         */
+        FORWARD,
+
+        /**
+         *
+         */
+        LEFT,
+
+        /**
+         *
+         */
+        BACKWARD,
+
+        /**
+         *
+         */
+        RIGHT,
+
+        /**
+         *
+         */
+        MOGO,
+
+        /**
+         *
+         */
+        AUTOSTACK,
+
+        /**
+         *
+         */
+        CONE,
+
+        /**
+         *
+         */
+        STAT,
+
+        /**
+         *
+         */
+        LOAD,
+
+        /**
+         *
+         */
+        NONE;
     }
 
+    /**
+     *
+     */
     public static enum Defaults {
-        SINGLE(KeyControl.SINGLE), DUAL_1(KeyControl.DUAL_1), DUAL_2(KeyControl.DUAL_2), QUAD_3(KeyControl.QUAD_3), QUAD_4(KeyControl.QUAD_4), BLANK(KeyControl.BLANK);
+
+        /**
+         *
+         */
+        SINGLE(KeyControl.SINGLE),
+
+        /**
+         *
+         */
+        DUAL_1(KeyControl.DUAL_1),
+
+        /**
+         *
+         */
+        DUAL_2(KeyControl.DUAL_2),
+
+        /**
+         *
+         */
+        QUAD_3(KeyControl.QUAD_3),
+
+        /**
+         *
+         */
+        QUAD_4(KeyControl.QUAD_4),
+
+        /**
+         *
+         */
+        BLANK(KeyControl.BLANK);
 
         private final KeyControl kc;
 
@@ -79,15 +176,28 @@ public final class KeyControl {
             this.kc = kc;
         }
 
+        /**
+         *
+         * @return
+         */
         public KeyControl getKC() {
             return kc;
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String fileData() {
         return Arrays.stream(keys()).map(k -> k.getName()).collect(Collectors.joining(" "));
     }
 
+    /**
+     *
+     * @param fileData
+     * @return
+     */
     public static KeyControl getKeyControl(String fileData) {
         return new KeyControl(Arrays.stream(fileData.split(" ")).map(KeyCode::valueOf).toArray(KeyCode[]::new));
     }

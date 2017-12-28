@@ -27,6 +27,12 @@ public class Loader {
 
     private Hitbox hitbox;
 
+    /**
+     *
+     * @param layoutX
+     * @param layoutY
+     * @param red
+     */
     public Loader(double layoutX, double layoutY, boolean red) {
         try {
             loader = new StackPane();
@@ -44,6 +50,10 @@ public class Loader {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Cone load() {
         if (!Field.getOwner(this).hasCone(this)) {
             Cone load = Field.getOwner(this).getLoadableCone(red);
@@ -58,10 +68,18 @@ public class Loader {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public Point2D getCenter() {
         return new Point2D(red ? 15 : 302, red ? 302 : 15);
     }
 
+    /**
+     *
+     * @return
+     */
     public Node getNode() {
         return loader;
     }

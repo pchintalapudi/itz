@@ -75,12 +75,22 @@ public class Start extends Application {
         primaryStage.show();
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         LauncherImpl.launchApplication(Start.class, Prestart.class, args);
     }
 
+    /**
+     *
+     */
     public static boolean SHUTDOWN;
 
+    /**
+     *
+     */
     public static final ScheduledExecutorService PULSER = Executors.newScheduledThreadPool(3);
 
     @Override

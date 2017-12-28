@@ -34,6 +34,10 @@ public final class KeyBuffer {
         ONMULTI = new TreeMap<>((k1, k2) -> k1.length > k2.length ? 1 : k1.length < k2.length ? -1 : 0);
     }
 
+    /**
+     *
+     * @param scene
+     */
     public static void initialize(Scene scene) {
         scene.addEventHandler(KeyEvent.KEY_PRESSED, k -> {
             if (!locked) {
@@ -47,6 +51,11 @@ public final class KeyBuffer {
         });
     }
 
+    /**
+     *
+     * @param k
+     * @param c
+     */
     public static void register(KeyCode k, Consumer<KeyCode> c) {
         if (ONACTION.containsKey(k)) {
             ONACTION.get(k).add(c);
@@ -55,6 +64,9 @@ public final class KeyBuffer {
         }
     }
 
+    /**
+     *
+     */
     public static void pulse() {
         ONACTION.entrySet().parallelStream().filter(e -> KEYBUFFER.get(e.getKey()))
                 .forEach(e -> e.getValue().forEach(c -> c.accept(e.getKey())));
@@ -63,6 +75,11 @@ public final class KeyBuffer {
         }
     }
 
+    /**
+     *
+     * @param c
+     * @param k
+     */
     public static void registerMulti(Consumer<KeyCode[]> c, KeyCode... k) {
         if (ONMULTI.containsKey(k)) {
             ONMULTI.get(k).add(c);
@@ -76,21 +93,37 @@ public final class KeyBuffer {
                 .forEach(e -> e.getValue().forEach(c -> c.accept(e.getKey())));
     }
 
+    /**
+     *
+     * @param k
+     * @param c
+     */
     public static void remove(KeyCode k, Consumer<KeyCode> c) {
         ONACTION.get(k).remove(c);
     }
 
+    /**
+     *
+     * @param k
+     * @return
+     */
     public static boolean isActive(KeyCode k) {
         return KEYBUFFER.get(k);
     }
 
     private static boolean locked;
 
+    /**
+     *
+     */
     public static void lock() {
         locked = true;
         Arrays.stream(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
     }
 
+    /**
+     *
+     */
     public static void unlock() {
         locked = false;
     }

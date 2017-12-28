@@ -70,6 +70,10 @@ public class Clock {
         secd.display(deciSeconds);
     }
     
+    /**
+     *
+     * @return
+     */
     public DoubleProperty getTime() {
         return time;
     }

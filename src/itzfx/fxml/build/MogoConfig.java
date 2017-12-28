@@ -27,12 +27,19 @@ public class MogoConfig {
     @FXML
     private TextField robotInTime;
 
+    /**
+     *
+     */
     @FXML
     public void initialize() {
         robotInTime.setTextFormatter(new DecimalFormatter());
         root.setUserData(this);
     }
 
+    /**
+     *
+     * @return
+     */
     public Double getMogoTime() {
         if (robotInTime.getText().isEmpty()) {
             return null;
@@ -41,6 +48,10 @@ public class MogoConfig {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Boolean isFrontMogo() {
         return front.isIndeterminate() ? null : front.isSelected();
     }

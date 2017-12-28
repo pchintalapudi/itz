@@ -45,10 +45,21 @@ public final class Translate {
         return graduated;
     }
 
+    /**
+     *
+     * @param commands
+     * @return
+     */
     public static List<String> translateTime(Queue<List<Command>> commands) {
         return translate(commands).stream().filter(Translate::filterZeroes).map(Translate::to10Millis).collect(Collectors.toCollection(LinkedList::new));
     }
 
+    /**
+     *
+     * @param commands
+     * @param r
+     * @return
+     */
     public static List<String> translateDistance(Queue<List<Command>> commands, Robot r) {
         return translate(commands).stream().filter(Translate::filterZeroes).map(s -> toDistance(s, r)).collect(Collectors.toCollection(LinkedList::new));
     }
@@ -220,6 +231,10 @@ public final class Translate {
         }
     }
 
+    /**
+     *
+     * @param owner
+     */
     public static void userTranslateToTime(Window owner) {
         FileUI.load("Autonomous", "*.rrn", owner, f -> {
             String text = (translateTime(Command.decode(Retrieval.read(f))).stream().collect(Collectors.joining("\n")));
@@ -234,6 +249,11 @@ public final class Translate {
         });
     }
 
+    /**
+     *
+     * @param owner
+     * @param r
+     */
     public static void userTranslateToDistance(Window owner, Robot r) {
         FileUI.load("Autonomous", "*.rrn", owner, f -> {
             String text = (translateDistance(Command.decode(Retrieval.read(f)), r).stream().collect(Collectors.joining("\n")));

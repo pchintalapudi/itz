@@ -42,11 +42,17 @@ public class ScoringBoxController {
 
     private ScoreAggregator sa;
 
+    /**
+     *
+     */
     public ScoringBoxController() {
         rScore = new SimpleIntegerProperty();
         bScore = new SimpleIntegerProperty();
     }
 
+    /**
+     *
+     */
     public void initialize() {
         redScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(rScore.get()), rScore));
         blueScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(bScore.get()), bScore));
@@ -54,34 +60,58 @@ public class ScoringBoxController {
         clock = (Clock) timerPane.getUserData();
     }
 
+    /**
+     *
+     * @return
+     */
     public DoubleProperty getTime() {
         return clock.getTime();
     }
 
+    /**
+     *
+     * @param sa
+     */
     public void setAggregator(ScoreAggregator sa) {
         this.sa = sa;
     }
 
+    /**
+     *
+     * @return
+     */
     public ScoreAggregator getAggregator() {
         return sa;
     }
 
+    /**
+     *
+     */
     public void pulseAuton() {
         int[] temp = sa.calculateAuton();
         rScore.set(temp[0]);
         bScore.set(temp[1]);
     }
     
+    /**
+     *
+     */
     public void determineAutonWinner() {
         sa.determineAutonWinner();
     }
 
+    /**
+     *
+     */
     public void pulseMatch() {
         int[] temp = sa.calculateMatch();
         rScore.set(temp[0]);
         bScore.set(temp[1]);
     }
 
+    /**
+     *
+     */
     public void generateReport() {
         sa.showReport();
     }

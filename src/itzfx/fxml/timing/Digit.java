@@ -53,6 +53,10 @@ public class Digit {
         });
     }
 
+    /**
+     *
+     * @param digit
+     */
     public void display(int digit) {
         assert digit > -1 && digit < 10;
         switch (digit) {

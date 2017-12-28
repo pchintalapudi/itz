@@ -35,10 +35,19 @@ public class Retrieval {
     private Retrieval() {
     }
 
+    /**
+     *
+     * @return
+     */
     public static File getDataDirectory() {
         return DATADIR;
     }
 
+    /**
+     *
+     * @param r
+     * @param f
+     */
     public static void readRobot(Robot r, File f) {
         try {
             Robot.fillRobot(r, Files.readAllLines(f.toPath()).get(0));
@@ -47,10 +56,20 @@ public class Retrieval {
         }
     }
 
+    /**
+     *
+     * @param r
+     * @param f
+     */
     public static void writeRobot(Robot r, File f) {
         writeToFile(Arrays.asList(r.fileData()), f);
     }
 
+    /**
+     *
+     * @param f
+     * @return
+     */
     public static KeyControl readKeyControl(File f) {
         try {
             return KeyControl.getKeyControl(Files.readAllLines(f.toPath()).get(0));
@@ -59,10 +78,20 @@ public class Retrieval {
         }
     }
 
+    /**
+     *
+     * @param kc
+     * @param f
+     */
     public static void writeKeyControl(KeyControl kc, File f) {
         writeToFile(Arrays.asList(kc.fileData()), f);
     }
 
+    /**
+     *
+     * @param r
+     * @param f
+     */
     public static void readRerun(Robot r, File f) {
         try {
             r.setAuton(Files.readAllLines(f.toPath()));
@@ -71,6 +100,11 @@ public class Retrieval {
         }
     }
 
+    /**
+     *
+     * @param f
+     * @return
+     */
     public static List<String> read(File f) {
         try {
             return Files.readAllLines(f.toPath());
@@ -80,6 +114,11 @@ public class Retrieval {
         }
     }
 
+    /**
+     *
+     * @param commands
+     * @param f
+     */
     public static void writeRerun(List<String> commands, File f) {
         writeToFile(commands, f);
     }

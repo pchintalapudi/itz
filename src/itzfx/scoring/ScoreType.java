@@ -11,7 +11,35 @@ package itzfx.scoring;
  */
 public enum ScoreType {
 
-    ZONE_NONE(0), ZONE_20(20), ZONE_10(10), ZONE_5(5), STAT_GOAL(0), PARKING(2);
+    /**
+     *
+     */
+    ZONE_NONE(0),
+
+    /**
+     *
+     */
+    ZONE_20(20),
+
+    /**
+     *
+     */
+    ZONE_10(10),
+
+    /**
+     *
+     */
+    ZONE_5(5),
+
+    /**
+     *
+     */
+    STAT_GOAL(0),
+
+    /**
+     *
+     */
+    PARKING(2);
 
     private final int score;
     
@@ -19,10 +47,19 @@ public enum ScoreType {
         this.score = score;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getScore() {
         return score;
     }
     
+    /**
+     *
+     * @param st
+     * @return
+     */
     public static boolean isMobileGoal(ScoreType st) {
         return st != STAT_GOAL && st != PARKING;
     }

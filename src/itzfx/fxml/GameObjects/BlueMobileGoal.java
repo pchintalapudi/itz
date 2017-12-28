@@ -21,6 +21,11 @@ public class BlueMobileGoal extends MobileGoal {
 
     private final StackPane mogo;
 
+    /**
+     *
+     * @param layoutX
+     * @param layoutY
+     */
     public BlueMobileGoal(double layoutX, double layoutY) {
         super(layoutX, layoutY);
         mogo = new StackPane();
@@ -33,6 +38,10 @@ public class BlueMobileGoal extends MobileGoal {
         super.registerProperties();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ScoreType determineScoringZone() {
         if (!super.isVanished()) {
@@ -47,11 +56,19 @@ public class BlueMobileGoal extends MobileGoal {
         return ScoreType.ZONE_NONE;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isRed() {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public StackPane getNode() {
         return mogo;

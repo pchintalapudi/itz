@@ -36,6 +36,11 @@ public class RobotMenu {
 
     private final String menuText;
 
+    /**
+     *
+     * @param r
+     * @param menuText
+     */
     public RobotMenu(Robot r, String menuText) {
         this.r = r;
         this.menuText = menuText;

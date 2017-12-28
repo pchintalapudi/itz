@@ -33,6 +33,10 @@ public class KeyBinder {
 
     private final KeyCode[] keys;
 
+    /**
+     *
+     * @param kc
+     */
     public KeyBinder(KeyControl kc) {
         keys = kc.keys();
     }
@@ -60,6 +64,10 @@ public class KeyBinder {
         });
     }
     
+    /**
+     *
+     * @return
+     */
     public KeyControl getKC() {
         return new KeyControl(keys);
     }

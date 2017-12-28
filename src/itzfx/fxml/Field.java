@@ -73,6 +73,9 @@ public class Field {
 
     private final List<Mobile> added;
 
+    /**
+     *
+     */
     public Field() {
         robots = new LinkedList<>();
         onField = new LinkedList<>();
@@ -350,6 +353,9 @@ public class Field {
         getRobots().add(r);
     }
 
+    /**
+     *
+     */
     public void reset() {
         try {
             stop();
@@ -375,21 +381,41 @@ public class Field {
         }
     }
 
+    /**
+     *
+     * @param r
+     * @return
+     */
     public static final Field getOwner(Robot r) {
         List<Field> fields = FIELDS.stream().filter(f -> f.getRobots().contains(r)).collect(Collectors.toList());
         return fields.size() > 0 ? fields.get(0) : null;
     }
 
+    /**
+     *
+     * @param l
+     * @return
+     */
     public static final Field getOwner(Loader l) {
         List<Field> fields = FIELDS.stream().filter(f -> f.rLoad == l || f.bLoad == l).collect(Collectors.toList());
         return fields.size() > 0 ? fields.get(0) : null;
     }
 
+    /**
+     *
+     * @param sg
+     * @return
+     */
     public static final Field getOwner(StationaryGoal sg) {
         List<Field> fields = FIELDS.stream().filter(f -> f.bStat == sg || f.rStat == sg).limit(1).collect(Collectors.toList());
         return fields.isEmpty() ? null : fields.get(0);
     }
 
+    /**
+     *
+     * @param mg
+     * @return
+     */
     public static final Field getOwner(MobileGoal mg) {
         List<Field> field = FIELDS.stream().filter(f -> f.mogos.contains(mg)).limit(1).collect(Collectors.toList());
         if (field.isEmpty()) {
@@ -398,14 +424,28 @@ public class Field {
         return field.isEmpty() ? null : field.get(0);
     }
 
+    /**
+     *
+     * @param mg
+     */
     public final void register(MobileGoal mg) {
         scores.registerReport(mg.getReporter());
     }
 
+    /**
+     *
+     * @param sg
+     */
     public final void register(StationaryGoal sg) {
         scores.registerReport(sg.getReporter());
     }
 
+    /**
+     *
+     * @param center
+     * @param pointingVector
+     * @return
+     */
     public MobileGoal huntMogo(Point2D center, Point2D pointingVector) {
         List<MobileGoal> possible = mogos.stream()
                 .filter(m -> !m.isVanished())
@@ -416,6 +456,12 @@ public class Field {
         return possible.size() > 0 ? possible.get(0) : null;
     }
 
+    /**
+     *
+     * @param center
+     * @param pointingVector
+     * @return
+     */
     public Cone huntCone(Point2D center, Point2D pointingVector) {
         List<Cone> possible = onField.stream()
                 .filter(c -> !c.isVanished())
@@ -426,6 +472,12 @@ public class Field {
         return possible.size() > 0 ? possible.get(0) : null;
     }
 
+    /**
+     *
+     * @param center
+     * @param pointingVector
+     * @return
+     */
     public StationaryGoal huntStat(Point2D center, Point2D pointingVector) {
         if (Math.abs(240 - center.getX() - pointingVector.getX()) < 20 && Math.abs(480 - center.getY() - pointingVector.getY()) < 20) {
             return rStat;
@@ -435,6 +487,10 @@ public class Field {
         return null;
     }
 
+    /**
+     *
+     * @param r
+     */
     public void load(Robot r) {
         if (r.isRed()) {
             Cone c = rLoad.load();
@@ -449,11 +505,21 @@ public class Field {
         }
     }
 
+    /**
+     *
+     * @param l
+     * @return
+     */
     public boolean hasCone(Loader l) {
         Point2D loadCenter = l.getCenter();
         return onField.stream().filter(c -> !c.isVanished()).anyMatch(c -> c.getCenterX() == loadCenter.getX() && c.getCenterY() == loadCenter.getY());
     }
 
+    /**
+     *
+     * @param red
+     * @return
+     */
     public Cone getLoadableCone(boolean red) {
         if (red) {
             List<Cone> cone = redDriverLoads.stream().filter(c -> !onField.contains(c)).limit(1).collect(Collectors.toList());
@@ -466,12 +532,20 @@ public class Field {
 
     private final ScoreAggregator scores = new ScoreAggregator();
 
+    /**
+     *
+     * @return
+     */
     public ScoreAggregator getAggregator() {
         return scores;
     }
 
     private ScoringBoxController sbc;
 
+    /**
+     *
+     * @param sbc
+     */
     public void inject(ScoringBoxController sbc) {
         this.sbc = sbc;
         sbc.setAggregator(scores);
@@ -488,17 +562,27 @@ public class Field {
 
     private ControlMode mode;
 
+    /**
+     *
+     * @param cm
+     */
     public void setMode(ControlMode cm) {
         this.mode = cm;
         reregisterMode(cm);
         switchToDriver = false;
     }
 
+    /**
+     *
+     */
     public void preMatch() {
         reset();
         setMode(ControlMode.FREE_PLAY);
     }
 
+    /**
+     *
+     */
     public void startMatch() {
         setMode(ControlMode.AUTON);
         switchToDriver = true;
@@ -521,6 +605,9 @@ public class Field {
         }
     }
 
+    /**
+     *
+     */
     public void stop() {
         timer.stop();
         reregisterMode(mode);
@@ -539,12 +626,18 @@ public class Field {
         }
     }
 
+    /**
+     *
+     */
     public void play() {
         robots.forEach(Robot::resume);
         timer.play();
         robots.forEach(Robot::deprime);
     }
 
+    /**
+     *
+     */
     public void pause() {
         robots.forEach(Robot::pause);
         timer.pause();
@@ -566,12 +659,21 @@ public class Field {
         }
     }
 
+    /**
+     *
+     */
     public void close() {
         timer.stop();
         Hitbox.clear();
         scheduled.cancel(true);
     }
 
+    /**
+     *
+     * @param sceneX
+     * @param sceneY
+     * @return
+     */
     public Cone generateCone(double sceneX, double sceneY) {
         Cone c = new Cone(center.sceneToLocal(sceneX, sceneY).getX(), center.sceneToLocal(sceneX, sceneY).getY());
         added.add(c);
@@ -579,6 +681,13 @@ public class Field {
         return c;
     }
 
+    /**
+     *
+     * @param sceneX
+     * @param sceneY
+     * @param red
+     * @return
+     */
     public MobileGoal generateMobileGoal(double sceneX, double sceneY, boolean red) {
         Point2D centerMogo = center.sceneToLocal(sceneX, sceneY);
         MobileGoal mg = red ? new RedMobileGoal(centerMogo.getX(), centerMogo.getY()) : new BlueMobileGoal(centerMogo.getX(), centerMogo.getY());
@@ -587,6 +696,9 @@ public class Field {
         return mg;
     }
 
+    /**
+     *
+     */
     public void clearAdded() {
         added.stream().peek(Mobile::reset).map(Mobile::getNode).forEach(center.getChildren()::remove);
     }

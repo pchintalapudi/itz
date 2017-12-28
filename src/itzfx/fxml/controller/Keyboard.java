@@ -73,10 +73,18 @@ public class Keyboard {
 
     private Rectangle selected;
 
+    /**
+     *
+     * @param k
+     */
     public void remove(KeyCode k) {
         mappings.get(k).setFill(null);
     }
 
+    /**
+     *
+     * @param k
+     */
     public void selected(KeyCode k) {
         if (selected != null) {
             selected.setFill(null);
@@ -87,6 +95,9 @@ public class Keyboard {
         }
     }
 
+    /**
+     *
+     */
     public void deselect() {
         if (selected != null) {
             selected.setFill(null);
@@ -94,6 +105,9 @@ public class Keyboard {
         }
     }
 
+    /**
+     *
+     */
     public void save() {
         if (selected != null) {
             selected.setFill(new Color(1, 1, 1, .25));

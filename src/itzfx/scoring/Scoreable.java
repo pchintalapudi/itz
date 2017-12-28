@@ -11,7 +11,15 @@ package itzfx.scoring;
  */
 public interface Scoreable {
     
+    /**
+     *
+     * @return
+     */
     public int score();
     
+    /**
+     *
+     * @return
+     */
     public boolean isRed();
 }

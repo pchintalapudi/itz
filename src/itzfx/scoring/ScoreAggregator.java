@@ -45,18 +45,33 @@ public class ScoreAggregator {
 
     private Boolean autonomous;
 
+    /**
+     *
+     */
     public ScoreAggregator() {
         reports = new LinkedList<>();
     }
 
+    /**
+     *
+     * @param sr
+     */
     public void registerReport(ScoreReport sr) {
         reports.add(sr);
     }
 
+    /**
+     *
+     * @param sr
+     */
     public void unregisterReport(ScoreReport sr) {
         reports.remove(sr);
     }
 
+    /**
+     *
+     * @return
+     */
     public int[] calculateMatch() {
         AtomicInteger[] initial = calculate();
         highStack(initial[0], initial[1]);
@@ -85,6 +100,10 @@ public class ScoreAggregator {
         return new AtomicInteger[]{aiR, aiB};
     }
 
+    /**
+     *
+     * @return
+     */
     public int[] calculateAuton() {
         AtomicInteger aiR = new AtomicInteger();
         AtomicInteger aiB = new AtomicInteger();
@@ -149,11 +168,17 @@ public class ScoreAggregator {
         return new Boolean[]{add(r20, b20, aiR, aiB), add(r10, b10, aiR, aiB), add(r5, b5, aiR, aiB), add(redStat, blueStat, aiR, aiB)};
     }
 
+    /**
+     *
+     */
     public void determineAutonWinner() {
         int[] temp = calculateAuton();
         autonomous = temp[0] > temp[1] ? true : temp[1] > temp[0] ? false : null;
     }
 
+    /**
+     *
+     */
     public void clearAuton() {
         autonomous = null;
     }
@@ -170,6 +195,10 @@ public class ScoreAggregator {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int calculateSkills() {
         AtomicInteger[] temp = calculate();
         return temp[0].get() + temp[1].get();
@@ -247,6 +276,9 @@ public class ScoreAggregator {
         }
     }
 
+    /**
+     *
+     */
     public void showReport() {
         updateReport();
         FXMLLoader loader = new FXMLLoader(ScoreAggregator.class.getResource("/itzfx/fxml/ScoreSheet.fxml"));

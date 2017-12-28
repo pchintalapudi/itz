@@ -30,6 +30,9 @@ public class RobotBuilder {
     private MogoConfig mc;
     private StackConfig sc;
 
+    /**
+     *
+     */
     public void initialize() {
         rc = (RobotConfig) rcPane.getUserData();
         mc = (MogoConfig) mcPane.getUserData();
@@ -47,10 +50,17 @@ public class RobotBuilder {
 
     private boolean submitted;
 
+    /**
+     *
+     * @return
+     */
     public boolean isSubmitted() {
         return submitted;
     }
 
+    /**
+     *
+     */
     public void submit() {
         speed = rc.getSpeed();
         autostack = rc.getAutostackTime();
@@ -62,6 +72,10 @@ public class RobotBuilder {
         submitted = true;
     }
 
+    /**
+     *
+     * @param r
+     */
     public void fillRobot(Robot r) {
         r.acceptValues(speed, mogotime, autostack, statstack, maxmogo, maxstat, front);
     }

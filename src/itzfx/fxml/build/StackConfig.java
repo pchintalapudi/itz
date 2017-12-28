@@ -26,12 +26,19 @@ public class StackConfig {
     @FXML
     private TextField statStack;
 
+    /**
+     *
+     */
     public void initialize() {
         mogoStack.setTextFormatter(new IntFormatter());
         statStack.setTextFormatter(new IntFormatter());
         root.setUserData(this);
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getMogoStack() {
         if (mogoStack.getText().isEmpty()) {
             return null;
@@ -40,6 +47,10 @@ public class StackConfig {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getStatStack() {
         if (statStack.getText().isEmpty()) {
             return null;

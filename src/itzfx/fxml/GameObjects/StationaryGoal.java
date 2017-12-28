@@ -44,6 +44,12 @@ public final class StationaryGoal implements Scoreable {
 
     private final ScoreReport sr;
 
+    /**
+     *
+     * @param layoutX
+     * @param layoutY
+     * @param red
+     */
     public StationaryGoal(double layoutX, double layoutY, boolean red) {
         this.stacked = FXCollections.observableList(new LinkedList<>());
         this.countModifier = new SimpleIntegerProperty();
@@ -96,24 +102,43 @@ public final class StationaryGoal implements Scoreable {
         return rightClick;
     }
 
+    /**
+     *
+     * @return
+     */
     public ScoreReport getReporter() {
         return sr;
     }
 
+    /**
+     *
+     * @param cone
+     */
     public void stack(Cone cone) {
         stacked.add(cone);
     }
 
+    /**
+     *
+     * @return
+     */
     public Cone destack() {
         return stacked.size() > 0 ? stacked.remove(0) : null;
     }
 
+    /**
+     *
+     * @param other
+     */
     public void shiftStack(MobileGoal other) {
         while (stacked.size() > 0) {
             other.stack(stacked.remove(0));
         }
     }
 
+    /**
+     *
+     */
     public void reset() {
         Platform.runLater(() -> {
             while (stacked.size() > 0) {
@@ -123,16 +148,28 @@ public final class StationaryGoal implements Scoreable {
         });
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isRed() {
         return red;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int score() {
         return stacked.size() * 2;
     }
 
+    /**
+     *
+     * @return
+     */
     public Node getNode() {
         return statGoal;
     }

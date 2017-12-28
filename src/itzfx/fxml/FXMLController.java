@@ -90,6 +90,9 @@ public class FXMLController {
         field.reset();
     }
 
+    /**
+     *
+     */
     @FXML
     public void close() {
         field.close();
@@ -103,6 +106,10 @@ public class FXMLController {
         copy(takeScreenshot(root));
     }
 
+    /**
+     *
+     * @param ignition
+     */
     public void inject(Start ignition) {
         this.ignition = ignition;
     }
@@ -152,6 +159,11 @@ public class FXMLController {
     @FXML
     private CheckMenuItem showHitboxes;
 
+    /**
+     *
+     * @param nodes
+     * @return
+     */
     public static WritableImage takeScreenshot(Node... nodes) {
         HBox container = new HBox();
         Scene shotScene = new Scene(container);
@@ -164,12 +176,20 @@ public class FXMLController {
         return shotScene.snapshot(null);
     }
 
+    /**
+     *
+     * @param i
+     */
     public static void copy(Image i) {
         ClipboardContent cc = new ClipboardContent();
         cc.putImage(i);
         Clipboard.getSystemClipboard().setContent(cc);
     }
 
+    /**
+     *
+     * @param text
+     */
     public static void copy(String text) {
         ClipboardContent cc = new ClipboardContent();
         cc.putString(text);

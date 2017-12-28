@@ -22,6 +22,9 @@ import javafx.scene.shape.Circle;
  */
 public final class Hitbox {
 
+    /**
+     *
+     */
     public static final BooleanProperty VISIBLE;
 
     private static final List<Hitbox> COLLIDABLE;
@@ -31,6 +34,9 @@ public final class Hitbox {
         COLLIDABLE = new LinkedList<>();
     }
 
+    /**
+     *
+     */
     public static void pulse() {
         for (int i = COLLIDABLE.size() - 1; i > -1; i--) {
             Hitbox hb = COLLIDABLE.get(i);
@@ -89,6 +95,10 @@ public final class Hitbox {
         }
     }
 
+    /**
+     *
+     * @param hb
+     */
     public static void register(Hitbox hb) {
         try {
             COLLIDABLE.add(hb);
@@ -97,6 +107,10 @@ public final class Hitbox {
         }
     }
 
+    /**
+     *
+     * @param hb
+     */
     public static void unregister(Hitbox hb) {
         try {
             COLLIDABLE.remove(hb);
@@ -105,6 +119,9 @@ public final class Hitbox {
         }
     }
     
+    /**
+     *
+     */
     public static void clear() {
         COLLIDABLE.clear();
     }
@@ -124,10 +141,24 @@ public final class Hitbox {
         this.check = check;
     }
 
+    /**
+     *
+     * @param radius
+     * @param cType
+     * @param check
+     * @param mass
+     */
     public Hitbox(double radius, CollisionType cType, Node check, double mass) {
         this(radius, cType, null, check, mass);
     }
 
+    /**
+     *
+     * @param radius
+     * @param cType
+     * @param movableOwner
+     * @param mass
+     */
     public Hitbox(double radius, CollisionType cType, Mobile movableOwner, double mass) {
         this(radius, cType, movableOwner, movableOwner.getNode(), mass);
     }
@@ -135,10 +166,18 @@ public final class Hitbox {
     private Supplier<Double> xPos;
     private Supplier<Double> yPos;
 
+    /**
+     *
+     * @param xPos
+     */
     public void setXSupplier(Supplier<Double> xPos) {
         this.xPos = xPos;
     }
 
+    /**
+     *
+     * @param yPos
+     */
     public void setYSupplier(Supplier<Double> yPos) {
         this.yPos = yPos;
     }
@@ -155,31 +194,70 @@ public final class Hitbox {
 
     private final double mass;
 
+    /**
+     *
+     * @return
+     */
     public boolean canCollide() {
         return collisionEnabled.get();
     }
 
+    /**
+     *
+     */
     public void disable() {
         collisionEnabled.set(false);
     }
 
+    /**
+     *
+     */
     public void enable() {
         collisionEnabled.set(true);
     }
 
+    /**
+     *
+     * @return
+     */
     public Mobile getMovable() {
         return this.movableOwner;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isMoveable() {
         return movableOwner != null;
     }
 
+    /**
+     *
+     * @return
+     */
     public Circle getVisual() {
         return visual;
     }
 
+    /**
+     *
+     */
     public static enum CollisionType {
-        STRONG, WEAK, PHANTOM;
+
+        /**
+         *
+         */
+        STRONG,
+
+        /**
+         *
+         */
+        WEAK,
+
+        /**
+         *
+         */
+        PHANTOM;
     }
 }

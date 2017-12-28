@@ -10,7 +10,31 @@ package itzfx;
  * @author Prem Chintalapudi 5776E
  */
 public enum ControlMode {
-    DRIVER_CONTROL(105), AUTON(15), DRIVER_SKILLS(60), PROGRAMMING_SKILLS(60), FREE_PLAY(0);
+
+    /**
+     *
+     */
+    DRIVER_CONTROL(105),
+
+    /**
+     *
+     */
+    AUTON(15),
+
+    /**
+     *
+     */
+    DRIVER_SKILLS(60),
+
+    /**
+     *
+     */
+    PROGRAMMING_SKILLS(60),
+
+    /**
+     *
+     */
+    FREE_PLAY(0);
 
     private final int seconds;
 
@@ -18,6 +42,10 @@ public enum ControlMode {
         this.seconds = seconds;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTime() {
         return seconds;
     }

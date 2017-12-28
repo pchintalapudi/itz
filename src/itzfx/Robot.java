@@ -81,6 +81,15 @@ public final class Robot extends Mobile implements Scoreable {
 
     private final ScoreReport sr;
 
+    /**
+     * Creates a robot at the specified coordinates with the specified initial
+     * rotation. No layout properties (layoutX, layoutY) are adjusted, just the
+     * translate properties of the node.
+     *
+     * @param layoutX the x coordinate to place the robot at
+     * @param layoutY the y coordinate to place the robot at
+     * @param initRotate the initial rotation of the robot
+     */
     public Robot(double layoutX, double layoutY, double initRotate) {
         super(layoutX, layoutY, initRotate);
         node = new StackPane();
@@ -118,7 +127,6 @@ public final class Robot extends Mobile implements Scoreable {
         setController(KeyControl.Defaults.SINGLE.getKC());
         preassignValues();
     }
-
     private void register() {
         Field.getOwner(this).getAggregator().registerReport(sr);
     }
@@ -132,12 +140,20 @@ public final class Robot extends Mobile implements Scoreable {
         robotStatMaxStack = 5;
     }
 
+    /**
+     *
+     */
     public void registerMogos() {
         Field.getOwner(this).register(redMogo);
         Field.getOwner(this).register(blueMogo);
         register();
     }
 
+    /**
+     *
+     * @param mogo
+     * @return
+     */
     public boolean owner(MobileGoal mogo) {
         return mogo == redMogo || mogo == blueMogo;
     }
@@ -151,6 +167,10 @@ public final class Robot extends Mobile implements Scoreable {
         blueMogo.vanish();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected DoubleBinding translateXBind() {
         return Bindings.createDoubleBinding(() -> {
@@ -159,6 +179,10 @@ public final class Robot extends Mobile implements Scoreable {
         }, super.centerXProperty());
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected DoubleBinding translateYBind() {
         return Bindings.createDoubleBinding(() -> {
@@ -167,6 +191,9 @@ public final class Robot extends Mobile implements Scoreable {
         }, super.centerYProperty());
     }
 
+    /**
+     *
+     */
     @Override
     protected void cleanUp() {
         mogoAnimation.stop();
@@ -216,15 +243,26 @@ public final class Robot extends Mobile implements Scoreable {
 
     private KeyControl controller;
 
+    /**
+     *
+     * @return
+     */
     public KeyControl getController() {
         return controller;
     }
 
+    /**
+     *
+     */
     public void eraseController() {
         Iterator<KeyCode> iteratorOld = Arrays.asList(this.controller.keys()).iterator();
         actions.stream().forEach(a -> KeyBuffer.remove(iteratorOld.next(), a));
     }
 
+    /**
+     *
+     * @param controller
+     */
     public void setController(KeyControl controller) {
         if (controller != null) {
             Iterator<KeyCode> iteratorNew = Arrays.asList(controller.keys()).iterator();
@@ -238,41 +276,69 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void disableCollision() {
         hb.disable();
     }
 
+    /**
+     *
+     */
     @Override
     public void enableCollision() {
         hb.enable();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canCollide() {
         return hb.canCollide();
     }
 
+    /**
+     *
+     */
     @Override
     public void permaDisableCollisions() {
         Hitbox.unregister(hb);
     }
 
+    /**
+     *
+     * @param red
+     */
     public void setRed(boolean red) {
         this.red.set(red);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isRed() {
         return red.get();
     }
 
+    /**
+     *
+     * @return
+     */
     public BooleanProperty redProperty() {
         return red;
     }
 
     private final BooleanProperty recording = new SimpleBooleanProperty();
 
+    /**
+     *
+     */
     public void pulse() {
         if (recording.get()) {
             if (pulse.isEmpty()) {
@@ -283,22 +349,40 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
+    /**
+     *
+     */
     public void record() {
         recording.set(true);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isRecording() {
         return recording.get();
     }
 
+    /**
+     *
+     * @return
+     */
     public BooleanProperty recordingProperty() {
         return recording;
     }
 
+    /**
+     *
+     */
     public void stopRecording() {
         recording.set(false);
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> saveRecording() {
         if (!saved.isEmpty()) {
             while (saved.peek().get(0) == Command.NONE) {
@@ -312,6 +396,10 @@ public final class Robot extends Mobile implements Scoreable {
 
     private List<String> commands;
 
+    /**
+     *
+     * @param commands
+     */
     public void setAuton(List<String> commands) {
         this.commands = commands;
     }
@@ -368,10 +456,16 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
+    /**
+     *
+     */
     public void runProgram() {
         readBack();
     }
 
+    /**
+     *
+     */
     public void driverControl() {
         if (readBackTask != null) {
             readBackTask.cancel(true);
@@ -379,6 +473,10 @@ public final class Robot extends Mobile implements Scoreable {
         setController(controller);
     }
 
+    /**
+     *
+     * @param rightClick
+     */
     @Override
     protected void rightClickOptions(ContextMenu rightClick) {
         MenuItem setAuton = new MenuItem("Set Autonomous");
@@ -455,6 +553,10 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public double getSpeed() {
         return robotSpeed;
     }
@@ -468,6 +570,9 @@ public final class Robot extends Mobile implements Scoreable {
     private final ObjectProperty<MobileGoal> privateMogo = new SimpleObjectProperty<>();
     private final ObjectProperty<MobileGoal> heldMogo = new SimpleObjectProperty<>();
 
+    /**
+     *
+     */
     public void mogo() {
         if (active.get()) {
             if (!movingMogo.get()) {
@@ -543,6 +648,9 @@ public final class Robot extends Mobile implements Scoreable {
 
     private long lastConeMove;
 
+    /**
+     *
+     */
     public void cone() {
         if (active.get()) {
             if (!movingCone.get() && System.currentTimeMillis() > 100 + lastConeMove) {
@@ -584,6 +692,9 @@ public final class Robot extends Mobile implements Scoreable {
 
     private final Timeline autostackAnimation = new Timeline();
 
+    /**
+     *
+     */
     public void autostack() {
         if (active.get() && heldMogo.get() != null && !movingCone.get() && privateMogo.get().score() / 2 < this.robotMogoMaxStack) {
             if (heldCone.get() == null) {
@@ -622,6 +733,9 @@ public final class Robot extends Mobile implements Scoreable {
         heldCone.set(null);
     }
 
+    /**
+     *
+     */
     public void statStack() {
         if (active.get()) {
             if (!movingCone.get() && heldCone.get() != null) {
@@ -667,6 +781,9 @@ public final class Robot extends Mobile implements Scoreable {
         heldCone.set(null);
     }
 
+    /**
+     *
+     */
     public void load() {
         Platform.runLater(() -> {
             Field.getOwner(this).load(this);
@@ -679,7 +796,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @TreatAsPrivate @param cone the cone to intake
+     * @param cone the cone to intake
      * @deprecated only public for field reset
      */
     @Deprecated
@@ -692,14 +809,24 @@ public final class Robot extends Mobile implements Scoreable {
 
     private final BooleanProperty primed = new SimpleBooleanProperty();
 
+    /**
+     *
+     */
     public void prime() {
         primed.set(true);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isPrimed() {
         return primed.get();
     }
 
+    /**
+     *
+     */
     public void deprime() {
         primed.set(false);
     }
@@ -707,6 +834,9 @@ public final class Robot extends Mobile implements Scoreable {
     private boolean mogoWas;
     private boolean stackWas;
 
+    /**
+     *
+     */
     public void pause() {
         if (mogoAnimation.getStatus() == Animation.Status.RUNNING) {
             mogoAnimation.pause();
@@ -719,6 +849,9 @@ public final class Robot extends Mobile implements Scoreable {
         active.set(false);
     }
 
+    /**
+     *
+     */
     public void resume() {
         if (mogoWas) {
             mogoAnimation.play();
@@ -731,6 +864,9 @@ public final class Robot extends Mobile implements Scoreable {
         active.set(true);
     }
 
+    /**
+     *
+     */
     @Override
     public void resetProperties() {
         mogoAnimation.stop();
@@ -756,11 +892,19 @@ public final class Robot extends Mobile implements Scoreable {
         active.set(true);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public StackPane getNode() {
         return node;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int score() {
         sr.setScoreType(inParkOne() || inParkTwo() ? ScoreType.PARKING : ScoreType.ZONE_NONE);
@@ -777,6 +921,16 @@ public final class Robot extends Mobile implements Scoreable {
                 : super.getCenterX() > 555 && super.getCenterY() > 425 && super.getCenterY() < 645;
     }
 
+    /**
+     *
+     * @param robotSpeed
+     * @param robotMogoIntakeTime
+     * @param robotAutostackTime
+     * @param robotStatTime
+     * @param robotMaxMogo
+     * @param robotMaxStat
+     * @param mogoIntakeFront
+     */
     public void acceptValues(Double robotSpeed, Double robotMogoIntakeTime, Double robotAutostackTime,
             Double robotStatTime, Integer robotMaxMogo, Integer robotMaxStat, Boolean mogoIntakeFront) {
         if (robotSpeed != null) {
@@ -805,6 +959,10 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String fileData() {
         return "" + robotSpeed + " " + robotMogoIntakeTime + " "
                 + robotAutostackTime + " " + robotStatTime + " "
@@ -812,6 +970,11 @@ public final class Robot extends Mobile implements Scoreable {
                 + robotMogoFront;
     }
 
+    /**
+     *
+     * @param r
+     * @param fileData
+     */
     public static void fillRobot(Robot r, String fileData) {
         String[] values = fileData.split(" ");
         double rs = Double.parseDouble(values[0]);

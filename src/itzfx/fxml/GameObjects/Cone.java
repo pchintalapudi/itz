@@ -27,6 +27,11 @@ public final class Cone extends Mobile {
 
     private final BooleanProperty stacked;
 
+    /**
+     *
+     * @param layoutX
+     * @param layoutY
+     */
     public Cone(double layoutX, double layoutY) {
         super(layoutX, layoutY);
         try {
@@ -47,47 +52,81 @@ public final class Cone extends Mobile {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void permaDisableCollisions() {
         Hitbox.unregister(hitbox);
     }
 
+    /**
+     *
+     */
     @Override
     public void disableCollision() {
         hitbox.disable();
     }
 
+    /**
+     *
+     */
     @Override
     public void enableCollision() {
         hitbox.enable();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean canCollide() {
         return hitbox.canCollide();
     }
 
+    /**
+     *
+     * @return
+     */
     public BooleanProperty stackedProperty() {
         return stacked;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isStacked() {
         return stacked.get();
     }
 
+    /**
+     *
+     */
     public void stack() {
         stacked.set(true);
     }
 
+    /**
+     *
+     */
     public void destack() {
         stacked.set(false);
     }
     
+    /**
+     *
+     */
     @Override
     protected void resetProperties() {
         stacked.set(false);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Parent getNode() {
         return cone;

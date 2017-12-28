@@ -44,6 +44,10 @@ public class ScoreSheetController {
     @FXML
     private Text bluePark;
 
+    /**
+     *
+     * @param temp
+     */
     public void update(int[] temp) {
         int[] vals = new int[13];
         if (temp != null) {
