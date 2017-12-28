@@ -17,7 +17,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls the "ScoringBox.fxml" file. Maintains live
+ * match scoring and autonomous scoring, when pulsed. Uses an internal
+ * {@link ScoreAggregator score aggregator} to check scores.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -43,17 +45,16 @@ public class ScoringBoxController {
     private ScoreAggregator sa;
 
     /**
-     *
+     * Creates a new ScoringBoxController. This is generally called by
+     * {@link FXMLLoader}.
      */
     public ScoringBoxController() {
         rScore = new SimpleIntegerProperty();
         bScore = new SimpleIntegerProperty();
     }
 
-    /**
-     *
-     */
-    public void initialize() {
+    @FXML
+    private void initialize() {
         redScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(rScore.get()), rScore));
         blueScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(bScore.get()), bScore));
         root.getParent().setUserData(this);
@@ -61,47 +62,54 @@ public class ScoringBoxController {
     }
 
     /**
+     * Gets the {@link DoubleProperty time property} on which the displayed
+     * {@link Clock clock} is based.
      *
-     * @return
+     * @return the time property that is monitored by the clock
      */
     public DoubleProperty getTime() {
         return clock.getTime();
     }
 
     /**
+     * Sets the aggregator that determines scores on demand.
      *
-     * @param sa
+     * @param sa the aggregator to set
      */
     public void setAggregator(ScoreAggregator sa) {
         this.sa = sa;
     }
 
     /**
+     * Gets the scoring aggregator
      *
-     * @return
+     * @return the aggregator relied upon by this controller
      */
     public ScoreAggregator getAggregator() {
         return sa;
     }
 
     /**
-     *
+     * Updates the displayed scores using a calculation that generates scores
+     * during the autonomous period.
      */
     public void pulseAuton() {
         int[] temp = sa.calculateAuton();
         rScore.set(temp[0]);
         bScore.set(temp[1]);
     }
-    
+
     /**
-     *
+     * Selects the autonomous winner based on the higher number of autonomous
+     * points. Automatically adds 10 points to the alliance's score.
      */
     public void determineAutonWinner() {
         sa.determineAutonWinner();
     }
 
     /**
-     *
+     * Updates the displayed scores using a calculation that generates scores
+     * during the driver control period.
      */
     public void pulseMatch() {
         int[] temp = sa.calculateMatch();
@@ -110,7 +118,7 @@ public class ScoringBoxController {
     }
 
     /**
-     *
+     * Displays a score sheet, formatted like an actual referee's score sheet.
      */
     public void generateReport() {
         sa.showReport();

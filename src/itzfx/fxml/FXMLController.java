@@ -10,11 +10,13 @@ import itzfx.ControlMode;
 import itzfx.Hitbox;
 import itzfx.Robot;
 import itzfx.data.FileUI;
+import itzfx.preload.Prestart;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -37,11 +39,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls file "FXML.fxml". Handles most of the methods
+ * located in the top {@link MenuBar}. The Robot {@link Menu} is filled with
+ * repetitive calls to {@link RobotMenu}.
  *
  * @author Prem Chintalapudi 5776E
  */
-public class FXMLController {
+public class FXMLController implements AutoCloseable {
 
     @FXML
     private BorderPane root;
@@ -91,9 +95,11 @@ public class FXMLController {
     }
 
     /**
-     *
+     * Closes this FXMLController and associated window. Also calls the
+     * {@link Field#close()} method of the embedded field.
      */
     @FXML
+    @Override
     public void close() {
         field.close();
         if (root.getScene() != null && root.getScene().getWindow() != null) {
@@ -107,8 +113,10 @@ public class FXMLController {
     }
 
     /**
+     * Allows a {@link Start} that initializes this object to insert itself for
+     * the purposes of restarting this program, on user request.
      *
-     * @param ignition
+     * @param ignition the Start that began this program
      */
     public void inject(Start ignition) {
         this.ignition = ignition;
@@ -118,6 +126,8 @@ public class FXMLController {
     private void restart() {
         Stage primaryStage = (Stage) root.getScene().getWindow();
         close();
+        new Prestart().start(new Stage());
+        ignition.init();
         ignition.start(primaryStage);
     }
 
@@ -160,25 +170,28 @@ public class FXMLController {
     private CheckMenuItem showHitboxes;
 
     /**
+     * Takes a screenshot of the given nodes. Each node has its picture taken in
+     * its own scene. Then, the pictures are accumulated into an {@link HBox} in
+     * its own scene before a snapshot is taken of the entire scene.
      *
-     * @param nodes
-     * @return
+     * @param nodes the nodes to include in the screenshot
+     * @return a {@link WritableImage} that holds the screenshot image
      */
     public static WritableImage takeScreenshot(Node... nodes) {
         HBox container = new HBox();
         Scene shotScene = new Scene(container);
-        ImageView[] images = Arrays.stream(nodes).map(node -> {
-            return node.snapshot(null, null);
-        }).map(wi -> {
-            return new ImageView(wi);
-        }).toArray(ImageView[]::new);
-        container.getChildren().addAll(images);
+        Arrays.stream(nodes).map(node -> node.snapshot(null, null)).map(ImageView::new)
+                .collect(container::getChildren, ObservableList<Node>::add, ObservableList<Node>::addAll);
         return shotScene.snapshot(null);
     }
 
     /**
+     * Copies an image into the system clipboard. This is generally used in
+     * combination with
+     * {@link FXMLController#takeScreenshot(javafx.scene.Node...)} to copy
+     * images of the program.
      *
-     * @param i
+     * @param i the image to copy into the clipboard
      */
     public static void copy(Image i) {
         ClipboardContent cc = new ClipboardContent();
@@ -187,8 +200,10 @@ public class FXMLController {
     }
 
     /**
+     * Copies a text string into the system clipboard. This is generally used to
+     * copy autonomous code into the system clipboard.
      *
-     * @param text
+     * @param text the text to copy
      */
     public static void copy(String text) {
         ClipboardContent cc = new ClipboardContent();
