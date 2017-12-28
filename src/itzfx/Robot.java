@@ -53,6 +53,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 /**
+ * This class is the monitor and controller of the on-field robot. It handles
+ * movement, right-click, and relates those actions to the properties of the
+ * robot. It also is capable of recording autonomous routines and re-running
+ * them later.
  *
  * @author Prem Chintalapudi 5776E
  */
