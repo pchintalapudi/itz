@@ -61,7 +61,7 @@ public class Prestart extends Preloader {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         this.stage = stage;
         stage.setScene(createPreloaderScene());
         stage.setOnHidden(w -> {
