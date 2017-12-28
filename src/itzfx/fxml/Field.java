@@ -41,11 +41,15 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls file "Field.fxml". Handles all field-related
+ * work (resetting, layout, loading, match setup, etc). Also communicates with
+ * robots to inform them of nearby
+ * {@link Cone cones}, {@link MobileGoal mobile goals}, and
+ * {@link StationaryGoal stationary goals}.
  *
  * @author Prem Chintalapudi 5776E
  */
-public class Field {
+public class Field implements AutoCloseable {
 
     private static final List<Field> FIELDS;
 
@@ -74,7 +78,7 @@ public class Field {
     private final List<Mobile> added;
 
     /**
-     *
+     * Constructs a new field, usually called by {@link FXMLLoader}.
      */
     public Field() {
         robots = new LinkedList<>();
@@ -354,7 +358,9 @@ public class Field {
     }
 
     /**
-     *
+     * Resets this field to its initial starting positions. Also clears
+     * user-added objects, destacks all stacks, and preloads cones. Also brings
+     * back all vanished objects.
      */
     public void reset() {
         try {
@@ -377,14 +383,15 @@ public class Field {
             getRobots().forEach(r -> r.forceIntake(preloads.remove(0)));
             preloads.addAll(c);
         } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
     /**
+     * Returns the field that the given {@link Robot Robot} has been placed on.
+     * This enables robot-field communication.
      *
-     * @param r
-     * @return
+     * @param r the robot on a field
+     * @return the field the robot is on
      */
     public static final Field getOwner(Robot r) {
         List<Field> fields = FIELDS.stream().filter(f -> f.getRobots().contains(r)).collect(Collectors.toList());
@@ -392,9 +399,11 @@ public class Field {
     }
 
     /**
+     * Returns the field that the given {@link Loader Loader} has been placed
+     * on. This enables loader-field communication.
      *
-     * @param l
-     * @return
+     * @param l the loader on a field
+     * @return the field the loader is on
      */
     public static final Field getOwner(Loader l) {
         List<Field> fields = FIELDS.stream().filter(f -> f.rLoad == l || f.bLoad == l).collect(Collectors.toList());
@@ -402,9 +411,11 @@ public class Field {
     }
 
     /**
+     * Returns the field that the given {@link StationaryGoal Stationary Goal}
+     * has been placed on. This enables stationary goal-field communication.
      *
-     * @param sg
-     * @return
+     * @param sg the stationary goal on a field
+     * @return the field the stationary goal is on
      */
     public static final Field getOwner(StationaryGoal sg) {
         List<Field> fields = FIELDS.stream().filter(f -> f.bStat == sg || f.rStat == sg).limit(1).collect(Collectors.toList());
@@ -412,9 +423,11 @@ public class Field {
     }
 
     /**
+     * Returns the field that the given {@link MobileGoal Mobile Goal} has been
+     * placed on. This enables mobile goal-field communication.
      *
-     * @param mg
-     * @return
+     * @param mg the mobile goal on a field
+     * @return the field the mobile goal is on
      */
     public static final Field getOwner(MobileGoal mg) {
         List<Field> field = FIELDS.stream().filter(f -> f.mogos.contains(mg)).limit(1).collect(Collectors.toList());
@@ -425,26 +438,37 @@ public class Field {
     }
 
     /**
+     * Registers a {@link MobileGoal Mobile Goal}'s
+     * {@link ScoreReport score report} with this field's scorer.
      *
-     * @param mg
+     * @param mg the mobile goal to register
      */
     public final void register(MobileGoal mg) {
         scores.registerReport(mg.getReporter());
     }
 
     /**
+     * Registers a {@link StationaryGoal Stationary Goal}'s
+     * {@link ScoreReport score report} with this field's scorer.
      *
-     * @param sg
+     * @param sg the stationary goal to register
      */
     public final void register(StationaryGoal sg) {
         scores.registerReport(sg.getReporter());
     }
 
     /**
+     * Returns a {@link MobileGoal mobile goal} near the given center point in
+     * the direction of the pointing vector at about the distance of the
+     * pointing vector.
      *
-     * @param center
-     * @param pointingVector
-     * @return
+     * @param center the tail point of the pointing vector. This can be viewed
+     * as a translation of the vector from the origin.
+     * @param pointingVector the object representing the approximate distance
+     * and direction relative to the center point in which to look for a mobile
+     * goal.
+     * @return a mobile goal, if one is nearby the indicated point. If not, this
+     * method returns null.
      */
     public MobileGoal huntMogo(Point2D center, Point2D pointingVector) {
         List<MobileGoal> possible = mogos.stream()
@@ -457,10 +481,15 @@ public class Field {
     }
 
     /**
+     * Returns a {@link Cone cone} near the given center point in the direction
+     * of the pointing vector at about the distance of the pointing vector.
      *
-     * @param center
-     * @param pointingVector
-     * @return
+     * @param center the tail point of the pointing vector. This can be viewed
+     * as a translation of the vector from the origin.
+     * @param pointingVector the object representing the approximate distance
+     * and direction relative to the center point in which to look for a cone.
+     * @return a cone, if one is nearby the indicated point. If not, this method
+     * returns null.
      */
     public Cone huntCone(Point2D center, Point2D pointingVector) {
         List<Cone> possible = onField.stream()
@@ -473,10 +502,17 @@ public class Field {
     }
 
     /**
+     * Returns a {@link StationaryGoal stationary goal} near the given center
+     * point in the direction of the pointing vector at about the distance of
+     * the pointing vector.
      *
-     * @param center
-     * @param pointingVector
-     * @return
+     * @param center the tail point of the pointing vector. This can be viewed
+     * as a translation of the vector from the origin.
+     * @param pointingVector the object representing the approximate distance
+     * and direction relative to the center point in which to look for a
+     * stationary goal.
+     * @return a stationary goal, if one is nearby the indicated point. If not,
+     * this method returns null.
      */
     public StationaryGoal huntStat(Point2D center, Point2D pointingVector) {
         if (Math.abs(240 - center.getX() - pointingVector.getX()) < 20 && Math.abs(480 - center.getY() - pointingVector.getY()) < 20) {
@@ -488,8 +524,11 @@ public class Field {
     }
 
     /**
+     * Tries to load a {@link Cone cone} on the loader belonging to the alliance
+     * that the given robot belongs to.
      *
-     * @param r
+     * @param r the robot denoting the alliance for which the cone must be
+     * loaded on
      */
     public void load(Robot r) {
         if (r.isRed()) {
@@ -506,9 +545,11 @@ public class Field {
     }
 
     /**
+     * Determines whether the given loader already has a {@link Cone cone}
+     * stacked on it.
      *
-     * @param l
-     * @return
+     * @param l the given loader being checked for a cone
+     * @return true if there is already a cone on this loader
      */
     public boolean hasCone(Loader l) {
         Point2D loadCenter = l.getCenter();
@@ -516,9 +557,13 @@ public class Field {
     }
 
     /**
+     * Finds a driver load {@link Cone cone} of the specified alliance, if any
+     * are still present.
      *
-     * @param red
-     * @return
+     * @param red the boolean denoting which alliance's driver loads are to be
+     * siphoned off.
+     * @return a driver load cone. If none are present, this method will return
+     * null.
      */
     public Cone getLoadableCone(boolean red) {
         if (red) {
@@ -533,8 +578,12 @@ public class Field {
     private final ScoreAggregator scores = new ScoreAggregator();
 
     /**
+     * Gets the internal {@link ScoreAggregator scorer} used by the injected
+     * {@link ScoringBoxController}. This is mainly so {@link Robot robots} can
+     * register their own private {@link MobileGoal mobile goals} for scoring
+     * purposes.
      *
-     * @return
+     * @return the Score Aggregator associated with this field
      */
     public ScoreAggregator getAggregator() {
         return scores;
@@ -543,8 +592,11 @@ public class Field {
     private ScoringBoxController sbc;
 
     /**
+     * Inserts the given {@link ScoringBoxController scoring box} into the
+     * field. This allows the scoring box to be updated in real time. This
+     * method must be called for real-time scoring.
      *
-     * @param sbc
+     * @param sbc the scoring box to insert
      */
     public void inject(ScoringBoxController sbc) {
         this.sbc = sbc;
@@ -563,8 +615,10 @@ public class Field {
     private ControlMode mode;
 
     /**
+     * Sets the {@link ControlMode mode} of this field. Also updates the timer
+     * with the mode's alloted time.
      *
-     * @param cm
+     * @param cm the mode to set
      */
     public void setMode(ControlMode cm) {
         this.mode = cm;
@@ -573,7 +627,7 @@ public class Field {
     }
 
     /**
-     *
+     * Prepares the field for a match scenario.
      */
     public void preMatch() {
         reset();
@@ -581,7 +635,25 @@ public class Field {
     }
 
     /**
+     * Begins a match.
+     * **************************************************************************
+     * Matches are played out as follows:
      *
+     * 1. Autonomous begins immediately. Driver controls are locked out, and
+     * recorded autonomous routines are triggered. The timer counts down from 15
+     * seconds.
+     *
+     * 2. Autonomous finishes. Robots are paused, driver controls are still
+     * locked out. Autonomous winner is determined and viewable on the score
+     * sheet.
+     *
+     * 3. After 5 seconds, the robots are resumed. Driver controls are back in
+     * play.
+     *
+     * 4. When any robot begins moving, the timer starts again, with 105 seconds
+     * on the clock.
+     * 
+     * 5. Game finishes. Match is visible on the score sheet.
      */
     public void startMatch() {
         setMode(ControlMode.AUTON);
@@ -606,7 +678,7 @@ public class Field {
     }
 
     /**
-     *
+     * Stops the field/match timer, and resets the time.
      */
     public void stop() {
         timer.stop();
@@ -627,7 +699,8 @@ public class Field {
     }
 
     /**
-     *
+     * Begins counting down the field/match timer. Also resumes all robot
+     * movement, if it has not been enabled already.
      */
     public void play() {
         robots.forEach(Robot::resume);
@@ -636,7 +709,7 @@ public class Field {
     }
 
     /**
-     *
+     * Temporarily pauses gameplay. Also prevents robots from moving.
      */
     public void pause() {
         robots.forEach(Robot::pause);
@@ -660,8 +733,10 @@ public class Field {
     }
 
     /**
-     *
+     * Closes this field. Cancels all tasks maintaining this field, and clears
+     * the {@link Hitbox#COLLIDABLE hitbox list} maintaining collisions.
      */
+    @Override
     public void close() {
         timer.stop();
         Hitbox.clear();
@@ -669,10 +744,12 @@ public class Field {
     }
 
     /**
+     * Creates a new {@link Cone cone} at the specified coordinates. This is
+     * meant for user-induced cone placement.
      *
-     * @param sceneX
-     * @param sceneY
-     * @return
+     * @param sceneX the scene x coordinate at which the cone should be placed
+     * @param sceneY the scene y coordinate at which the cone should be placed
+     * @return the newly generated cone
      */
     public Cone generateCone(double sceneX, double sceneY) {
         Cone c = new Cone(center.sceneToLocal(sceneX, sceneY).getX(), center.sceneToLocal(sceneX, sceneY).getY());
@@ -682,11 +759,15 @@ public class Field {
     }
 
     /**
+     * Creates a new {@link MobileGoal mobile goal} at the specified
+     * coordinates. This is meant for user-induced mobile goal placement.
      *
-     * @param sceneX
-     * @param sceneY
-     * @param red
-     * @return
+     * @param sceneX the scene x coordinate at which the mobile goal should be
+     * placed
+     * @param sceneY the scene y coordinate at which the mobile goal should be
+     * placed
+     * @param red the color of the mobile goal (true if red, false if blue)
+     * @return the newly generated mobile goal
      */
     public MobileGoal generateMobileGoal(double sceneX, double sceneY, boolean red) {
         Point2D centerMogo = center.sceneToLocal(sceneX, sceneY);
@@ -697,13 +778,17 @@ public class Field {
     }
 
     /**
-     *
+     * Clears all user-added objects from the field. This is mainly called by
+     * the {@link Field#reset() reset} method. It removes all {@link Cone cones}
+     * and {@link MobileGoal mobile goals} from the field.
      */
     public void clearAdded() {
         added.stream().peek(Mobile::reset).map(Mobile::getNode).forEach(center.getChildren()::remove);
     }
 
     /**
+     * Gets the list of robots playing on this field.
+     *
      * @return the robots
      */
     public List<Robot> getRobots() {

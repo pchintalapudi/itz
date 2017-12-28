@@ -9,7 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls the "ScoreSheet.fxml" file. This updates the
+ * fields on the score sheet so that it accurately displays the results of a
+ * match.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -46,7 +48,37 @@ public class ScoreSheetController {
 
     /**
      *
-     * @param temp
+     * @param temp the codes for values to insert into the score sheet. They are
+     * listed as follows:
+     * <p>
+     * Mobile Goals in:
+     * </p><p>
+     * Red 20 point zone
+     * </p><p>
+     * Blue 20 point zone
+     * </p><p>
+     * Red 10 point zone
+     * </p><p>
+     * Blue 10 point zone
+     * </p><p>
+     * Red 5 point zone
+     * </p><p>
+     * Blue 5 point zone
+     * </p><p>
+     * Red cones stacked
+     * </p><p>
+     * Blue cones stacked
+     * </p><p>
+     * Red # of high stacks
+     * </p><p>
+     * Blue # of high stacks
+     * </p><p>
+     * Autonomous bonus (1 if red, -1 if blue, 0 if none)
+     * </p><p>
+     * Red # of robots parked
+     * </p><p>
+     * Blue # of robots parked
+     * </p>
      */
     public void update(int[] temp) {
         int[] vals = new int[13];

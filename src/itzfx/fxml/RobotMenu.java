@@ -23,7 +23,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls the "RobotMenu.fxml" file. This is repeated 4
+ * times on a fully formed field, all headed under the "Robot" top-level menu.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -37,9 +38,11 @@ public class RobotMenu {
     private final String menuText;
 
     /**
+     * Creates a new RobotMenu with the associated {@link Robot Robot} and text.
+     * The menu's text will be initialized with the provided menutext.
      *
-     * @param r
-     * @param menuText
+     * @param r the robot controlled by this menu
+     * @param menuText the text displayed on this menu
      */
     public RobotMenu(Robot r, String menuText) {
         this.r = r;
