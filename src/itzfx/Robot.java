@@ -432,14 +432,12 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     private Future<?> readBackTask;
+    private Queue<List<Command>> decoded;
 
     private void readBack() {
-        if (commands != null) {
-            Queue<List<Command>> decoded = Command.decode(this.commands);
-            if (decoded != null && !decoded.isEmpty()) {
-                eraseController();
-                readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(decoded), 0, 10, TimeUnit.MILLISECONDS);
-            }
+        if (decoded != null && !decoded.isEmpty()) {
+            eraseController();
+            readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(decoded), 0, 10, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -487,7 +485,10 @@ public final class Robot extends Mobile implements Scoreable {
      * Runs the saved autonomous routine.
      */
     public void runProgram() {
-        readBack();
+        if (commands != null) {
+            decoded = Command.decode(this.commands);
+            readBack();
+        }
     }
 
     /**
@@ -864,12 +865,17 @@ public final class Robot extends Mobile implements Scoreable {
 
     private boolean mogoWas;
     private boolean stackWas;
+    private boolean rerunWas;
 
     /**
      * Pauses the movement of this robot, including stack and mobile goal
      * animations.
      */
     public void pause() {
+        if (readBackTask != null && !readBackTask.isDone()) {
+            readBackTask.cancel(false);
+            rerunWas = true;
+        }
         if (mogoAnimation.getStatus() == Animation.Status.RUNNING) {
             mogoAnimation.pause();
             mogoWas = true;
@@ -886,6 +892,9 @@ public final class Robot extends Mobile implements Scoreable {
      * animations.
      */
     public void resume() {
+        if (rerunWas) {
+            readBack();
+        }
         if (mogoWas) {
             mogoAnimation.play();
             mogoWas = false;
