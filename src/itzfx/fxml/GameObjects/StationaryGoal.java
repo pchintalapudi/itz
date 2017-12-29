@@ -103,41 +103,40 @@ public final class StationaryGoal implements Scoreable {
     }
 
     /**
+     * Gets the {@link ScoreReport score reporter} that will be updated when
+     * this stationary goal is scored.
      *
-     * @return
+     * @return this stationary goal's score reporter
      */
     public ScoreReport getReporter() {
         return sr;
     }
 
     /**
+     * "Stacks" a {@link Cone} on top of this stationary goal. In reality, the
+     * given cone is supposed to be vanished, while the count displayed on top
+     * of this stationary goal is incremented.
      *
-     * @param cone
+     * @param cone the cone to stack
      */
     public void stack(Cone cone) {
         stacked.add(cone);
     }
 
     /**
+     * "Destacks" a {@link Cone} from this stationary goal. Removes and returns
+     * a cone that was placed on top of this stationary goal.
      *
-     * @return
+     * @return the cone that was destacked.
      */
     public Cone destack() {
         return stacked.size() > 0 ? stacked.remove(0) : null;
     }
 
     /**
-     *
-     * @param other
-     */
-    public void shiftStack(MobileGoal other) {
-        while (stacked.size() > 0) {
-            other.stack(stacked.remove(0));
-        }
-    }
-
-    /**
-     *
+     * Resets this Stationary Goal. Any stacked {@link Cone cones} are
+     * destacked, before having their own {@link Mobile#reset reset} methods
+     * called.
      */
     public void reset() {
         Platform.runLater(() -> {
@@ -149,8 +148,7 @@ public final class StationaryGoal implements Scoreable {
     }
 
     /**
-     *
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public boolean isRed() {
@@ -158,8 +156,7 @@ public final class StationaryGoal implements Scoreable {
     }
 
     /**
-     *
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public int score() {
@@ -167,8 +164,10 @@ public final class StationaryGoal implements Scoreable {
     }
 
     /**
+     * A method that returns the view of this object shown on the field. It may
+     * be either FXML-based or based solely on JavaFX code.
      *
-     * @return
+     * @return a {@link Node} representing this Stationary Goal
      */
     public Node getNode() {
         return statGoal;

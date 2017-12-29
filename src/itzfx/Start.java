@@ -47,7 +47,7 @@ public class Start extends Application {
     private Parent p;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void init() {
@@ -71,7 +71,7 @@ public class Start extends Application {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void start(Stage primaryStage) {
@@ -100,6 +100,9 @@ public class Start extends Application {
      */
     public static final ScheduledExecutorService PULSER = Executors.newScheduledThreadPool(3);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void stop() {
         PULSER.shutdownNow();

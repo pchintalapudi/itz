@@ -27,6 +27,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 /**
+ * This class is the root class for all mobile goals. It handles stacking and
+ * scoring, as well as collisions.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -40,9 +42,10 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     private final ScoreReport sr;
 
     /**
+     * Constructs a new Mobile Goal at the given coordinates.
      *
-     * @param layoutX
-     * @param layoutY
+     * @param layoutX the specified x coordinate
+     * @param layoutY the specified y coordinate
      */
     protected MobileGoal(double layoutX, double layoutY) {
         super(layoutX, layoutY);
@@ -53,7 +56,9 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
+     * {@inheritDoc}
      *
+     * Adds stacking effects to the node returned by {@link Mobile#getNode()}
      */
     @Override
     protected void registerProperties() {
@@ -85,8 +90,9 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
+     * Adds "Stack" and "Destack" options.
      *
-     * @param rightClick
+     * @param rightClick {@inheritDoc}
      */
     @Override
     protected void rightClickOptions(ContextMenu rightClick) {
@@ -99,32 +105,42 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
+     * Gets the {@link ScoreReport score reporter} that will be updated when
+     * this mobile goal is scored.
      *
-     * @return
+     * @return this mobile goal's score reporter
      */
     public ScoreReport getReporter() {
         return sr;
     }
 
     /**
+     * "Stacks" a {@link Cone} on top of this mobile goal. In reality, the given
+     * cone is supposed to be vanished, while the count displayed on top of this
+     * mobile goal is incremented.
      *
-     * @param cone
+     * @param cone the cone to stack
      */
     public void stack(Cone cone) {
         stacked.add(cone);
     }
 
     /**
+     * "Destacks" a {@link Cone} from this mobile goal. Removes and returns a
+     * cone that was placed on top of this mobile goal.
      *
-     * @return
+     * @return the cone that was destacked.
      */
     public Cone destack() {
         return stacked.size() > 0 ? stacked.remove(0) : null;
     }
 
     /**
+     * Shifts the whole {@link Cone cone} stack onto another mobile goal. This
+     * is generally used when shifting between a {@link Robot robot}'s private
+     * mobile goals and a mobile goal on the field.
      *
-     * @param other
+     * @param other the mobile goal to shift this mobile goal's stack onto
      */
     public void shiftStack(MobileGoal other) {
         while (stacked.size() > 0) {
@@ -133,7 +149,7 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void disableCollision() {
@@ -141,7 +157,7 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void enableCollision() {
@@ -149,8 +165,9 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
+     * {@inheritDoc}
      *
-     * @return
+     * @return {@inheritDoc}
      */
     @Override
     public boolean canCollide() {
@@ -158,7 +175,7 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void permaDisableCollisions() {
@@ -166,7 +183,10 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
+     * {@inheritDoc}
      *
+     * Converts this mobile goal's list to a stack of 0, resets the count
+     * modifier, and resets all the previously held cones.
      */
     @Override
     protected void resetProperties() {
@@ -177,15 +197,17 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
+     * {@inheritDoc}
      *
-     * @return
+     * @return {@inheritDoc}
      */
     @Override
     public abstract StackPane getNode();
 
     /**
+     * {@inheritDoc}
      *
-     * @return
+     * @return {@inheritDoc}
      */
     @Override
     public int score() {
@@ -194,8 +216,11 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
     }
 
     /**
+     * A method that determines which point zone this mobile goal is in. This
+     * method will return the corresponding {@link ScoreType} to the current
+     * zone. It is called during scoring.
      *
-     * @return
+     * @return the score type that represents the zone this mobile goal is in.
      */
     protected abstract ScoreType determineScoringZone();
 }

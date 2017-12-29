@@ -14,6 +14,9 @@ import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 
 /**
+ * The class representing a Red {@link MobileGoal Mobile Goal}. Red mobile goals
+ * are represented by the FXML code in the file "RedMobileGoal.fxml". They can
+ * be stacked on and pushed.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -22,9 +25,11 @@ public class RedMobileGoal extends MobileGoal {
     private final StackPane mogo;
 
     /**
+     * Constructs a new red {@link MobileGoal mobile goal} at the given
+     * coordinates.
      *
-     * @param layoutX
-     * @param layoutY
+     * @param layoutX the x coordinate at which to place this mobile goal
+     * @param layoutY the y coordinate at which to place this mobile goal
      */
     public RedMobileGoal(double layoutX, double layoutY) {
         super(layoutX, layoutY);
@@ -39,8 +44,7 @@ public class RedMobileGoal extends MobileGoal {
     }
 
     /**
-     *
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public ScoreType determineScoringZone() {
@@ -57,8 +61,9 @@ public class RedMobileGoal extends MobileGoal {
     }
 
     /**
+     * Returns true, as this is a <b>red</b> {@link MobileGoal mobile goal}.
      *
-     * @return
+     * @return true
      */
     @Override
     public boolean isRed() {
@@ -66,8 +71,7 @@ public class RedMobileGoal extends MobileGoal {
     }
 
     /**
-     *
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public StackPane getNode() {

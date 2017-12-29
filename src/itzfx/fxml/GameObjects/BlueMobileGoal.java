@@ -14,17 +14,22 @@ import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 
 /**
+ * The class representing a Blue {@link MobileGoal Mobile Goal}. Blue mobile
+ * goals are represented by the FXML code in the file "BlueMobileGoal.fxml".
+ * They can be stacked on and pushed.
  *
  * @author Prem Chintalapudi 5776E
  */
-public class BlueMobileGoal extends MobileGoal {
+public final class BlueMobileGoal extends MobileGoal {
 
     private final StackPane mogo;
 
     /**
+     * Constructs a new blue {@link MobileGoal mobile goal} at the given
+     * coordinates.
      *
-     * @param layoutX
-     * @param layoutY
+     * @param layoutX the x coordinate at which to place this mobile goal
+     * @param layoutY the y coordinate at which to place this mobile goal
      */
     public BlueMobileGoal(double layoutX, double layoutY) {
         super(layoutX, layoutY);
@@ -39,8 +44,7 @@ public class BlueMobileGoal extends MobileGoal {
     }
 
     /**
-     *
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public ScoreType determineScoringZone() {
@@ -57,8 +61,9 @@ public class BlueMobileGoal extends MobileGoal {
     }
 
     /**
+     * Returns false, as this is a <b>blue</b> {@link MobileGoal mobile goal}.
      *
-     * @return
+     * @return false
      */
     @Override
     public boolean isRed() {
@@ -66,8 +71,7 @@ public class BlueMobileGoal extends MobileGoal {
     }
 
     /**
-     *
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public StackPane getNode() {

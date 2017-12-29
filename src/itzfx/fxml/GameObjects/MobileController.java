@@ -11,6 +11,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 /**
+ * A class that adds drag functionality to some FXML loads. Specifically, this
+ * class is known to be the controller class for {@link Cone Cones} and
+ * {@link MobileGoal Mobile Goals}.
  *
  * @author Prem Chintalapudi 5776E
  */

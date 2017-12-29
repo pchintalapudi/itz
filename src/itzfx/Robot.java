@@ -300,7 +300,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void disableCollision() {
@@ -308,7 +308,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void enableCollision() {
@@ -316,7 +316,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
      * @return true if the robot can collide
      */
@@ -327,7 +327,7 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      *
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void permaDisableCollisions() {
@@ -513,7 +513,10 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
+     * Adds "Set Autonomous", "Run Autonomous", and "Enable Driver Control"
+     * options.
+     *
+     * @param rightClick {@inheritDoc}
      */
     @Override
     protected void rightClickOptions(ContextMenu rightClick) {
@@ -918,7 +921,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void resetProperties() {
@@ -946,9 +949,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
-     *
-     * @return a visual representation of this robot
+     * {@inheritDoc}
      */
     @Override
     public StackPane getNode() {
@@ -957,8 +958,7 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * This method always returns 0 for a robot. However, it does force the
-     * robot to update whether it is parked or not.
-     * @inheritDoc
+     * robot to update whether it is parked or not. {@inheritDoc}
      *
      * @return 0
      */
