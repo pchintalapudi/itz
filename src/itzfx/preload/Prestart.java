@@ -26,6 +26,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -53,7 +54,9 @@ public class Prestart extends Preloader {
         try {
             FXMLLoader loader = new FXMLLoader(Prestart.class.getResource("Prestart.fxml"));
             loader.setController(this);
-            stage.setScene(new Scene(loader.load()));
+            Parent p = loader.load();
+            p.getStylesheets().add("/itzfx/fxml/Resources.css");
+            stage.setScene(new Scene(p));
         } catch (IOException ex) {
             Logger.getLogger(Prestart.class.getName()).log(Level.SEVERE, null, ex);
         }

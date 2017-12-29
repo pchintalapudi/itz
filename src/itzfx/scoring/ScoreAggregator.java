@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
@@ -284,13 +286,19 @@ public class ScoreAggregator {
         FXMLLoader loader = new FXMLLoader(ScoreAggregator.class.getResource("/itzfx/fxml/ScoreSheet.fxml"));
         try {
             Pane load = (loader.load());
+            load.getStylesheets().add("/itzfx/fxml/Resources.css");
             StackPane report = new StackPane(load);
             report.setPadding(new Insets(10));
             ScoreSheetController ssc = loader.getController();
             ssc.update(new int[]{red20, blue20, red10, blue10, red5, blue5, redCones, blueCones, redStacks, blueStacks, auton, redPark, bluePark});
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
+            System.out.println(show.getDialogPane().getChildren());
             show.getDialogPane().setContent(report);
-            show.getDialogPane().getChildren().forEach(n -> n.setStyle("-fx-background-color:#ffffff"));
+            show.getDialogPane().getChildren().stream().peek(n -> n.setStyle("-fx-background-color:#ffffff")).filter(n -> n instanceof ButtonBar).map(n -> (ButtonBar) n)
+                    .flatMap(bb -> bb.getButtons().stream())
+                    .filter(n -> n instanceof Button).map(n -> (Button) n).peek(b -> b.getStyleClass().clear())
+                    .peek(b -> b.getStyleClass().add("button")).peek(b -> b.getStylesheets().add("itzfx/fxml/Resources.css"))
+                    .filter(b -> b.getText().equals("Cancel")).forEach(b -> b.getStyleClass().add("cancel-button"));
             show.getButtonTypes().get(0);
             show.showAndWait().filter(bt -> bt.getButtonData() == ButtonData.OK_DONE)
                     .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(report)));

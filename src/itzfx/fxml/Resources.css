@@ -20,16 +20,34 @@ and open the template in the editor.
     -fx-background-color:#ffffff;
 }
 
+.progress-bar {
+    -fx-accent:#0088ff
+}
+
 .button {
     -fx-background-color: #ffffff;
-    -fx-border-color: #87ceeb;
+    -fx-border-color: #0088ff;
     -fx-border-radius: 5;
 }
 .button:hover {
     -fx-background-color: #ddeeff
 }
 .button:pressed {
-    -fx-background-color: #87ceeb;
+    -fx-background-color: #0088ff;
+}
+
+.cancel-button {
+    -fx-background-color:#ffffff;
+    -fx-border-color: #ff6666;
+    -fx-text-alignment: center;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #ffdddd;
+}
+
+.cancel-button:pressed {
+    -fx-background-color: #ff6666;
 }
 
 .text1 {
