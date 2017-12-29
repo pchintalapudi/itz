@@ -179,7 +179,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
+     *
      *
      * @see {@link Mobile#translateXBind}
      */
@@ -192,7 +192,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
+     *
      *
      * @see {@link Mobile#translateYBind}
      */
@@ -205,7 +205,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
+     *
      *
      * @see {@link Mobile#cleanUp}
      */
@@ -301,8 +301,6 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
-     *
-     * @see {@link Mobile#disableCollision}
      */
     @Override
     public void disableCollision() {
@@ -311,8 +309,6 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
-     *
-     * @see {@link Mobile#enableCollision}
      */
     @Override
     public void enableCollision() {
@@ -322,7 +318,7 @@ public final class Robot extends Mobile implements Scoreable {
     /**
      * @inheritDoc
      *
-     * @see {@link Mobile#canCollide}
+     * @return true if the robot can collide
      */
     @Override
     public boolean canCollide() {
@@ -330,9 +326,8 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
      *
-     * @see {@link Mobile#permaDisableCollisions}
+     * @inheritDoc
      */
     @Override
     public void permaDisableCollisions() {
@@ -350,7 +345,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * @inheritDoc
+     *
      *
      * @see {@link Scoreable#isRed}
      */
@@ -519,8 +514,6 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
-     *
-     * @see {@link Mobile#rightClickOptions}
      */
     @Override
     protected void rightClickOptions(ContextMenu rightClick) {
@@ -926,8 +919,6 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
-     *
-     * @see {@link Mobile#resetProperties}
      */
     @Override
     public void resetProperties() {
@@ -957,7 +948,7 @@ public final class Robot extends Mobile implements Scoreable {
     /**
      * @inheritDoc
      *
-     * @see {@link Mobile#getNode}
+     * @return a visual representation of this robot
      */
     @Override
     public StackPane getNode() {
@@ -965,9 +956,11 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
+     * This method always returns 0 for a robot. However, it does force the
+     * robot to update whether it is parked or not.
      * @inheritDoc
      *
-     * @see {@link Scoreable#score}
+     * @return 0
      */
     @Override
     public int score() {
