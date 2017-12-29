@@ -5,26 +5,30 @@
  */
 package itzfx.preload;
 
+import itzfx.Start;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.application.Preloader;
 import javafx.application.Preloader.ProgressNotification;
 import javafx.application.Preloader.StateChangeNotification;
-import javafx.geometry.Insets;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -35,48 +39,59 @@ import javafx.util.Duration;
  */
 public class Prestart extends Preloader {
 
+    @FXML
     private ProgressBar bar;
     private Stage stage;
 
-    private Scene createPreloaderScene() {
-        bar = new ProgressBar(0);
-        Text loading = new Text("Loading 'In The Zone'...");
-        loading.setFont(Font.font("Arial", FontWeight.BOLD, 30));
-        loading.setFill(Color.BLACK);
-        loading.setEffect(new DropShadow(2, 2, 2, Color.GAINSBORO.darker()));
-        bar.setEffect(new DropShadow(2, 2, 2, Color.GAINSBORO.darker()));
-        bar.getChildrenUnmodifiable().stream().filter(n -> n instanceof Rectangle).map(n -> (Rectangle) n)
-                .reduce(new Rectangle(100, 100), (r1, r2) -> r1.getHeight() > r2.getHeight() ? r2 : r1).setEffect(new DropShadow(2, 2, 2, Color.GAINSBORO.darker()));
-        HBox parent = new HBox();
-        parent.setSpacing(50);
-        parent.setStyle("-fx-background-color:#ffffff");
-        VBox left = new VBox();
-        left.setStyle("-fx-background-color:#ffffff");
-        left.setSpacing(20);
-        left.setTranslateY(50);
-        parent.getChildren().add(new ImageView(new Image(Prestart.class.getResourceAsStream("/itzfx/Images/phoenixWlogo.png"), 150, 150, true, true)));
-        parent.getChildren().add(left);
-        parent.getChildren().add(new ImageView(new Image(Prestart.class.getResourceAsStream("/itzfx/Images/VEXEDR-stacked-red-transp-1000px.png"), 200, 200, true, true)));
-        left.getChildren().add(new StackPane(loading));
-        left.getChildren().add(new StackPane(bar));
-        bar.setPrefWidth(200);
-        parent.setPadding(new Insets(25));
-        Timeline tl = new Timeline();
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(4800), e -> tl.stop(), new KeyValue(bar.progressProperty(), 1)));
-        tl.play();
-        return new Scene(parent, 900, 200);
-    }
+    @FXML
+    private Label loading;
 
     @Override
     public void start(Stage stage) {
         this.stage = stage;
-        stage.setScene(createPreloaderScene());
+        stage.setTitle("In The Zone - Starting...");
+        try {
+            FXMLLoader loader = new FXMLLoader(Prestart.class.getResource("Prestart.fxml"));
+            loader.setController(this);
+            stage.setScene(new Scene(loader.load()));
+        } catch (IOException ex) {
+            Logger.getLogger(Prestart.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tl = new Timeline();
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(4800), e -> stopTimelines(), new KeyValue(bar.progressProperty(), 1)));
+        tl.play();
+        StringProperty sp = new SimpleStringProperty(getNextFalseFile());
+        loading.textProperty().bind(Bindings.createStringBinding(() -> "Loading " + sp.get() + ".jfx...", sp));
+        future = Start.PULSER.scheduleAtFixedRate(() -> Platform.runLater(() -> sp.set(getNextFalseFile())), 2000, 85, TimeUnit.MILLISECONDS);
         stage.setOnHidden(w -> {
             if (suddenClose) {
                 System.exit(0);
             }
         });
         stage.show();
+    }
+
+    private Timeline tl;
+    private Future<?> future;
+
+    private void stopTimelines() {
+        tl.stop();
+        future.cancel(true);
+    }
+
+    private static final List<String> FALSE_FILES = Arrays.asList("Core-files",
+            "JavaFX 8.0", "sun.misc.Unsafe", "Netbeans IDE", "Eclipse", "5776E",
+            "DVHS Robotics", "College Essays", "Lol you saw this", "Give me the monitor",
+            "Got into MIT", "\"The physics\"", "Robots are 18 pounds", "Broken cortexes",
+            "V5", "Rerun works!!", "Some random code", "You can't see me");
+
+    private static Iterator<String> ffIterator = FALSE_FILES.iterator();
+
+    private static String getNextFalseFile() {
+        if (!ffIterator.hasNext()) {
+            ffIterator = FALSE_FILES.iterator();
+        }
+        return ffIterator.next();
     }
 
     private boolean suddenClose = true;

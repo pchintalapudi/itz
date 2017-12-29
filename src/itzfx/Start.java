@@ -75,6 +75,7 @@ public class Start extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.setTitle("In The Zone (ITZ)");
         Scene scene = new Scene(p);
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
