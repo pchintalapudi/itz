@@ -15,14 +15,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls the "KeyBinder.fxml" file. This is the main
+ * class for creating a new controller format. This class should be instantiated
+ * prior to loading the controlled FXML file. Keys may be selected through key
+ * presses OR through mouse clicks.
  *
  * @author Prem Chintalapudi 5776E
  */
 public class KeyBinder {
-
-    @FXML
-    private AnchorPane root;
 
     @FXML
     private ListView<String> left;
@@ -34,13 +34,14 @@ public class KeyBinder {
     private final KeyCode[] keys;
 
     /**
+     * Constructs a new KeyBinder with the given key set.
      *
-     * @param kc
+     * @param kc the original set of keys
      */
     public KeyBinder(KeyControl kc) {
         keys = kc.keys();
     }
-    
+
     @FXML
     private void initialize() {
         this.keyboard = (Keyboard) center.getUserData();
@@ -63,10 +64,12 @@ public class KeyBinder {
             keyboard.selected(keys[left.getSelectionModel().getSelectedIndex()]);
         });
     }
-    
+
     /**
+     * Gets a new control format, represented as a KeyControl, from the selected
+     * keys in this KeyBinder.
      *
-     * @return
+     * @return a KeyControl that consists of the selected keys
      */
     public KeyControl getKC() {
         return new KeyControl(keys);

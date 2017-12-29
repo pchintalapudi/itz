@@ -22,7 +22,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls "Keyboard.fxml". Runs mouse-clicking and
+ * highlighting of keys during KeyControl construction. Every key has been
+ * sheathed in its own rectangle (this took quite a while).
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -74,16 +76,18 @@ public class Keyboard {
     private Rectangle selected;
 
     /**
+     * Removes the fill indicating a key has been selected.
      *
-     * @param k
+     * @param k the KeyCode of the key to remove
      */
     public void remove(KeyCode k) {
         mappings.get(k).setFill(null);
     }
 
     /**
+     * Highlights a key in blue to indicate that this key has focus.
      *
-     * @param k
+     * @param k the KeyCode of the key to highlight
      */
     public void selected(KeyCode k) {
         if (selected != null) {
@@ -96,7 +100,8 @@ public class Keyboard {
     }
 
     /**
-     *
+     * Hides the currently focused key (indicating that focus has moved away
+     * from it).
      */
     public void deselect() {
         if (selected != null) {
@@ -106,7 +111,8 @@ public class Keyboard {
     }
 
     /**
-     *
+     * Fills a key with a less opaque white fill, indicating that it has been
+     * saved as a bind to a function.
      */
     public void save() {
         if (selected != null) {
