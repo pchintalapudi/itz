@@ -14,12 +14,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls "Clock.fxml". Basically a low-overhead
+ * digitized field timer. This clock has a granularity of at maximum 0.1
+ * seconds, so any more specific times will not be observed.
  *
  * @author Prem Chintalapudi 5776E
  */
 public class Clock {
-    
+
     @FXML
     private AnchorPane root;
 
@@ -69,10 +71,12 @@ public class Clock {
         sec.display(secs);
         secd.display(deciSeconds);
     }
-    
+
     /**
+     * Gets the property that this clock observes to display the time. This
+     * property is measured in seconds.
      *
-     * @return
+     * @return the property observed by this clock
      */
     public DoubleProperty getTime() {
         return time;

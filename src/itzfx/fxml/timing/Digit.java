@@ -12,7 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls "Digit.fxml". Base class for displaying a
+ * single digit without high rendering costs. This render relies on a display
+ * that looks like a 7-light LED display.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -54,8 +56,13 @@ public class Digit {
     }
 
     /**
+     * Configures this object to create a visual representation of the passed
+     * digit. This will throw an AssertionError if the passed value is not a
+     * valid digit.
      *
-     * @param digit
+     * @param digit the digit to display
+     *
+     * @throws AssertionError if the given value is <b>not</b> a single digit
      */
     public void display(int digit) {
         assert digit > -1 && digit < 10;
