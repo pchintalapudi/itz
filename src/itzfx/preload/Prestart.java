@@ -34,7 +34,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * Simple Preloader Using the ProgressBar Control
+ * FXML Controller Class. Controls "Prestart.fxml". Used to customize UX and
+ * hide the fact that a reset must be done 3 seconds in to ensure that start-up
+ * collisions don't mess with initial position.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -47,6 +49,9 @@ public class Prestart extends Preloader {
     @FXML
     private Label loading;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start(Stage stage) {
         this.stage = stage;
@@ -99,6 +104,9 @@ public class Prestart extends Preloader {
 
     private boolean suddenClose = true;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void handleStateChangeNotification(StateChangeNotification scn) {
         if (scn.getType() == StateChangeNotification.Type.BEFORE_START) {
@@ -107,6 +115,9 @@ public class Prestart extends Preloader {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void handleProgressNotification(ProgressNotification pn) {
         //Nothing really happens
