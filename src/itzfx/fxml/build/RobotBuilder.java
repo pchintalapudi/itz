@@ -11,7 +11,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls "RobotBuilder.fxml". Main header for visuals
+ * attempting to show a robot builder.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -30,10 +31,8 @@ public class RobotBuilder {
     private MogoConfig mc;
     private StackConfig sc;
 
-    /**
-     *
-     */
-    public void initialize() {
+    @FXML
+    private void initialize() {
         rc = (RobotConfig) rcPane.getUserData();
         mc = (MogoConfig) mcPane.getUserData();
         sc = (StackConfig) scPane.getUserData();
@@ -48,18 +47,9 @@ public class RobotBuilder {
     private Integer maxstat;
     private Boolean front;
 
-    private boolean submitted;
-
     /**
-     *
-     * @return
-     */
-    public boolean isSubmitted() {
-        return submitted;
-    }
-
-    /**
-     *
+     * Gets all values from the different tabs and saves them in this object.
+     * This method <b>must</b> be called prior to filling robots.
      */
     public void submit() {
         speed = rc.getSpeed();
@@ -69,12 +59,14 @@ public class RobotBuilder {
         front = mc.isFrontMogo();
         maxmogo = sc.getMogoStack();
         maxstat = sc.getStatStack();
-        submitted = true;
     }
 
     /**
+     * Sets a robot's values to the values entered by the user. If the user has
+     * not entered a value, the robot should interpret that as keeping its
+     * previous value.
      *
-     * @param r
+     * @param r the robot to set the values of
      */
     public void fillRobot(Robot r) {
         r.acceptValues(speed, mogotime, autostack, statstack, maxmogo, maxstat, front);

@@ -12,7 +12,8 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls file "MogoConfig.fxml". Creates and maintains
+ * image/options in "Mobile Goal Configuration" tab of the robot builder.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -27,18 +28,17 @@ public class MogoConfig {
     @FXML
     private TextField robotInTime;
 
-    /**
-     *
-     */
     @FXML
-    public void initialize() {
+    private void initialize() {
         robotInTime.setTextFormatter(new DecimalFormatter());
         root.setUserData(this);
     }
 
     /**
+     * Gets the entered time for the mobile goal intake time. If the user has
+     * not entered anything, this returns null.
      *
-     * @return
+     * @return the value the user entered, or null
      */
     public Double getMogoTime() {
         if (robotInTime.getText().isEmpty()) {
@@ -49,8 +49,11 @@ public class MogoConfig {
     }
 
     /**
+     * Gets whether or not the user decided if their robot would intake from the
+     * front or the back.
      *
-     * @return
+     * @return true if this is a front-intaking robot, false if not, or null if
+     * this is indeterminate
      */
     public Boolean isFrontMogo() {
         return front.isIndeterminate() ? null : front.isSelected();

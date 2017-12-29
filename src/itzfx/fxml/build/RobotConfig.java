@@ -11,7 +11,8 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 
 /**
- * FXML Controller class
+ * FXML Controller class. Controls "RobotConfig.fxml". Creates and maintains
+ * images/options in the "Robot Configuration" tab of the robot builder.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -36,8 +37,10 @@ public class RobotConfig {
     }
 
     /**
+     * Gets the entered speed of the robot. This value will be null if the user
+     * did not enter anything.
      *
-     * @return
+     * @return the user-entered value, or null
      */
     public Double getSpeed() {
         if (robotSpeed.getText().isEmpty()) {
@@ -48,8 +51,10 @@ public class RobotConfig {
     }
 
     /**
+     * Gets the entered autostack time of the robot. This value will be null if
+     * the user did not enter anything.
      *
-     * @return
+     * @return the user-entered value, or null
      */
     public Double getAutostackTime() {
         if (this.robotAutostackTime.getText().isEmpty()) {
@@ -60,8 +65,10 @@ public class RobotConfig {
     }
 
     /**
+     * Gets the entered stationary stack time of the robot. This value will be
+     * null if the user did not enter anything.
      *
-     * @return
+     * @return the user-entered value, or null
      */
     public Double getStatTime() {
         if (this.robotStatTime.getText().isEmpty()) {
