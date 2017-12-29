@@ -180,6 +180,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#translateXBind}
      */
     @Override
     protected DoubleBinding translateXBind() {
@@ -191,6 +193,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#translateYBind}
      */
     @Override
     protected DoubleBinding translateYBind() {
@@ -202,6 +206,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#cleanUp}
      */
     @Override
     protected void cleanUp() {
@@ -295,6 +301,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#disableCollision}
      */
     @Override
     public void disableCollision() {
@@ -303,6 +311,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#enableCollision}
      */
     @Override
     public void enableCollision() {
@@ -311,6 +321,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#canCollide}
      */
     @Override
     public boolean canCollide() {
@@ -319,6 +331,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#permaDisableCollisions}
      */
     @Override
     public void permaDisableCollisions() {
@@ -337,6 +351,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Scoreable#isRed}
      */
     @Override
     public boolean isRed() {
@@ -503,6 +519,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#rightClickOptions}
      */
     @Override
     protected void rightClickOptions(ContextMenu rightClick) {
@@ -908,6 +926,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#resetProperties}
      */
     @Override
     public void resetProperties() {
@@ -936,6 +956,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Mobile#getNode}
      */
     @Override
     public StackPane getNode() {
@@ -944,6 +966,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     /**
      * @inheritDoc
+     *
+     * @see {@link Scoreable#score}
      */
     @Override
     public int score() {
