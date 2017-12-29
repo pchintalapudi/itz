@@ -21,68 +21,57 @@ public enum Command {
     /**
      *
      */
-    FORWARD, 
-
+    FORWARD,
     /**
      *
      */
-    BACKWARD, 
-
+    BACKWARD,
     /**
      *
      */
-    LEFT_TURN, 
-
+    LEFT_TURN,
     /**
      *
      */
-    RIGHT_TURN, 
-
+    RIGHT_TURN,
     /**
      *
      */
-    MOGO, 
-
+    MOGO,
     /**
      *
      */
-    AUTOSTACK, 
-
+    AUTOSTACK,
     /**
      *
      */
-    CONE, 
-
+    CONE,
     /**
      *
      */
-    STATSTACK, 
-
+    STATSTACK,
     /**
      *
      */
-    LOAD, 
-
+    LOAD,
     /**
      *
      */
-    NONE,//Everything after here is just for itzfx.rerun.translate.Translate purposes only.
+    NONE,
+    //Everything after here is just for itzfx.rerun.translate.Translate purposes only.
 
     /**
      *
      */
     FL,
-
     /**
      *
      */
     FR,
-
     /**
      *
      */
     BL,
-
     /**
      *
      */
