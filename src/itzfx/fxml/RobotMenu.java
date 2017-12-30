@@ -9,7 +9,7 @@ import itzfx.Robot;
 import itzfx.data.FileUI;
 import itzfx.fxml.build.RobotBuilder;
 import itzfx.fxml.controller.KeyBinder;
-import itzfx.rerun.translate.Translate;
+import itzfx.rerun.Translate;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

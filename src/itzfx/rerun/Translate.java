@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itzfx.rerun.translate;
+package itzfx.rerun;
 
 import itzfx.Robot;
 import itzfx.data.FileUI;
 import itzfx.data.Retrieval;
 import itzfx.fxml.FXMLController;
-import itzfx.rerun.Command;
 import java.math.BigDecimal;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -24,6 +23,64 @@ import javafx.scene.control.ScrollPane;
 import javafx.stage.Window;
 
 /**
+ * This class contains several methods for the purpose of converting saved
+ * reruns to RobotC code. The generated code should then be copy-pastable into a
+ * RobotC file, though this feature has not been thoroughly tested.
+ *
+ * <p>
+ * This feature relies on an API being present in the RobotC code, with the
+ * following signatures:
+ * </p>
+ *
+ * <p>
+ * void drive(byte powerLeft, byte powerRight, long timeInMillis)
+ *
+ * This method should set the motor power for the left side of the drive to
+ * "powerLeft", and that of the right side of the drive to "powerRight" for the
+ * indicated time in milliseconds.
+ * </p>
+ *
+ * <p>
+ * void move(byte powerLeft, byte powerRight, float distanceInInches)
+ *
+ * This method should set the motor power for the left side of the drive to
+ * "powerLeft", and that of the right side of the drive to "powerRight" for the
+ * indicated distance in inches.
+ * </p>
+ *
+ * <p>
+ * task mogoTask
+ *
+ * This task should determine whether to intake or outtake a mobile goal, and it
+ * should do so outside of the main user control thread. The generated code
+ * <b>will</b> call "startTask" on this task.
+ * </p>
+ * <p>
+ * task autostackTask
+ *
+ * This task should automatically intake a cone, if one is not already held, and
+ * it should stack it on the held mobile goal, automatically incrementing. This
+ * should not happen on the control loop's thread. The generated code
+ * <b>will</b> call "startTask" on this task.
+ * </p>
+ *
+ * <p>
+ * task coneTask
+ *
+ * This task should automatically either intake or outtake a cone, depending on
+ * whether or not one is currently held. It may happen on the control loop's
+ * thread (though long-running implementations should not happen on the control
+ * loop). The generated code <b>will</b> call "startTask" on this task.
+ * </p>
+ *
+ * <p>
+ * task statTask
+ *
+ * This task should stack a cone on a stationary goal, automatically
+ * incrementing its height. This may not happen on the control loop's thread,
+ * though the simulation pauses all other activity until this stack operation
+ * has concluded. The generated code <b>will</b> call "startTask" on this task.
+ * </p>
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -39,26 +96,41 @@ public final class Translate {
             if (graduated.size() > 0 && graduated.peekLast().c == command) {
                 graduated.peekLast().length++;
             } else {
-                graduated.add(new Segment(command, i));
+                graduated.add(new Segment(command));
             }
         }
         return graduated;
     }
 
     /**
+     * Gets a list of strings representing lines of code that might be generated
+     * for an equivalent time-based program.
      *
-     * @param commands
-     * @return
+     * @param commands the rerun-generated list of {@link Command commands} to
+     * translate
+     * @return the translated code, formatted to meet the method requirements as
+     * shown in the documentation for {@link Translate this class}.
+     *
+     * @see Translate#translate(java.util.Queue)
+     * @see Translate#to10Millis(itzfx.rerun.Translate.Segment)
      */
     public static List<String> translateTime(Queue<List<Command>> commands) {
         return translate(commands).stream().filter(Translate::filterZeroes).map(Translate::to10Millis).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
+     * Gets a list of strings representing lines of code that might be generated
+     * for an equivalent distance-based program, based on the given robot's
+     * speed.
      *
-     * @param commands
-     * @param r
-     * @return
+     * @param commands the rerun-generated list of {@link Command commands} to
+     * translate
+     * @param r the robot from which to obtain a speed
+     * @return the translated code, formatted to meet the method requirements as
+     * shown in the documentation for {@link Translate this class}.
+     *
+     * @see Translate#translate(java.util.Queue)
+     * @see Translate#toDistance(itzfx.rerun.Translate.Segment, itzfx.Robot)
      */
     public static List<String> translateDistance(Queue<List<Command>> commands, Robot r) {
         return translate(commands).stream().filter(Translate::filterZeroes).map(s -> toDistance(s, r)).collect(Collectors.toCollection(LinkedList::new));
@@ -103,7 +175,7 @@ public final class Translate {
             case MOGO:
                 return "startTask(mogoTask);";
             case CONE:
-                return "startTask(intakeTask);";
+                return "startTask(coneTask);";
             case AUTOSTACK:
                 return "startTask(autostackTask);";
             case STATSTACK:
@@ -117,25 +189,25 @@ public final class Translate {
     private static String toDistance(Segment s, Robot r) {
         switch (s.c) {
             case FORWARD:
-                return "drive(127, 127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(127, 127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
             case LEFT_TURN:
-                return "drive(-127, 127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(-127, 127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
             case BACKWARD:
-                return "drive(-127, -127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(-127, -127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
             case RIGHT_TURN:
-                return "drive(127, -127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(127, -127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
             case FR:
-                return "drive(127, 0, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(127, 0, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
             case BR:
-                return "drive(0, -127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(0, -127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
             case FL:
-                return "drive(0, 127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(0, 127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
             case BL:
-                return "drive(-127, 0, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(-127, 0, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
             case MOGO:
                 return "startTask(mogoTask);";
             case CONE:
-                return "startTask(intakeTask);";
+                return "startTask(coneTask);";
             case AUTOSTACK:
                 return "startTask(autostackTask);";
             case STATSTACK:
@@ -221,19 +293,22 @@ public final class Translate {
     private static class Segment {
 
         private final Command c;
-        private final long start;
         private long length;
 
-        public Segment(Command c, long start) {
+        public Segment(Command c) {
             this.c = c;
-            this.start = start;
             length = 1;
         }
     }
 
     /**
+     * Provides a user interface to allow the user to select an autonomous file
+     * and translate it into time-based RobotC code. This will block the passed
+     * {@link Window} from receiving input.
      *
-     * @param owner
+     * @param owner the window to block
+     *
+     * @see Translate#to10Millis(itzfx.rerun.Translate.Segment)
      */
     public static void userTranslateToTime(Window owner) {
         FileUI.load("Autonomous", "*.rrn", owner, f -> {
@@ -250,9 +325,14 @@ public final class Translate {
     }
 
     /**
+     * Provides a user interface to allow the user to select an autonomous file
+     * and translate it into distance-based RobotC code. This will block the
+     * passed {@link Window} from receiving input.
      *
-     * @param owner
-     * @param r
+     * @param owner the window to block
+     * @param r the robot from which to take the speed from
+     *
+     * @see Translate#toDistance(itzfx.rerun.Translate.Segment, itzfx.Robot)
      */
     public static void userTranslateToDistance(Window owner, Robot r) {
         FileUI.load("Autonomous", "*.rrn", owner, f -> {

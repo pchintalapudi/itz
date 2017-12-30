@@ -13,6 +13,7 @@ import itzfx.fxml.GameObjects.BlueMobileGoal;
 import itzfx.fxml.GameObjects.Cone;
 import itzfx.fxml.Field;
 import itzfx.rerun.Command;
+import itzfx.rerun.Rerun;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.ScoreType;
 import itzfx.scoring.Scoreable;
@@ -21,8 +22,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -179,9 +178,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
-     *
-     * @see {@link Mobile#translateXBind}
+     * {@inheritDoc}
      */
     @Override
     protected DoubleBinding translateXBind() {
@@ -192,9 +189,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     *
-     *
-     * @see {@link Mobile#translateYBind}
+     * {@inheritDoc}
      */
     @Override
     protected DoubleBinding translateYBind() {
@@ -212,7 +207,7 @@ public final class Robot extends Mobile implements Scoreable {
     @Override
     protected void cleanUp() {
         mogoAnimation.stop();
-        autostackAnimation.stop();
+        stackAnimation.stop();
         if (heldMogo.get() != null) {
             heldMogo.get().setCenter(super.getCenterX() + privateMogo.get().getNode().getTranslateX() * Math.cos(Math.toRadians(node.getRotate())),
                     super.getCenterY() + privateMogo.get().getNode().getTranslateX() * Math.sin(Math.toRadians(node.getRotate())));
@@ -430,8 +425,6 @@ public final class Robot extends Mobile implements Scoreable {
         return recorded;
     }
 
-    private List<String> commands;
-
     /**
      * Sets the autonomous program to run from a list of strings representing a
      * past rerun. This is generally pulled from a rerun file (*.rrn).
@@ -439,66 +432,17 @@ public final class Robot extends Mobile implements Scoreable {
      * @param commands the past rerun, represented as a list of encoded strings
      */
     public void setAuton(List<String> commands) {
-        this.commands = commands;
+        rerun = new Rerun(this, commands);
     }
 
-    private Future<?> readBackTask;
-    private Queue<List<Command>> decoded;
-
-    private void readBack() {
-        if (decoded != null && !decoded.isEmpty()) {
-            eraseController();
-            readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(decoded), 0, 10, TimeUnit.MILLISECONDS);
-        }
-    }
-
-    private void interpret(Queue<List<Command>> commands) {
-        try {
-            commands.poll().forEach(this::translate);
-        } catch (Exception ex) {
-            readBackTask.cancel(true);
-        }
-    }
-
-    private void translate(Command command) {
-        switch (command) {
-            case FORWARD:
-                forward();
-                break;
-            case LEFT_TURN:
-                leftTurn();
-                break;
-            case BACKWARD:
-                backward();
-                break;
-            case RIGHT_TURN:
-                rightTurn();
-                break;
-            case MOGO:
-                mogo();
-                break;
-            case AUTOSTACK:
-                autostack();
-                break;
-            case CONE:
-                cone();
-                break;
-            case STATSTACK:
-                statStack();
-                break;
-            case LOAD:
-                load();
-                break;
-        }
-    }
+    private Rerun rerun;
 
     /**
      * Runs the saved autonomous routine.
      */
     public void runProgram() {
-        if (commands != null) {
-            decoded = Command.decode(this.commands);
-            readBack();
+        if (rerun != null) {
+            rerun.readBack();
         }
     }
 
@@ -506,8 +450,8 @@ public final class Robot extends Mobile implements Scoreable {
      * Enables driver control of the robot.
      */
     public void driverControl() {
-        if (readBackTask != null) {
-            readBackTask.cancel(true);
+        if (rerun != null) {
+            rerun.pause();
         }
         setController(controller);
     }
@@ -540,7 +484,10 @@ public final class Robot extends Mobile implements Scoreable {
         rightClick.getItems().add(dc);
     }
 
-    private void forward() {
+    /**
+     * Moves the robot forwards. This does take into account robot speed.
+     */
+    public void forward() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
                 super.shiftCenter(robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
@@ -554,7 +501,10 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
-    private void backward() {
+    /**
+     * Moves the robot backwards. This does take into account robot speed.
+     */
+    public void backward() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
                 super.shiftCenter(-robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
@@ -568,7 +518,10 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
-    private void leftTurn() {
+    /**
+     * Turns the robot to the left. This does take into account robot speed.
+     */
+    public void leftTurn() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
                 node.setRotate(node.getRotate() - robotSpeed / (Math.PI * 7));
@@ -581,7 +534,10 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
-    private void rightTurn() {
+    /**
+     * MOves the robot to the right. This does take into account robot speed.
+     */
+    public void rightTurn() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
                 node.setRotate(node.getRotate() + robotSpeed / (Math.PI * 7));
@@ -732,7 +688,7 @@ public final class Robot extends Mobile implements Scoreable {
         heldCone.set(null);
     }
 
-    private final Timeline autostackAnimation = new Timeline();
+    private final Timeline stackAnimation = new Timeline();
 
     /**
      * Tries to intake a cone if none are held, and autostacks it if one is held
@@ -759,18 +715,18 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     private void runAutostack() {
-        autostackAnimation.stop();
-        autostackAnimation.getKeyFrames().clear();
+        stackAnimation.stop();
+        stackAnimation.getKeyFrames().clear();
         movingCone.set(true);
-        autostackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotAutostackTime), this::finishAutostack,
+        stackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotAutostackTime), this::finishAutostack,
                 new KeyValue(privateCone.centerXProperty(), robotMogoFront ? 70 : 25)));
-        autostackAnimation.play();
+        stackAnimation.play();
     }
 
     private void finishAutostack(ActionEvent e) {
         e.consume();
         privateCone.vanish();
-        autostackAnimation.stop();
+        stackAnimation.stop();
         movingCone.set(false);
         privateMogo.get().stack(heldCone.get());
         heldCone.set(null);
@@ -806,18 +762,18 @@ public final class Robot extends Mobile implements Scoreable {
             heldCone.get().disableCollision();
             driveBaseMovable.set(false);
             movingCone.set(true);
-            autostackAnimation.stop();
-            autostackAnimation.getKeyFrames().clear();
-            autostackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotStatTime), e -> finishStat(e, sg),
+            stackAnimation.stop();
+            stackAnimation.getKeyFrames().clear();
+            stackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotStatTime), e -> finishStat(e, sg),
                     new KeyValue(heldCone.get().centerXProperty(), sgCenter.getX()), new KeyValue(heldCone.get().centerYProperty(), sgCenter.getY())));
-            autostackAnimation.play();
+            stackAnimation.play();
         }
     }
 
     private void finishStat(ActionEvent e, StationaryGoal sg) {
         e.consume();
         movingCone.set(false);
-        autostackAnimation.stop();
+        stackAnimation.stop();
         driveBaseMovable.set(true);
         sg.stack(heldCone.get());
         heldCone.get().vanish();
@@ -886,16 +842,16 @@ public final class Robot extends Mobile implements Scoreable {
      * animations.
      */
     public void pause() {
-        if (readBackTask != null && !readBackTask.isDone()) {
-            readBackTask.cancel(false);
+        if (rerun != null && !rerun.isDone()) {
+            rerun.pause();
             rerunWas = true;
         }
         if (mogoAnimation.getStatus() == Animation.Status.RUNNING) {
             mogoAnimation.pause();
             mogoWas = true;
         }
-        if (autostackAnimation.getStatus() == Animation.Status.RUNNING) {
-            autostackAnimation.pause();
+        if (stackAnimation.getStatus() == Animation.Status.RUNNING) {
+            stackAnimation.pause();
             stackWas = true;
         }
         active.set(false);
@@ -907,14 +863,14 @@ public final class Robot extends Mobile implements Scoreable {
      */
     public void resume() {
         if (rerunWas) {
-            readBack();
+            rerun.readBack();
         }
         if (mogoWas) {
             mogoAnimation.play();
             mogoWas = false;
         }
         if (stackWas) {
-            autostackAnimation.play();
+            stackAnimation.play();
             stackWas = false;
         }
         active.set(true);
@@ -925,8 +881,11 @@ public final class Robot extends Mobile implements Scoreable {
      */
     @Override
     public void resetProperties() {
+        mogoWas = false;
+        stackWas = false;
+        rerunWas = false;
         mogoAnimation.stop();
-        autostackAnimation.stop();
+        stackAnimation.stop();
         if (heldMogo.get() != null) {
             privateMogo.get().shiftStack(heldMogo.get());
             heldMogo.get().reset();
@@ -941,8 +900,8 @@ public final class Robot extends Mobile implements Scoreable {
         blueMogo.vanish();
         movingMogo.set(false);
         movingCone.set(false);
-        if (readBackTask != null) {
-            readBackTask.cancel(true);
+        if (rerun != null) {
+            rerun.stop();
         }
         setController(controller);
         active.set(true);
