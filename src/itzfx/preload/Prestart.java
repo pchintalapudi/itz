@@ -66,7 +66,7 @@ public class Prestart extends Preloader {
             Logger.getLogger(Prestart.class.getName()).log(Level.SEVERE, null, ex);
         }
         tl = new Timeline();
-        tl.getKeyFrames().add(new KeyFrame(Duration.millis(4800), e -> stopTimelines(), new KeyValue(bar.progressProperty(), 1)));
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(4500), e -> stopTimelines(), new KeyValue(bar.progressProperty(), 1)));
         tl.play();
         StringProperty sp = new SimpleStringProperty(getNextFalseFile());
         loading.textProperty().bind(Bindings.createStringBinding(() -> "Loading " + sp.get() + ".jfx...", sp));
