@@ -24,6 +24,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 /**
+ * This class tallies up scores from registered
+ * {@link ScoreReport score reports} to give final red and blue match/autonomous
+ * scores. Skills scoring will be added in a future release. A new skills score
+ * user interface will be added to support skills scoring as well.
  *
  * @author Prem Chintalapudi 5776E
  */
@@ -48,31 +52,29 @@ public class ScoreAggregator {
     private Boolean autonomous;
 
     /**
-     *
+     * Constructs a new ScoreAggregator.
      */
     public ScoreAggregator() {
         reports = new LinkedList<>();
     }
 
     /**
+     * Registeres a {@link ScoreReport score report} with this aggregator.
+     * Registering a report means that this report will be scored, and its score
+     * will be added to its corresponding alliance's score.
      *
-     * @param sr
+     * @param sr the score report to register
      */
     public void registerReport(ScoreReport sr) {
         reports.add(sr);
     }
 
     /**
+     * Calculates match score for the currently registered score reports.
      *
-     * @param sr
-     */
-    public void unregisterReport(ScoreReport sr) {
-        reports.remove(sr);
-    }
-
-    /**
+     * @return the calculated match scores in the order {red, blue}
      *
-     * @return
+     * @see ScoreAggregator#calculate()
      */
     public int[] calculateMatch() {
         AtomicInteger[] initial = calculate();
@@ -103,8 +105,11 @@ public class ScoreAggregator {
     }
 
     /**
+     * Calculates autonomous score (no parking bonus) for the currently
+     * registered score reports.
      *
-     * @return
+     * @return the calculated autonomous scores in the order {red, blue}
+     *
      */
     public int[] calculateAuton() {
         AtomicInteger aiR = new AtomicInteger();
@@ -171,7 +176,8 @@ public class ScoreAggregator {
     }
 
     /**
-     *
+     * Sets the autonomous winner of this ScoreAggregator based on which
+     * alliance has more points currently. That alliance gets a 10 point bonus.
      */
     public void determineAutonWinner() {
         int[] temp = calculateAuton();
@@ -179,7 +185,7 @@ public class ScoreAggregator {
     }
 
     /**
-     *
+     * Clears the autonomous winner, in preparation for a new match.
      */
     public void clearAuton() {
         autonomous = null;
@@ -198,8 +204,10 @@ public class ScoreAggregator {
     }
 
     /**
+     * Calculates the skills score. This method is currently unimplemented
+     * correctly, and will be fixed in a future update.
      *
-     * @return
+     * @return the calculated skills score
      */
     public int calculateSkills() {
         AtomicInteger[] temp = calculate();
@@ -279,7 +287,10 @@ public class ScoreAggregator {
     }
 
     /**
+     * Shows a {@link ScoreSheet score sheet} in a {@link Dialog}. This is
+     * mostly for visual looks and UX enhancement.
      *
+     * @see ScoreSheetController
      */
     public void showReport() {
         updateReport();
