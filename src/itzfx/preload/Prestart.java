@@ -91,7 +91,8 @@ public class Prestart extends Preloader {
             "JavaFX 8.0", "sun.misc.Unsafe", "Netbeans IDE", "Eclipse", "5776E",
             "DVHS Robotics", "College Essays", "Lol you saw this", "Give me the monitor",
             "Got into MIT", "\"The physics\"", "Robots are 18 pounds", "Broken cortexes",
-            "V5", "Rerun works!!", "Some random code", "You can't see me");
+            "V5", "Rerun works!!", "Some random code", "You can't see me", "Why are you even reading this?",
+            "Just get on with life", "'; DROP TABLE bots;");
 
     private static Iterator<String> ffIterator = FALSE_FILES.iterator();
 
