@@ -88,6 +88,10 @@ public class FXMLController implements AutoCloseable {
             }
         }
     }
+    
+    public Field getField() {
+        return field;
+    }
 
     @FXML
     private void reset() {
