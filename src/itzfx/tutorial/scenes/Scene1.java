@@ -31,7 +31,13 @@ public class Scene1 implements TutorialScene {
     }
     
     @Override
-    public TutorialScene nextScene() {
-        return new Scene2(tr);
+    public AnchorPane getRoot() {
+        return root;
+    }
+    
+    @Override
+    public void nextScene() {
+        Scene2 s2 = new Scene2(tr);
+        root.getScene().setRoot(s2.getRoot());
     }
 }

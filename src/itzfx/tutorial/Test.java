@@ -30,9 +30,8 @@ public class Test extends Application {
         try {
             AnchorPane p = loader.load();
             Scene1 s1 = loader.getController();
-            s1.inject(new TutorialRobot(90, 180, 90));
             primaryStage.setScene(new Scene(p));
-            KeyBuffer.initialize(primaryStage.getScene());
+            s1.inject(new TutorialRobot(90, 180, 90));
             primaryStage.show();
             Start.PULSER.scheduleAtFixedRate(KeyBuffer::pulse, 0, 10, TimeUnit.MILLISECONDS);
         } catch (IOException ex) {

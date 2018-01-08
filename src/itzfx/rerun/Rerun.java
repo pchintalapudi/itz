@@ -103,7 +103,9 @@ public final class Rerun {
      * Stops the rerun task immediately.
      */
     public void stop() {
-        readBackTask.cancel(true);
+        if (readBackTask != null) {
+            readBackTask.cancel(true);
+        }
     }
 
     /**
@@ -111,6 +113,8 @@ public final class Rerun {
      * allow that command to finish before pausing.
      */
     public void pause() {
-        readBackTask.cancel(false);
+        if (readBackTask != null) {
+            readBackTask.cancel(false);
+        }
     }
 }

@@ -5,6 +5,8 @@
  */
 package itzfx.tutorial.scenes;
 
+import javafx.scene.Parent;
+
 
 /**
  *
@@ -12,5 +14,7 @@ package itzfx.tutorial.scenes;
  */
 public interface TutorialScene {
     
-    public TutorialScene nextScene();
+    public void nextScene();
+    
+    public Parent getRoot();
 }

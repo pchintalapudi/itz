@@ -378,6 +378,8 @@ public final class Robot extends Mobile implements Scoreable {
      * Begins recording a rerun.
      */
     public void record() {
+        pulse.clear();
+        saved.clear();
         recording.set(true);
     }
 

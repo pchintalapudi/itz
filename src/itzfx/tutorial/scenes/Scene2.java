@@ -26,9 +26,12 @@ public class Scene2 implements TutorialScene {
         tr.setController(TutorialStep.STEP1.getController());
         root.getChildren().add(tr.getNode());
     }
+    @Override
+    public AnchorPane getRoot() {
+        return root;
+    }
 
     @Override
-    public TutorialScene nextScene() {
-        return null;
+    public void nextScene() {
     }
 }

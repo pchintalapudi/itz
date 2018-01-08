@@ -18,7 +18,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -33,12 +35,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -240,6 +244,35 @@ public class TutorialRobot extends Mobile {
                 actions.stream().forEach(a -> KeyBuffer.register(iteratorNew.next(), a));
             }
             this.controller = controller;
+        }
+    }
+
+    public static Map<Consumer<KeyEvent>, EventType<KeyEvent>> getActionMappings(TutorialRobot r) {
+        Iterator<Consumer<KeyCode>> itr = r.actions.iterator();
+        return Arrays.stream(r.controller.keys()).map(k -> new Mapping<>(k, itr.next())).filter(m -> m.getKey() != KeyCode.UNDEFINED)
+                .map(m -> new Mapping<>(KeyEvent.KEY_PRESSED, (Consumer<KeyEvent>) k -> {
+            if (k.getCode() == m.getKey()) {
+                ((Consumer<KeyCode>) m.getValue()).accept(k.getCode());
+            }
+        })).collect(Collectors.toMap(Mapping::getValue, Mapping::getKey));
+    }
+
+    private static class Mapping<K, V> {
+
+        private final K key;
+        private final V value;
+
+        public Mapping(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
         }
     }
 
