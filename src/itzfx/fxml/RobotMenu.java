@@ -6,6 +6,7 @@
 package itzfx.fxml;
 
 import itzfx.Robot;
+import itzfx.Start;
 import itzfx.data.FileUI;
 import itzfx.fxml.build.RobotBuilder;
 import itzfx.fxml.controller.KeyBinder;
@@ -16,6 +17,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
@@ -61,8 +63,18 @@ public class RobotMenu {
             TabPane p = loader.load();
             RobotBuilder rb = loader.getController();
             Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY);
+            show.setHeaderText("Build Your Robot");
+            show.setTitle("Robot Builder");
             show.getDialogPane().setContent(p);
             show.getDialogPane().setPrefHeight(500);
+            show.getDialogPane().getChildren().stream().peek(n -> n.setStyle("-fx-background-color:#ffffff")).filter(n -> n instanceof ButtonBar).map(n -> (ButtonBar) n)
+                    .flatMap(bb -> bb.getButtons().stream())
+                    .filter(n -> n instanceof Button).map(n -> (Button) n).peek(b -> b.getStyleClass().clear())
+                    .peek(b -> b.getStyleClass().add("button")).peek(b -> b.getStylesheets().add("itzfx/fxml/Resources.css"))
+                    .filter(b -> b.getText().equals("Cancel")).forEach(b -> b.getStyleClass().add("cancel-button"));
+            show.getButtonTypes().get(0);
+            show.getDialogPane().getChildren().add(Start.generateShift());
+            show.getDialogPane().getChildren().add(Start.generateShift());
             show.showAndWait().filter(bt -> bt.getButtonData().equals(ButtonBar.ButtonData.APPLY)).ifPresent(bt -> {
                 rb.submit();
                 rb.fillRobot(r);
@@ -86,7 +98,17 @@ public class RobotMenu {
         try {
             AnchorPane load = loader.load();
             Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY);
+            show.setHeaderText("Create Your Controller");
+            show.setTitle("Controller Creator");
+            load.getChildren().add(Start.generateShift());
             show.getDialogPane().setContent(load);
+            show.getDialogPane().getChildren().stream().peek(n -> n.setStyle("-fx-background-color:#ffffff")).filter(n -> n instanceof ButtonBar).map(n -> (ButtonBar) n)
+                    .flatMap(bb -> bb.getButtons().stream())
+                    .filter(n -> n instanceof Button).map(n -> (Button) n).peek(b -> b.getStyleClass().clear())
+                    .peek(b -> b.getStyleClass().add("button")).peek(b -> b.getStylesheets().add("itzfx/fxml/Resources.css"))
+                    .filter(b -> b.getText().equals("Cancel")).forEach(b -> b.getStyleClass().add("cancel-button"));
+            show.getButtonTypes().get(0);
+            show.getDialogPane().getChildren().add(Start.generateShift());
             show.showAndWait().filter(bt -> bt.getButtonData().equals(ButtonBar.ButtonData.APPLY)).ifPresent(bt -> {
                 r.setController(kb.getKC());
                 FileUI.saveKeyControl(kb.getKC(), r.getNode().getScene().getWindow());

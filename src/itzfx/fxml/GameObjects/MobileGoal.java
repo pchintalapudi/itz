@@ -79,7 +79,7 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
                 change.getRemoved().forEach(c -> c.destack());
             }
         });
-        this.hitbox = new Hitbox(25, Hitbox.CollisionType.STRONG, this, 10);
+        this.hitbox = new Hitbox(25, Hitbox.CollisionType.STRONG, this, 15);
         Hitbox.register(hitbox);
         getNode().getChildren().addAll(stackLabel, hitbox.getVisual());
         super.registerProperties();

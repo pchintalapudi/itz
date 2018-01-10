@@ -9,6 +9,9 @@ import com.sun.javafx.application.LauncherImpl;
 import itzfx.fxml.FXMLController;
 import itzfx.preload.Prestart;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +23,11 @@ import javafx.application.Preloader.ProgressNotification;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import sun.misc.Unsafe;
 
 /**
  *
@@ -31,19 +38,21 @@ public class Start extends Application {
     private FXMLController fxml;
 
     //Because I can
-//    public static final Unsafe UNSAFE;
-//
-//    static {
-//        try {
-//            java.lang.reflect.Field f = Unsafe.class.getDeclaredField("theUnsafe");
-//            f.setAccessible(true);
-//            UNSAFE = (Unsafe) f.get(null);
-//        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-//            Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
-//            System.err.println(ex);
-//            throw new RuntimeException();
-//        }
-//    }
+    public static final Unsafe UNSAFE;
+
+    public static final List<Unsafe> UNSAFES = new LinkedList<>();
+
+    static {
+        try {
+            java.lang.reflect.Field f = LockSupport.class.getDeclaredField("UNSAFE");
+            f.setAccessible(true);
+            UNSAFE = (Unsafe) f.get(null);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+            Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex);
+            throw new RuntimeException();
+        }
+    }
     private Parent p;
 
     /**
@@ -52,6 +61,13 @@ public class Start extends Application {
     @Override
     public void init() {
         try {
+            for (int i = 0; i < 200; i++) {
+                try {
+                    UNSAFES.add((Unsafe) UNSAFE.allocateInstance(Unsafe.class));
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             super.notifyPreloader(new ProgressNotification(0));
             FXMLLoader loader = new FXMLLoader(Start.class.getResource("/itzfx/fxml/FXML.fxml"));
             p = loader.load();
@@ -76,7 +92,7 @@ public class Start extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("In The Zone (ITZ)");
-        Scene scene = new Scene(p);
+        Scene scene = new Scene(new StackPane(p, generateShift()));
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -89,6 +105,12 @@ public class Start extends Application {
      */
     public static void main(String[] args) {
         LauncherImpl.launchApplication(Start.class, Prestart.class, args);
+    }
+
+    public static final Rectangle generateShift() {
+        Rectangle warmShift = new Rectangle(1500, 1000, Calendar.getInstance().get(Calendar.HOUR_OF_DAY) > 20 || Calendar.getInstance().get(Calendar.HOUR_OF_DAY) < 7 ? new Color(1, 0.5, 0, 0.1) : Color.TRANSPARENT);
+        warmShift.setMouseTransparent(true);
+        return warmShift;
     }
 
     /**

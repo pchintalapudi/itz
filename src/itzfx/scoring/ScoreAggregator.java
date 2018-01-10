@@ -5,6 +5,7 @@
  */
 package itzfx.scoring;
 
+import itzfx.Start;
 import itzfx.fxml.FXMLController;
 import itzfx.fxml.ScoreSheetController;
 import java.io.IOException;
@@ -303,7 +304,6 @@ public class ScoreAggregator {
             ScoreSheetController ssc = loader.getController();
             ssc.update(new int[]{red20, blue20, red10, blue10, red5, blue5, redCones, blueCones, redStacks, blueStacks, auton, redPark, bluePark});
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
-            System.out.println(show.getDialogPane().getChildren());
             show.getDialogPane().setContent(report);
             show.getDialogPane().getChildren().stream().peek(n -> n.setStyle("-fx-background-color:#ffffff")).filter(n -> n instanceof ButtonBar).map(n -> (ButtonBar) n)
                     .flatMap(bb -> bb.getButtons().stream())
@@ -311,6 +311,7 @@ public class ScoreAggregator {
                     .peek(b -> b.getStyleClass().add("button")).peek(b -> b.getStylesheets().add("itzfx/fxml/Resources.css"))
                     .filter(b -> b.getText().equals("Cancel")).forEach(b -> b.getStyleClass().add("cancel-button"));
             show.getButtonTypes().get(0);
+            show.getDialogPane().getChildren().add(Start.generateShift());
             show.showAndWait().filter(bt -> bt.getButtonData() == ButtonData.OK_DONE)
                     .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(report)));
         } catch (IOException ex) {
