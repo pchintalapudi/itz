@@ -35,6 +35,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -247,14 +248,15 @@ public class TutorialRobot extends Mobile {
         }
     }
 
-    public static Map<Consumer<KeyEvent>, EventType<KeyEvent>> getActionMappings(TutorialRobot r) {
+    public static List<EventHandler<KeyEvent>> getActionList(TutorialRobot r) {
         Iterator<Consumer<KeyCode>> itr = r.actions.iterator();
-        return Arrays.stream(r.controller.keys()).map(k -> new Mapping<>(k, itr.next())).filter(m -> m.getKey() != KeyCode.UNDEFINED)
-                .map(m -> new Mapping<>(KeyEvent.KEY_PRESSED, (Consumer<KeyEvent>) k -> {
+        return Arrays.stream(r.controller.keys()).map(k -> new Mapping<>(k, itr.next()))
+                .filter(m -> m.getKey() != KeyCode.UNDEFINED)
+                .map(m -> (EventHandler<KeyEvent>) (k -> {
             if (k.getCode() == m.getKey()) {
-                ((Consumer<KeyCode>) m.getValue()).accept(k.getCode());
+                m.getValue().accept(k.getCode());
             }
-        })).collect(Collectors.toMap(Mapping::getValue, Mapping::getKey));
+        })).collect(Collectors.toList());
     }
 
     private static class Mapping<K, V> {

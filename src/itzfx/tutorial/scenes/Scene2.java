@@ -33,5 +33,6 @@ public class Scene2 implements TutorialScene {
 
     @Override
     public void nextScene() {
+        
     }
 }
