@@ -14,11 +14,12 @@ import itzfx.fxml.GameObjects.Cone;
 import itzfx.fxml.GameObjects.MobileGoal;
 import itzfx.fxml.GameObjects.RedMobileGoal;
 import itzfx.fxml.GameObjects.StationaryGoal;
+import itzfx.rerun.Command;
+import itzfx.tutorial.scenes.TutorialScene;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import javafx.animation.KeyFrame;
@@ -36,7 +37,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
@@ -240,41 +240,11 @@ public class TutorialRobot extends Mobile {
             Iterator<KeyCode> iteratorNew = Arrays.asList(controller.keys()).iterator();
             if (this.controller != null) {
                 Iterator<KeyCode> iteratorOld = Arrays.asList(this.controller.keys()).iterator();
-                actions.stream().peek(a -> KeyBuffer.remove(iteratorOld.next(), a)).forEach(a -> KeyBuffer.register(iteratorNew.next(), a));
+                actions.stream().peek(a -> TutorialBuffer.remove(iteratorOld.next(), a)).forEach(a -> KeyBuffer.register(iteratorNew.next(), a));
             } else {
-                actions.stream().forEach(a -> KeyBuffer.register(iteratorNew.next(), a));
+                actions.stream().forEach(a -> TutorialBuffer.register(iteratorNew.next(), a));
             }
             this.controller = controller;
-        }
-    }
-
-    public static List<EventHandler<KeyEvent>> getActionList(TutorialRobot r) {
-        Iterator<Consumer<KeyCode>> itr = r.actions.iterator();
-        return Arrays.stream(r.controller.keys()).map(k -> new Mapping<>(k, itr.next()))
-                .filter(m -> m.getKey() != KeyCode.UNDEFINED)
-                .map(m -> (EventHandler<KeyEvent>) (k -> {
-            if (k.getCode() == m.getKey()) {
-                m.getValue().accept(k.getCode());
-            }
-        })).collect(Collectors.toList());
-    }
-
-    private static class Mapping<K, V> {
-
-        private final K key;
-        private final V value;
-
-        public Mapping(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public K getKey() {
-            return key;
-        }
-
-        public V getValue() {
-            return value;
         }
     }
 
@@ -372,19 +342,11 @@ public class TutorialRobot extends Mobile {
      */
     public void mogo() {
         if (!movingMogo.get()) {
-            if (heldMogo.get() == null) {
-                Platform.runLater(() -> {
-//                        mogoIntake();
-                });
-            } else {
-                Platform.runLater(() -> {
-                    mogoOuttake();
-                });
-            }
+            TutorialScene.getFocusedScene().interact(Command.MOGO);
         }
     }
 
-    private void mogoIntake(MobileGoal mogo) {
+    public void mogoIntake(MobileGoal mogo) {
 //        MobileGoal mogo = Field.getOwner(this).huntMogo(new Point2D(super.getCenterX(), super.getCenterY()),
 //                new Point2D(70 * Math.cos(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1),
 //                        70 * Math.sin(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1)));
@@ -410,7 +372,7 @@ public class TutorialRobot extends Mobile {
         movingMogo.set(false);
     }
 
-    private void mogoOuttake() {
+    public void mogoOuttake() {
         movingMogo.set(true);
         mogoAnimation.stop();
         mogoAnimation.getKeyFrames().clear();
@@ -444,25 +406,11 @@ public class TutorialRobot extends Mobile {
     public void cone() {
         if (!movingCone.get() && System.currentTimeMillis() > 100 + lastConeMove) {
             lastConeMove = System.currentTimeMillis();
-            if (heldCone.get() == null) {
-                Platform.runLater(() -> {
-//                        coneIntake();
-                });
-            } else {
-                Platform.runLater(() -> {
-                    coneOuttake();
-                });
-            }
+            TutorialScene.getFocusedScene().interact(Command.CONE);
         }
     }
 
-    private void coneIntake() {
-//        Cone cone = Field.getOwner(this).huntCone(new Point2D(super.getCenterX(), super.getCenterY()),
-//                new Point2D(60 * Math.cos(Math.toRadians(node.getRotate())),
-//                        60 * Math.sin(Math.toRadians(node.getRotate()))));
-    }
-
-    private void coneOuttake() {
+    public void coneOuttake() {
         privateCone.vanish();
         heldCone.get().setCenter(super.getCenterX() + 60 * Math.cos(Math.toRadians(node.getRotate())),
                 super.getCenterY() + 60 * Math.sin(Math.toRadians(node.getRotate())));
@@ -479,9 +427,7 @@ public class TutorialRobot extends Mobile {
     public void autostack() {
         if (heldMogo.get() != null && !movingCone.get() && privateMogo.get().score() / 2 < this.robotMogoMaxStack) {
             if (heldCone.get() == null) {
-                Platform.runLater(() -> {
-//                    coneIntake();
-                });
+                cone();
             }
             if (heldCone.get() != null) {
                 Platform.runLater(() -> {
@@ -515,12 +461,12 @@ public class TutorialRobot extends Mobile {
     public void statStack() {
         if (!movingCone.get() && heldCone.get() != null) {
             Platform.runLater(() -> {
-//                    runStatStack();
+                TutorialScene.getFocusedScene().interact(Command.STATSTACK);
             });
         }
     }
 
-    private void runStatStack(StationaryGoal sg) {
+    public void runStatStack(StationaryGoal sg) {
 //        StationaryGoal sg = Field.getOwner(this).huntStat(new Point2D(super.getCenterX(), super.getCenterY()), new Point2D(57.5 * Math.cos(Math.toRadians(node.getRotate())),
 //                57.5 * Math.sin(Math.toRadians(node.getRotate()))));
         if (sg != null && sg.score() / 2 < robotStatMaxStack) {

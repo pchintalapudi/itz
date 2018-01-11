@@ -5,10 +5,12 @@
  */
 package itzfx.tutorial;
 
-import java.util.Collection;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
+import itzfx.tutorial.scenes.TutorialScene;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 /**
  *
@@ -16,11 +18,14 @@ import javafx.scene.input.KeyEvent;
  */
 public final class Tutorials {
 
-    public static void registerKeyListeners(Scene scene, Collection<EventHandler<KeyEvent>> handlers) {
-        handlers.forEach(h -> scene.addEventHandler(KeyEvent.KEY_PRESSED, h));
-    }
-
-    public static void unregisterKeyListeners(Scene scene, Collection<EventHandler<KeyEvent>> handlers) {
-        handlers.forEach(h -> scene.removeEventHandler(KeyEvent.KEY_PRESSED, h));
+    public static Parent load(String url, TutorialScene controller) {
+        FXMLLoader loader = new FXMLLoader(Tutorials.class.getResource(url));
+        loader.setController(controller);
+        try {
+            return loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(Tutorials.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 }

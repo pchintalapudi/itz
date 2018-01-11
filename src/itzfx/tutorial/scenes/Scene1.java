@@ -9,10 +9,7 @@ import itzfx.KeyControl;
 import itzfx.tutorial.TutorialRobot;
 import itzfx.tutorial.TutorialStep;
 import itzfx.tutorial.Tutorials;
-import java.util.List;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -27,26 +24,23 @@ public class Scene1 implements TutorialScene {
 
     private TutorialRobot tr;
 
-    private List<EventHandler<KeyEvent>> handlers;
-
     public void inject(TutorialRobot tr) {
         this.tr = tr;
         TutorialStep.setControllers(KeyControl.Defaults.SINGLE.getKC());
         tr.setController(TutorialStep.STEP1.getController());
-        handlers = TutorialRobot.getActionList(tr);
-        Tutorials.registerKeyListeners(root.getScene(), handlers);
         root.getChildren().add(tr.getNode());
+        TutorialScene.setFocusedScene(this);
     }
 
     @Override
-    public AnchorPane getRoot() {
-        return root;
+    public void init() {
     }
 
     @Override
     public void nextScene() {
-        Tutorials.unregisterKeyListeners(root.getScene(), handlers);
         Scene2 s2 = new Scene2(tr);
-        root.getScene().setRoot(s2.getRoot());
+        root.getScene().setRoot(Tutorials.load("scenes/Scene2.fxml", s2));
+        s2.init();
+        TutorialScene.setFocusedScene(s2);
     }
 }

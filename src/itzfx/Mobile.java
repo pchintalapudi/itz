@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -204,6 +205,10 @@ public abstract class Mobile {
      */
     public final double getCenterY() {
         return centerY.get();
+    }
+
+    public final Point2D getCenter() {
+        return new Point2D(getCenterX(), getCenterY());
     }
 
     /**

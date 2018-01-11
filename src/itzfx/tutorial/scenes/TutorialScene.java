@@ -5,16 +5,30 @@
  */
 package itzfx.tutorial.scenes;
 
-import javafx.scene.Parent;
-
+import itzfx.rerun.Command;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  *
  * @author prem
  */
 public interface TutorialScene {
-    
+
+    public static final ObjectProperty<TutorialScene> FOCUSED = new SimpleObjectProperty<>();
+
+    public static void setFocusedScene(TutorialScene focused) {
+        FOCUSED.set(focused);
+    }
+
+    public static TutorialScene getFocusedScene() {
+        return FOCUSED.get();
+    }
+
     public void nextScene();
-    
-    public Parent getRoot();
+
+    public void init();
+
+    default public void interact(Command command) {
+    }
 }

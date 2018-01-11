@@ -5,9 +5,9 @@
  */
 package itzfx.tutorial;
 
-import itzfx.KeyBuffer;
 import itzfx.Start;
 import itzfx.tutorial.scenes.Scene1;
+import itzfx.tutorial.scenes.TutorialScene;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -33,7 +35,13 @@ public class Test extends Application {
             primaryStage.setScene(new Scene(p));
             s1.inject(new TutorialRobot(90, 180, 90));
             primaryStage.show();
-            Start.PULSER.scheduleAtFixedRate(KeyBuffer::pulse, 0, 10, TimeUnit.MILLISECONDS);
+            primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, k -> {
+                if (k.getCode() == KeyCode.ENTER) {
+                    TutorialScene.getFocusedScene().nextScene();
+                }
+            });
+            TutorialBuffer.initialize(primaryStage.getScene());
+            Start.PULSER.scheduleAtFixedRate(TutorialBuffer::pulse, 0, 10, TimeUnit.MILLISECONDS);
         } catch (IOException ex) {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }

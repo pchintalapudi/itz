@@ -15,7 +15,7 @@ import javafx.scene.input.KeyCode;
  * @author prem
  */
 public enum TutorialStep {
-    STEP1, STEP2, STEP3, STEP4, STEP5, STEP6, STEP7, STEP8, STEP9, STEP10;
+    STEP1, STEP2, STEP3, STEP4, STEP5, STEP6, STEP7;
 
     public static void setControllers(KeyControl controller) {
         Iterator<TutorialControllers> itr = Arrays.asList(TutorialControllers.values()).iterator();
@@ -35,9 +35,8 @@ public enum TutorialStep {
     private enum TutorialControllers {
 
         F(true), FB(true, false, true), FBLR(true, true, true, true), FBM(true, false, true, false, true),
-        FBLRM(true, true, true, true, true), FBA(true, false, true, false, false, true),
-        FBLRMA(true, true, true, true, true, true), FBC(true, false, true, false, false, false, true),
-        FBCS(true, false, true, false, false, false, true, true), FBLRMACS(true, true, true, true, true, true, true, true);
+        FBA(true, false, true, false, false, true), FBC(true, false, true, false, false, false, true),
+        FBCS(true, false, true, false, false, false, true, true);
 
         private final Boolean[] controls;
 
