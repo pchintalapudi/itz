@@ -5,6 +5,7 @@
  */
 package itzfx.tutorial.scenes;
 
+import itzfx.KeyControl;
 import itzfx.rerun.Command;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

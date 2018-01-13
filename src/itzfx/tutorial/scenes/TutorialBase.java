@@ -21,5 +21,4 @@ public class TutorialBase {
     private void close() {
         root.getScene().getWindow().hide();
     }
-    
 }

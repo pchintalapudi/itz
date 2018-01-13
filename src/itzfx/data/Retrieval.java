@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -142,6 +144,9 @@ public class Retrieval {
      * @param f the file to save to
      */
     public static void writeRerun(List<String> commands, File f) {
+        while(commands.get(commands.size() - 1).equals("NONE")) {
+            commands.remove(commands.get(commands.size() - 1));
+        }
         writeToFile(commands, f);
     }
 
