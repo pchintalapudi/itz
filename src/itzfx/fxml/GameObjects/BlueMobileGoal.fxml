@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Group?>
+<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.RadialGradient?>
 <?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Arc?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Line?>
 
 <Pane fx:id="mobile" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onDragged" onMousePressed="#onPress" prefHeight="50.0" prefWidth="50.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.GameObjects.MobileController">
     <children>
@@ -17,15 +18,48 @@
             <fill>
                 <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                     <stops>
-                        <Stop color="#3c3cff" />
-                        <Stop color="#3c3cff" offset="0.5" />
-                        <Stop color="#1e1e7f" offset="0.8" />
-                        <Stop color="#3c3cff" offset="1.0" />
+                        <Stop color="#4444ff" />
+                        <Stop color="#4444ff" offset="0.0075" />
+                        <Stop color="#2d2db4" offset="1.0" />
                     </stops>
                 </RadialGradient>
             </fill>
         </Circle>
-        <Circle layoutX="25.0" layoutY="25.0" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+        <Group>
+            <children>
+                <Arc fill="#181844" layoutX="25.0" layoutY="25.0" length="75.0" radiusX="21.0" radiusY="21.0" startAngle="50.0" strokeType="INSIDE" type="ROUND" />
+                <Arc fill="#181844" layoutX="25.0" layoutY="25.0" length="75.0" radiusX="21.0" radiusY="21.0" startAngle="140.0" strokeType="INSIDE" type="ROUND" />
+                <Arc fill="#181844" layoutX="25.0" layoutY="25.0" length="75.0" radiusX="21.0" radiusY="21.0" startAngle="230.0" strokeType="INSIDE" type="ROUND" />
+                <Arc fill="#181844" layoutX="25.0" layoutY="25.0" length="75.0" radiusX="21.0" radiusY="21.0" startAngle="320.0" strokeType="INSIDE" type="ROUND" />
+            </children>
+        </Group>
+        <Circle layoutX="25.0" layoutY="25.0" radius="17.0" strokeType="INSIDE">
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop color="#4444ff" />
+                        <Stop color="#2d2db4" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </fill>
+            <effect>
+                <DropShadow />
+            </effect>
+        </Circle>
+        <Circle layoutX="25.0" layoutY="25.0" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop color="#4444ff" />
+                        <Stop color="#2d2db4" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </fill>
+            <effect>
+                <DropShadow />
+            </effect>
+        </Circle>
+        <Arc layoutX="25.0" layoutY="25.0" length="65.0" radiusX="13.0" radiusY="13.0" startAngle="55.0" stroke="BLACK" strokeType="INSIDE" type="ROUND">
             <fill>
                 <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                     <stops>
@@ -35,28 +69,68 @@
                     </stops>
                 </RadialGradient>
             </fill>
-        </Circle>
-        <Line endX="15.0" layoutX="25.0" layoutY="25.0" rotate="45.0" startX="-15.0">
-            <stroke>
-                <LinearGradient endX="1.0" endY="1.0">
+            <effect>
+                <ColorAdjust brightness="-0.15">
+                    <input>
+                        <DropShadow color="#00000080" />
+                    </input>
+                </ColorAdjust>
+            </effect>
+        </Arc>
+        <Arc layoutX="25.0" layoutY="25.0" length="65.0" radiusX="13.0" radiusY="13.0" startAngle="145.0" stroke="BLACK" strokeType="INSIDE" type="ROUND">
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                     <stops>
-                        <Stop color="BLACK" />
-                        <Stop color="#888888" offset="0.5" />
-                        <Stop color="BLACK" offset="1.0" />
+                        <Stop color="#4444ff" />
+                        <Stop color="#4444ff" offset="0.007633587786259542" />
+                        <Stop color="#2d2db4" offset="1.0" />
                     </stops>
-                </LinearGradient>
-            </stroke>
-        </Line>
-        <Line endX="15.0" layoutX="25.0" layoutY="25.0" rotate="-45.0" startX="-15.0">
-            <stroke>
-                <LinearGradient endX="1.0" endY="1.0">
+                </RadialGradient>
+            </fill>
+            <effect>
+                <ColorAdjust brightness="-0.15">
+                    <input>
+                        <DropShadow color="#00000080" />
+                    </input>
+                </ColorAdjust>
+            </effect>
+        </Arc>
+        <Arc layoutX="25.0" layoutY="25.0" length="65.0" radiusX="13.0" radiusY="13.0" startAngle="325.0" stroke="BLACK" strokeType="INSIDE" type="ROUND">
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                     <stops>
-                        <Stop color="BLACK" />
-                        <Stop color="#888888" offset="0.4980916030534351" />
-                        <Stop color="BLACK" offset="1.0" />
+                        <Stop color="#4444ff" />
+                        <Stop color="#4444ff" offset="0.007633587786259542" />
+                        <Stop color="#2d2db4" offset="1.0" />
                     </stops>
-                </LinearGradient>
-            </stroke>
-        </Line>
+                </RadialGradient>
+            </fill>
+            <effect>
+                <ColorAdjust brightness="-0.15">
+                    <input>
+                        <DropShadow color="#00000080" />
+                    </input>
+                </ColorAdjust>
+            </effect>
+        </Arc>
+        <Arc layoutX="25.0" layoutY="25.0" length="65.0" radiusX="13.0" radiusY="13.0" startAngle="235.0" stroke="BLACK" strokeType="INSIDE" type="ROUND">
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop color="#4444ff" />
+                        <Stop color="#4444ff" offset="0.007633587786259542" />
+                        <Stop color="#2d2db4" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </fill>
+            <effect>
+                <ColorAdjust brightness="-0.15">
+                    <input>
+                        <DropShadow color="#00000080" />
+                    </input>
+                </ColorAdjust>
+            </effect>
+        </Arc>
+        <Circle fill="#4444ff" layoutX="25.0" layoutY="25.0" radius="3.0" stroke="BLACK" strokeType="INSIDE" />
     </children>
 </Pane>

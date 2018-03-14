@@ -18,8 +18,8 @@
                 </RadialGradient>
             </fill>
         </Circle>
-        <Line endX="15.0" layoutX="15.0" layoutY="15.0" rotate="45.0" startX="-15.0" />
-        <Line endX="15.0" layoutX="15.0" layoutY="15.0" rotate="-45.0" startX="-15.0" />
+        <Line endX="14.5" layoutX="15.0" layoutY="15.0" rotate="45.0" startX="-14.5" />
+        <Line endX="14.5" layoutX="15.0" layoutY="15.0" rotate="-45.0" startX="-14.5" />
         <Circle layoutX="15.0" layoutY="15.0" radius="11.25" stroke="BLACK" strokeType="INSIDE">
             <fill>
                 <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
