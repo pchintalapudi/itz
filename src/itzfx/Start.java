@@ -12,15 +12,26 @@ import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.LockSupport;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Preloader.ProgressNotification;
+import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  *
@@ -56,6 +67,7 @@ public class Start extends Application {
             FXMLLoader loader = new FXMLLoader(Start.class.getResource("/itzfx/fxml/FXML.fxml"));
             p = loader.load();
             p.getStylesheets().add("/itzfx/fxml/Resources.css");
+            addZoomListeners(p);
             fxml = loader.getController();
             fxml.inject(this);
             Thread current = Thread.currentThread();
@@ -70,13 +82,70 @@ public class Start extends Application {
         }
     }
 
+    private static void addZoomListeners(Node n) {
+        final double minZoomSoft, minZoomHard;
+        final double maxZoomSoft, maxZoomHard;
+        minZoomHard = 0.5;
+        minZoomSoft = 0.71;
+        maxZoomSoft = 1.41;
+        maxZoomHard = 2;
+        n.scaleYProperty().bindBidirectional(n.scaleXProperty());
+        n.setOnZoom(ze -> {
+            if (n.getScaleX() < maxZoomHard && n.getScaleX() > minZoomHard) {
+                n.setScaleX(ze.getZoomFactor() * n.getScaleX());
+            }
+        });
+        n.setOnZoomFinished(ze -> {
+            if (n.getScaleX() < minZoomSoft) {
+                restoreZoom(minZoomSoft, n.scaleXProperty());
+            }
+            if (n.getScaleX() > maxZoomSoft) {
+                restoreZoom(maxZoomSoft, n.scaleXProperty());
+            }
+        });
+        addDoubleTapToRestoreZoom(n);
+        cancelSingleFingerScroll(n);
+    }
+    
+    private static void restoreZoom(double restorationValue, DoubleProperty scale) {
+        Timeline tl = new Timeline();
+        tl.getKeyFrames().add(new KeyFrame(Duration.millis(200), e -> tl.stop(), new KeyValue(scale, restorationValue)));
+        tl.play();
+    }
+    
+    private static void cancelSingleFingerScroll(Node n) {
+        n.setOnScroll(se -> {
+            if (se.getTouchCount() == 1) {
+                se.consume();
+            }
+        });
+    }
+    
+    private static void addDoubleTapToRestoreZoom(Node n) {
+        AtomicInteger touchCount = new AtomicInteger();
+        AtomicBoolean held = new AtomicBoolean();
+        n.setOnTouchPressed(te -> {
+            held.set(true);
+        });
+        n.setOnTouchReleased(te -> {
+            if (held.getAndSet(false)) {
+                if (touchCount.incrementAndGet() == 2) {
+                    restoreZoom(1, n.scaleXProperty());
+                }
+                PULSER.schedule(touchCount::decrementAndGet, 150, TimeUnit.MILLISECONDS);
+            }
+            te.consume();
+        });
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("In The Zone (ITZ)");
-        Scene scene = new Scene(p);
+        primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("Images/VEXEDR-stacked-red-transp-1000px.png")));
+        Scene scene = new Scene(new ScrollPane(new Group(p)));
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
