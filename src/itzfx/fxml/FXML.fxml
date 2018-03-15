@@ -125,7 +125,7 @@
     <center>
         <Pane BorderPane.alignment="CENTER">
             <children>
-                <BorderPane layoutY="2.4000015258789062" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="870.0" prefWidth="990.0">
+                <BorderPane layoutY="2.4" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="870.0" prefWidth="990.0">
                     <top>
                         <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="750.0" BorderPane.alignment="CENTER">
                             <left>
