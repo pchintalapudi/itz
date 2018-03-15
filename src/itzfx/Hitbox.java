@@ -93,10 +93,14 @@ public final class Hitbox {
 
     private static boolean inRange(Hitbox hb1, Hitbox hb2) {
         try {
-            return (hb1.getTranslates().distance(hb2.getTranslates()) < hb1.visual.getRadius() + hb2.visual.getRadius());
+            return (squareDistance(hb1.getTranslates(), hb2.getTranslates()) < Math.pow(hb1.visual.getRadius() + hb2.visual.getRadius(), 2));
         } catch (Throwable t) {
             return false;
         }
+    }
+    
+    private static double squareDistance(Point2D point1, Point2D point2) {
+        return Math.pow(point1.getX() - point2.getX(), 2) + Math.pow(point1.getY() - point2.getY(), 2);
     }
 
     /**

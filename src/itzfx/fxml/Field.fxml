@@ -58,6 +58,18 @@
     <center>
         <Pane fx:id="center" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" BorderPane.alignment="CENTER">
             <fx:include source="Tiles.fxml" />
+         <Group>
+            <children>
+               <Rectangle arcHeight="5.0" arcWidth="5.0" height="25.0" layoutY="592.5" rotate="-45.0" strokeType="INSIDE" width="7.5" />
+               <Rectangle arcHeight="50.0" arcWidth="5.0" height="25.0" layoutX="110.0" layoutY="703.0" rotate="-45.0" strokeType="INSIDE" width="7.5" />
+            </children>
+         </Group>
+         <Group layoutX="603.0" layoutY="-600.0">
+            <children>
+               <Rectangle arcHeight="5.0" arcWidth="5.0" height="25.0" layoutY="592.5" rotate="-45.0" strokeType="INSIDE" width="7.5" />
+               <Rectangle arcHeight="50.0" arcWidth="5.0" height="25.0" layoutX="110.0" layoutY="703.0" rotate="-45.0" strokeType="INSIDE" width="7.5" />
+            </children>
+         </Group>
             <StackPane fx:id="blue20" layoutX="653.0" layoutY="-17.0" rotate="-45.0">
                 <children>
                     <Rectangle arcHeight="5.0" arcWidth="5.0" height="153.0" stroke="BLACK" strokeType="INSIDE" width="15.0">
@@ -145,13 +157,13 @@
             </StackPane>
             <Group>
                 <Rectangle fill="WHITE" height="160.0" layoutX="299.0" layoutY="221.0" rotate="45.0" strokeType="INSIDE" width="5.0" />
-                <Rectangle fill="WHITE" height="160.0" layoutX="415.0" layoutY="338.0" rotate="45.0" strokeType="INSIDE" width="5.0" />
-                <Rectangle fill="WHITE" height="160.0" layoutX="415.0" layoutY="221.0" rotate="-45.0" strokeType="INSIDE" width="5.0" />
-                <Rectangle fill="WHITE" height="160.0" layoutX="299.0" layoutY="338.0" rotate="-45.0" strokeType="INSIDE" width="5.0" />
-                <Rectangle fill="WHITE" height="120.0" layoutX="300.0" strokeType="INSIDE" width="5.0" />
-                <Rectangle fill="WHITE" height="120.0" layoutX="420.0" layoutY="600.0" strokeType="INSIDE" width="5.0" />
-                <Rectangle fill="WHITE" height="120.0" layoutX="60.0" layoutY="240.0" rotate="90.0" strokeType="INSIDE" width="5.0" />
-                <Rectangle fill="WHITE" height="120.0" layoutX="660.0" layoutY="360.0" rotate="90.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="160.0" layoutX="417.0" layoutY="340.0" rotate="45.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="160.0" layoutX="417.0" layoutY="220.5" rotate="-45.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="160.0" layoutX="299.0" layoutY="340.0" rotate="-45.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="119.0" layoutX="300.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="118.0" layoutX="420.0" layoutY="603.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="118.0" layoutX="58.0" layoutY="242.0" rotate="90.0" strokeType="INSIDE" width="5.0" />
+                <Rectangle fill="WHITE" height="117.0" layoutX="657.0" layoutY="362.0" rotate="90.0" strokeType="INSIDE" width="5.0" />
             </Group>
             <StackPane fx:id="blue5" layoutX="536.0" layoutY="-71.0" rotate="-45.0">
                 <children>
@@ -163,6 +175,14 @@
                     <Rectangle fill="WHITE" height="500.0" strokeType="INSIDE" width="5.0" />
                 </children>
             </StackPane>
+         <Group>
+            <children>
+               <Rectangle arcHeight="5.0" arcWidth="5.0" height="25.0" layoutY="472.75" rotate="-45.0" strokeType="INSIDE" width="5.0" />
+               <Rectangle arcHeight="5.0" arcWidth="5.0" height="20.0" layoutX="482.75" layoutY="-6.0" rotate="-45.0" strokeType="INSIDE" width="5.0" />
+               <Rectangle arcHeight="5.0" arcWidth="5.0" height="20.0" layoutX="711.0" layoutY="222.5" rotate="-45.0" strokeType="INSIDE" width="5.0" />
+               <Rectangle arcHeight="5.0" arcWidth="5.0" height="20.0" layoutX="232.5" layoutY="707.0" rotate="-45.0" strokeType="INSIDE" width="5.0" />
+            </children>
+         </Group>
         </Pane>
     </center>
 </BorderPane>

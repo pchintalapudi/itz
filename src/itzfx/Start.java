@@ -24,11 +24,9 @@ import javafx.application.Application;
 import javafx.application.Preloader.ProgressNotification;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -144,11 +142,12 @@ public class Start extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("In The Zone (ITZ)");
-        primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("Images/VEXEDR-stacked-red-transp-1000px.png")));
-        Scene scene = new Scene(new ScrollPane(new Group(p)));
+        primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("Images/icon.png")));
+        Scene scene = new Scene(p);
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
+        System.out.println(Runtime.getRuntime().availableProcessors() + " " + Thread.activeCount());
     }
 
     /**
@@ -168,7 +167,7 @@ public class Start extends Application {
     /**
      * Main thread pool for scheduling tasks.
      */
-    public static final ScheduledExecutorService PULSER = Executors.newScheduledThreadPool(3);
+    public static final ScheduledExecutorService PULSER = Executors.newSingleThreadScheduledExecutor();
 
     /**
      * {@inheritDoc}
