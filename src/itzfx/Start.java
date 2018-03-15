@@ -38,6 +38,10 @@ import javafx.util.Duration;
 public class Start extends Application {
 
     private FXMLController fxml;
+    
+    public Start() {
+        instance = this;
+    }
 
     //Because I can
 //    public static final Unsafe UNSAFE;
@@ -177,5 +181,11 @@ public class Start extends Application {
         PULSER.shutdownNow();
         SHUTDOWN = true;
         fxml.close();
+    }
+    
+    private static Start instance;
+    
+    public static void navigate(String url) {
+        instance.getHostServices().showDocument(url);
     }
 }

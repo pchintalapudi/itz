@@ -74,9 +74,9 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
         stacked.addListener((Change<? extends Cone> change) -> {
             change.next();
             if (change.wasAdded()) {
-                change.getAddedSubList().forEach(c -> c.stack());
+                change.getAddedSubList().forEach(Cone::stack);
             } else if (change.wasRemoved()) {
-                change.getRemoved().forEach(c -> c.destack());
+                change.getRemoved().forEach(Cone::destack);
             }
         });
         this.hitbox = new Hitbox(25, Hitbox.CollisionType.STRONG, this, 15);

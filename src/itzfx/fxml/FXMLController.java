@@ -21,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -36,6 +37,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 /**
@@ -172,6 +174,21 @@ public class FXMLController implements AutoCloseable {
 
     @FXML
     private CheckMenuItem showHitboxes;
+    
+    @FXML
+    private void about() {
+        FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("About.fxml"));
+        try {
+            TextFlow tf = loader.load();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("About this simulation");
+            alert.setTitle("About");
+            alert.getDialogPane().setContent(tf);
+            alert.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Takes a screenshot of the given nodes. Each node has its picture taken in

@@ -97,7 +97,7 @@
                 <Menu fx:id="robotMenu" mnemonicParsing="false" text="Robot" />
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem mnemonicParsing="false" text="About" onAction="#about"/>
                     </items>
                 </Menu>
             </menus>
