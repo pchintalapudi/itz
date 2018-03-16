@@ -47,17 +47,12 @@ public final class BlueMobileGoal extends MobileGoal {
      * {@inheritDoc}
      */
     @Override
-    public ScoreType determineScoringZone() {
-        if (!super.isVanished()) {
-            if (super.getCenterX() - super.getCenterY() > 600 - 15) {
-                return ScoreType.ZONE_20;
-            } else if (super.getCenterX() - super.getCenterY() > 480 - 15) {
-                return ScoreType.ZONE_10;
-            } else if (super.getCenterX() - super.getCenterY() > 360 - 15) {
-                return ScoreType.ZONE_5;
-            }
+    public ScoreType determineScoringZone(boolean skills) {
+        ScoreType st = MobileGoal.inUpperRightCorner(this);
+        if (skills && st == ScoreType.ZONE_NONE) {
+            st = MobileGoal.inLowerLeftCorner(this);
         }
-        return ScoreType.ZONE_NONE;
+        return st;
     }
 
     /**

@@ -103,6 +103,15 @@ public class ScoreAggregator {
         });
         return new AtomicInteger[]{aiR, aiB};
     }
+    
+    private AtomicInteger calculateSkillsScore() {
+        AtomicInteger score = new AtomicInteger();
+        reports.forEach(sr -> {
+            score.addAndGet(sr.getOwner().scoreSkills());
+            score.addAndGet(sr.getType().getScore());
+        });
+        return score;
+    }
 
     /**
      * Calculates autonomous score (no parking bonus) for the currently
@@ -210,8 +219,8 @@ public class ScoreAggregator {
      * @return the calculated skills score
      */
     public int calculateSkills() {
-        AtomicInteger[] temp = calculate();
-        return temp[0].get() + temp[1].get();
+        AtomicInteger score = calculateSkillsScore();
+        return score.get();
     }
 
     private void updateReport() {
@@ -327,7 +336,7 @@ public class ScoreAggregator {
         }
 
         public int max(int compare) {
-            return integer = integer > compare ? integer : compare;
+            return integer = Math.max(integer, compare);
         }
     }
 }

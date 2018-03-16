@@ -12,7 +12,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.SplitPane;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
@@ -26,7 +27,7 @@ import javafx.scene.text.Text;
 public class ScoringBoxController {
 
     @FXML
-    private SplitPane root;
+    private Parent root;
 
     @FXML
     private Text redScore;
@@ -35,12 +36,19 @@ public class ScoringBoxController {
     private Text blueScore;
 
     @FXML
+    private Text skillsScore;
+    
+    @FXML
+    private Parent skillsPane;
+
+    @FXML
     private AnchorPane timerPane;
 
     private Clock clock;
 
     private final IntegerProperty rScore;
     private final IntegerProperty bScore;
+    private final IntegerProperty sScore;
 
     private ScoreAggregator sa;
 
@@ -51,13 +59,15 @@ public class ScoringBoxController {
     public ScoringBoxController() {
         rScore = new SimpleIntegerProperty();
         bScore = new SimpleIntegerProperty();
+        sScore = new SimpleIntegerProperty();
     }
 
     @FXML
     private void initialize() {
         redScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(rScore.get()), rScore));
         blueScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(bScore.get()), bScore));
-        root.getParent().setUserData(this);
+        skillsScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sScore.get()), sScore));
+        root.setUserData(this);
         clock = (Clock) timerPane.getUserData();
     }
 
@@ -105,6 +115,7 @@ public class ScoringBoxController {
      */
     public void determineAutonWinner() {
         sa.determineAutonWinner();
+        skillsPane.setVisible(false);
     }
 
     /**
@@ -115,10 +126,18 @@ public class ScoringBoxController {
         int[] temp = sa.calculateMatch();
         rScore.set(temp[0]);
         bScore.set(temp[1]);
+        skillsPane.setVisible(false);
     }
 
+    public void pulseSkills() {
+        int temp = sa.calculateSkills();
+        sScore.set(temp);
+        skillsPane.setVisible(true);
+    }
+    
     /**
      * Displays a score sheet, formatted like an actual referee's score sheet.
+     * Does not work for skills score
      */
     public void generateReport() {
         sa.showReport();

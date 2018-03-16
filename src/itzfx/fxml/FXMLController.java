@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
@@ -35,7 +36,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -53,7 +53,7 @@ public class FXMLController implements AutoCloseable {
     private BorderPane root;
 
     @FXML
-    private VBox right;
+    private Parent right;
 
     private Field field;
 
@@ -69,8 +69,7 @@ public class FXMLController implements AutoCloseable {
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         field = (Field) ((Pane) ((BorderPane) ((Pane) root.getCenter()).getChildren().get(0)).getCenter()).getChildren().get(0).getUserData();
         Hitbox.VISIBLE.bind(showHitboxes.selectedProperty());
-        sbc = (ScoringBoxController) right.getChildren().get(0).getUserData();
-        right.setSpacing(25);
+        sbc = (ScoringBoxController) right.getChildrenUnmodifiable().get(0).getUserData();
         field.inject(sbc);
         field.getRobots().forEach(r -> r.recordingProperty().addListener((o, b, s) -> {
             if (!s) {

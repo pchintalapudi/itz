@@ -19,6 +19,7 @@ import itzfx.KeyBuffer;
 import itzfx.KeyControl;
 import itzfx.Mobile;
 import itzfx.Robot;
+import itzfx.scoring.ScoreReport;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,9 +30,11 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
@@ -103,12 +106,24 @@ public class Field implements AutoCloseable {
         scheduled = Start.PULSER.scheduleAtFixedRate(() -> {
             KeyBuffer.pulse();
             Hitbox.pulse();
-            if (sbc != null) {
-                if (mode == ControlMode.DRIVER_CONTROL || mode == ControlMode.FREE_PLAY) {
-                    sbc.pulseMatch();
-                } else if (mode == ControlMode.AUTON) {
-                    sbc.pulseAuton();
-                }
+            if (sbc != null && mode != null) {
+                Platform.runLater(() -> {
+                    switch (mode) {
+                        case DRIVER_CONTROL:
+                        case FREE_PLAY:
+                            sbc.pulseMatch();
+                            break;
+                        case AUTON:
+                            sbc.pulseAuton();
+                            break;
+                        case DRIVER_SKILLS:
+                        case PROGRAMMING_SKILLS:
+                            sbc.pulseSkills();
+                            break;
+                        default:
+                            break;
+                    }
+                });
             }
             getRobots().forEach(Robot::pulse);
         }, 0, 10, TimeUnit.MILLISECONDS);
@@ -471,13 +486,12 @@ public class Field implements AutoCloseable {
      * method returns null.
      */
     public MobileGoal huntMogo(Point2D center, Point2D pointingVector) {
-        List<MobileGoal> possible = mogos.stream()
+        return mogos.stream()
                 .filter(m -> !m.isVanished())
                 .filter(m -> {
                     Point2D realVector = new Point2D(m.getCenterX(), m.getCenterY()).subtract(center);
                     return Math.abs(realVector.getX() - pointingVector.getX()) < 15 && Math.abs(realVector.getY() - pointingVector.getY()) < 15;
-                }).limit(1).collect(Collectors.toList());
-        return possible.size() > 0 ? possible.get(0) : null;
+                }).findAny().orElse(null);
     }
 
     /**
@@ -600,6 +614,7 @@ public class Field implements AutoCloseable {
      */
     public void inject(ScoringBoxController sbc) {
         this.sbc = sbc;
+        System.out.println(sbc);
         sbc.setAggregator(scores);
         time = sbc.getTime();
         setMode(ControlMode.AUTON);
@@ -652,7 +667,7 @@ public class Field implements AutoCloseable {
      *
      * 4. When any robot begins moving, the timer starts again, with 105 seconds
      * on the clock.
-     * 
+     *
      * 5. Game finishes. Match is visible on the score sheet.
      */
     public void startMatch() {
@@ -729,6 +744,8 @@ public class Field implements AutoCloseable {
             getRobots().stream().peek(Robot::eraseController).forEach(Robot::runProgram);
         } else {
             getRobots().forEach(Robot::driverControl);
+        }
+        if (cm == ControlMode.DRIVER_SKILLS || cm == ControlMode.PROGRAMMING_SKILLS) {
         }
     }
 

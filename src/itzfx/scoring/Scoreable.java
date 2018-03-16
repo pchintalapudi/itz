@@ -31,4 +31,12 @@ public interface Scoreable {
      * alliance.
      */
     public boolean isRed();
+    
+    /**
+     * Scores this Scoreable as if it were in skills score. 
+     * @return 
+     */
+    public default int scoreSkills() {
+        return score();
+    }
 }

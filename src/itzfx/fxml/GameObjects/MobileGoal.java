@@ -211,7 +211,13 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
      */
     @Override
     public int score() {
-        sr.setScoreType(determineScoringZone());
+        sr.setScoreType(determineScoringZone(false));
+        return stacked.size() * 2;
+    }
+
+    @Override
+    public int scoreSkills() {
+        sr.setScoreType(determineScoringZone(true));
         return stacked.size() * 2;
     }
 
@@ -220,7 +226,34 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
      * method will return the corresponding {@link ScoreType} to the current
      * zone. It is called during scoring.
      *
+     * @param skills if this is a skills run.
      * @return the score type that represents the zone this mobile goal is in.
      */
-    protected abstract ScoreType determineScoringZone();
+    protected abstract ScoreType determineScoringZone(boolean skills);
+
+    protected static ScoreType inLowerLeftCorner(Mobile m) {
+        if (!m.isVanished()) {
+            if (m.getCenterY() - m.getCenterX() > 600 - 15) {
+                return ScoreType.ZONE_20;
+            } else if (m.getCenterY() - m.getCenterX() > 480 - 15) {
+                return ScoreType.ZONE_10;
+            } else if (m.getCenterY() - m.getCenterX() > 360 - 15) {
+                return ScoreType.ZONE_5;
+            }
+        }
+        return ScoreType.ZONE_NONE;
+    }
+
+    protected static ScoreType inUpperRightCorner(Mobile m) {
+        if (!m.isVanished()) {
+            if (m.getCenterX() - m.getCenterY() > 600 - 15) {
+                return ScoreType.ZONE_20;
+            } else if (m.getCenterX() - m.getCenterY() > 480 - 15) {
+                return ScoreType.ZONE_10;
+            } else if (m.getCenterX() - m.getCenterY() > 360 - 15) {
+                return ScoreType.ZONE_5;
+            }
+        }
+        return ScoreType.ZONE_NONE;
+    }
 }

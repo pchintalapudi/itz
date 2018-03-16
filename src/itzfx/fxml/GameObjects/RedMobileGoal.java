@@ -47,17 +47,12 @@ public class RedMobileGoal extends MobileGoal {
      * {@inheritDoc}
      */
     @Override
-    public ScoreType determineScoringZone() {
-        if (!super.isVanished()) {
-            if (super.getCenterY() - super.getCenterX() > 600 - 15) {
-                return ScoreType.ZONE_20;
-            } else if (super.getCenterY() - super.getCenterX() > 480 - 15) {
-                return ScoreType.ZONE_10;
-            } else if (super.getCenterY() - super.getCenterX() > 360 - 15) {
-                return ScoreType.ZONE_5;
-            }
+    public ScoreType determineScoringZone(boolean skills) {
+        ScoreType st = MobileGoal.inLowerLeftCorner(this);
+        if (skills && st == ScoreType.ZONE_NONE) {
+            st = MobileGoal.inUpperRightCorner(this);
         }
-        return ScoreType.ZONE_NONE;
+        return st;
     }
 
     /**
