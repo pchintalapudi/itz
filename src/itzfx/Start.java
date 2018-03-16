@@ -22,12 +22,17 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Preloader.ProgressNotification;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -38,7 +43,7 @@ import javafx.util.Duration;
 public class Start extends Application {
 
     private FXMLController fxml;
-    
+
     public Start() {
         instance = this;
     }
@@ -108,13 +113,13 @@ public class Start extends Application {
         addDoubleTapToRestoreZoom(n);
         cancelSingleFingerScroll(n);
     }
-    
+
     private static void restoreZoom(double restorationValue, DoubleProperty scale) {
         Timeline tl = new Timeline();
         tl.getKeyFrames().add(new KeyFrame(Duration.millis(200), e -> tl.stop(), new KeyValue(scale, restorationValue)));
         tl.play();
     }
-    
+
     private static void cancelSingleFingerScroll(Node n) {
         n.setOnScroll(se -> {
             if (se.getTouchCount() == 1) {
@@ -122,7 +127,7 @@ public class Start extends Application {
             }
         });
     }
-    
+
     private static void addDoubleTapToRestoreZoom(Node n) {
         AtomicInteger touchCount = new AtomicInteger();
         AtomicBoolean held = new AtomicBoolean();
@@ -147,7 +152,17 @@ public class Start extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("In The Zone (ITZ)");
         primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("Images/icon.png")));
-        Scene scene = new Scene(p);
+        AnchorPane.setLeftAnchor(p, 0d);
+        AnchorPane.setTopAnchor(p, 0d);
+        AnchorPane.setRightAnchor(p, 0d);
+        AnchorPane.setBottomAnchor(p, 0d);
+        AnchorPane windowScale = new AnchorPane(new Group(p));
+        StackPane root = new StackPane(windowScale);
+        NumberBinding maxScale = Bindings.min(root.widthProperty().divide(1500),
+                                      root.heightProperty().divide(1000));
+        windowScale.scaleXProperty().bind(maxScale);
+        windowScale.scaleYProperty().bind(maxScale);
+        Scene scene = new Scene(root, 1500, 1000);
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -182,9 +197,9 @@ public class Start extends Application {
         SHUTDOWN = true;
         fxml.close();
     }
-    
+
     private static Start instance;
-    
+
     public static void navigate(String url) {
         instance.getHostServices().showDocument(url);
     }
