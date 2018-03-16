@@ -33,7 +33,7 @@ public abstract class Mobile {
 
     private final double layoutX;
     private final double layoutY;
-    private final double initRotate;
+    private double initRotate;
 
     /**
      * Constructs a new Mobile at the specified coordinates with initial rotate
@@ -388,5 +388,10 @@ public abstract class Mobile {
 
     private double lineDistance(double x, double y, double m, double k) {
         return Math.abs(k + m * x - y) / Math.sqrt(1 + m * m);
+    }
+    
+    protected void adjustInitRotate(double extra) {
+        initRotate += extra;
+        getNode().setRotate(getNode().getRotate() + extra);
     }
 }

@@ -978,7 +978,7 @@ public final class Robot extends Mobile implements Scoreable {
         }
         if (mogoIntakeFront != null) {
             if (this.robotMogoFront ^ mogoIntakeFront) {
-                node.setRotate(node.getRotate() + 180);
+                adjustInitRotate(180);
             }
             this.robotMogoFront = mogoIntakeFront;
         }
