@@ -33,6 +33,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -71,10 +72,9 @@ public class Start extends Application {
     public void init() {
         try {
             super.notifyPreloader(new ProgressNotification(0));
-            FXMLLoader loader = new FXMLLoader(Start.class.getResource("/itzfx/fxml/FXML.fxml"));
+            FXMLLoader loader = new FXMLLoader(Start.class.getResource("fxml/FXML.fxml"));
             p = loader.load();
-            p.getStylesheets().add("/itzfx/fxml/Resources.css");
-            addZoomListeners(p);
+//            addZoomListeners(p);
             fxml = loader.getController();
             fxml.inject(this);
             Thread current = Thread.currentThread();
@@ -152,17 +152,19 @@ public class Start extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("In The Zone (ITZ)");
         primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("Images/icon.png")));
+        final double width = 1600, height = 900;
         AnchorPane.setLeftAnchor(p, 0d);
         AnchorPane.setTopAnchor(p, 0d);
         AnchorPane.setRightAnchor(p, 0d);
         AnchorPane.setBottomAnchor(p, 0d);
+        p.setClip(new Rectangle(0, 0, width, height));
         AnchorPane windowScale = new AnchorPane(new Group(p));
         StackPane root = new StackPane(windowScale);
-        NumberBinding maxScale = Bindings.min(root.widthProperty().divide(1500),
-                                      root.heightProperty().divide(1000));
+        NumberBinding maxScale = Bindings.min(root.widthProperty().divide(width),
+                                      root.heightProperty().divide(height));
         windowScale.scaleXProperty().bind(maxScale);
         windowScale.scaleYProperty().bind(maxScale);
-        Scene scene = new Scene(root, 1500, 1000);
+        Scene scene = new Scene(root, width, height);
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
         primaryStage.show();

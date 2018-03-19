@@ -6,6 +6,7 @@
 package itzfx.fxml;
 
 import javafx.fxml.FXML;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
 /**
@@ -38,9 +39,9 @@ public class ScoreSheetController {
     @FXML
     private Text blueStacks;
     @FXML
-    private Text redAuton;
+    private ImageView redAuton;
     @FXML
-    private Text blueAuton;
+    private ImageView blueAuton;
     @FXML
     private Text redPark;
     @FXML

@@ -109,18 +109,11 @@ public class Field implements AutoCloseable {
             if (sbc != null && mode != null) {
                 Platform.runLater(() -> {
                     switch (mode) {
-                        case DRIVER_CONTROL:
-                        case FREE_PLAY:
-                            sbc.pulseMatch();
-                            break;
                         case AUTON:
                             sbc.pulseAuton();
                             break;
-                        case DRIVER_SKILLS:
-                        case PROGRAMMING_SKILLS:
-                            sbc.pulseSkills();
-                            break;
                         default:
+                            sbc.pulse();
                             break;
                     }
                 });

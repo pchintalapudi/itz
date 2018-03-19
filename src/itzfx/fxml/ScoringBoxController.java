@@ -37,9 +37,6 @@ public class ScoringBoxController {
 
     @FXML
     private Text skillsScore;
-    
-    @FXML
-    private Parent skillsPane;
 
     @FXML
     private AnchorPane timerPane;
@@ -115,31 +112,30 @@ public class ScoringBoxController {
      */
     public void determineAutonWinner() {
         sa.determineAutonWinner();
-        skillsPane.setVisible(false);
     }
 
     /**
      * Updates the displayed scores using a calculation that generates scores
      * during the driver control period.
      */
-    public void pulseMatch() {
+    public void pulse() {
         int[] temp = sa.calculateMatch();
         rScore.set(temp[0]);
         bScore.set(temp[1]);
-        skillsPane.setVisible(false);
-    }
-
-    public void pulseSkills() {
-        int temp = sa.calculateSkills();
-        sScore.set(temp);
-        skillsPane.setVisible(true);
+        sScore.set(sa.calculateSkills());
     }
     
     /**
      * Displays a score sheet, formatted like an actual referee's score sheet.
      * Does not work for skills score
      */
-    public void generateReport() {
+    @FXML
+    private void generateReport() {
         sa.showReport();
+    }
+    
+    @FXML
+    private void generateSkillsReport() {
+        
     }
 }

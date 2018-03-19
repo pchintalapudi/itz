@@ -19,7 +19,6 @@
                 <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                     <stops>
                         <Stop color="#4444ff" />
-                        <Stop color="#4444ff" offset="0.0075" />
                         <Stop color="#2d2db4" offset="1.0" />
                     </stops>
                 </RadialGradient>

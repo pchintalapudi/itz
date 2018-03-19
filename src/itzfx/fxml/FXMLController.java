@@ -9,7 +9,6 @@ import itzfx.Start;
 import itzfx.ControlMode;
 import itzfx.Hitbox;
 import itzfx.Robot;
-import itzfx.data.FileUI;
 import itzfx.preload.Prestart;
 import java.io.IOException;
 import java.util.Arrays;
@@ -71,11 +70,6 @@ public class FXMLController implements AutoCloseable {
         Hitbox.VISIBLE.bind(showHitboxes.selectedProperty());
         sbc = (ScoringBoxController) right.getChildrenUnmodifiable().get(0).getUserData();
         field.inject(sbc);
-        field.getRobots().forEach(r -> r.recordingProperty().addListener((o, b, s) -> {
-            if (!s) {
-                FileUI.saveRerun(r, root.getScene().getWindow());
-            }
-        }));
         List<Robot> robots = field.getRobots();
         for (int i = 0; i < robots.size(); i++) {
             RobotMenu controller = new RobotMenu(robots.get(i), "Robot " + (i + 1));

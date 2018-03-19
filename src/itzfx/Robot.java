@@ -17,9 +17,10 @@ import itzfx.rerun.Rerun;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.ScoreType;
 import itzfx.scoring.Scoreable;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
@@ -112,7 +113,7 @@ public final class Robot extends Mobile implements Scoreable {
         red = new SimpleBooleanProperty(true);
         filter.bind(Bindings.createObjectBinding(() -> red.get() ? new Color(1, 0, 0, .05) : new Color(0, 0, 1, .05), red));
         active = new SimpleBooleanProperty(true);
-        actions = new LinkedList<>();
+        actions = new ArrayList<>(9);
         driveBaseMovable = new SimpleBooleanProperty(true);
         sr = new ScoreReport(this);
         sr.setScoreType(ScoreType.ZONE_NONE);
@@ -370,7 +371,7 @@ public final class Robot extends Mobile implements Scoreable {
                 pulse.add(Command.NONE);
             }
             saved.add(pulse);
-            pulse = new LinkedList<>();
+            pulse = new ArrayList<>(2);
         }
     }
 
@@ -378,6 +379,10 @@ public final class Robot extends Mobile implements Scoreable {
      * Begins recording a rerun.
      */
     public void record() {
+        if (!recording.get()) {
+            pulse.clear();
+            saved.clear();
+        }
         recording.set(true);
     }
 
@@ -1015,7 +1020,7 @@ public final class Robot extends Mobile implements Scoreable {
         r.acceptValues(rs, rmit, rat, rst, rmms, rsms, rmf);
     }
 
-    private final Queue<List<Command>> saved = new LinkedList<>();
+    private final Queue<List<Command>> saved = new ArrayDeque<>(1000);
 
-    private List<Command> pulse = new LinkedList<>();
+    private List<Command> pulse = new ArrayList<>(2);
 }

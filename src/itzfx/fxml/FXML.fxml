@@ -5,16 +5,19 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="white-background" stylesheets="@css/global.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
@@ -97,23 +100,48 @@
                 <Menu fx:id="robotMenu" mnemonicParsing="false" text="Robot" />
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About" onAction="#about"/>
+                        <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
     </top>
     <right>
-        <VBox fx:id="right" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+        <VBox fx:id="right" prefHeight="974.4" prefWidth="731.2" BorderPane.alignment="CENTER">
             <children>
                 <fx:include source="ScoringBox.fxml" />
-                <StackPane prefHeight="150.0" prefWidth="200.0">
+                <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                     <children>
-                        <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../Images/VEXEDR-stacked-red-transp-1000px.png" />
-                            </image>
-                        </ImageView>
+                        <ImageView fitHeight="300.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true" styleClass="vex-logo" />
+                        <ImageView fitHeight="300.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true" styleClass="dvhs-robotics-logo" />
+                    </children>
+                </HBox>
+                <StackPane prefHeight="300.0" prefWidth="700.0">
+                    <children>
+                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                            <tabs>
+                                <Tab text="Robot 1">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </Tab>
+                                <Tab text="Robot 2">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </Tab>
+                                <Tab text="Robot 3">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </Tab>
+                                <Tab text="Robot 4">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </Tab>
+                            </tabs>
+                        </TabPane>
                     </children>
                 </StackPane>
             </children>
@@ -125,49 +153,52 @@
     <center>
         <Pane BorderPane.alignment="CENTER">
             <children>
-                <BorderPane layoutY="2.4" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="870.0" prefWidth="990.0">
+                <BorderPane layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="870.0" prefWidth="850.0">
                     <top>
-                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="750.0" BorderPane.alignment="CENTER">
-                            <left>
-                                <Rectangle fill="#4444ff" height="120.0" strokeType="INSIDE" width="5.0" BorderPane.alignment="CENTER" />
-                            </left>
-                            <opaqueInsets>
-                                <Insets left="120.0" />
-                            </opaqueInsets>
-                            <bottom>
-                                <Rectangle fill="#4444ff" height="5.0" strokeType="INSIDE" width="750.0" BorderPane.alignment="TOP_LEFT" />
-                            </bottom>
-                            <right>
-                                <Rectangle fill="#4444ff" height="120.0" strokeType="INSIDE" width="5.0" BorderPane.alignment="CENTER" />
-                            </right>
-                        </BorderPane>
+                        <HBox BorderPane.alignment="CENTER">
+                            <children>
+                                <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="730.0">
+                                    <left>
+                                        <Rectangle height="120.0" strokeType="INSIDE" styleClass="blue-alliance" width="5.0" BorderPane.alignment="CENTER" />
+                                    </left>
+                                    <opaqueInsets>
+                                        <Insets left="120.0" />
+                                    </opaqueInsets>
+                                    <bottom>
+                                        <Rectangle height="5.0" strokeType="INSIDE" styleClass="blue-alliance" width="730.0" BorderPane.alignment="TOP_LEFT" />
+                                    </bottom>
+                                    <right>
+                                        <Rectangle height="120.0" strokeType="INSIDE" styleClass="blue-alliance" width="5.0" BorderPane.alignment="CENTER" />
+                                    </right>
+                                    <HBox.margin>
+                                        <Insets left="120.0" />
+                                    </HBox.margin>
+                                </BorderPane>
+                            </children>
+                        </HBox>
                     </top>
                     <center>
-                        <Pane>
+                        <Pane prefHeight="750.0" prefWidth="730.0">
                             <children>
                                 <fx:include source="Field.fxml" />
                             </children>
                         </Pane>
                     </center>
                     <left>
-                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="120.0" BorderPane.alignment="CENTER">
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="120.0" BorderPane.alignment="CENTER">
                             <top>
-                                <Rectangle fill="#ff4444" height="5.0" strokeType="INSIDE" width="120.0" BorderPane.alignment="CENTER" />
+                                <Rectangle height="5.0" strokeType="INSIDE" styleClass="red-alliance" width="120.0" BorderPane.alignment="CENTER" />
                             </top>
                             <right>
-                                <Rectangle fill="#ff4444" height="750.0" strokeType="INSIDE" width="5.0" BorderPane.alignment="CENTER" />
+                                <Rectangle height="730.0" strokeType="INSIDE" styleClass="red-alliance" width="5.0" BorderPane.alignment="CENTER" />
                             </right>
                             <bottom>
-                                <Rectangle fill="#ff4444" height="5.0" strokeType="INSIDE" width="120.0" BorderPane.alignment="CENTER" />
+                                <Rectangle height="5.0" strokeType="INSIDE" styleClass="red-alliance" width="120.0" BorderPane.alignment="CENTER" />
                             </bottom>
                         </BorderPane>
                     </left>
                 </BorderPane>
-                <ImageView fx:id="logo" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../Images/phoenixWlogo.png" />
-                    </image>
-                </ImageView>
+                <ImageView fx:id="logo" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" styleClass="logo" />
             </children>
         </Pane>
     </center>

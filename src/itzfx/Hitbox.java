@@ -5,6 +5,7 @@
  */
 package itzfx;
 
+import itzfx.utils.QuickMafs;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -46,7 +47,7 @@ public final class Hitbox {
         for (int i = COLLIDABLE.size() - 1; i > -1; i--) {
             Hitbox hb = COLLIDABLE.get(i);
             if (hb.cType != CollisionType.PHANTOM && hb.canCollide()) {
-                COLLIDABLE.subList(0, i).stream()
+                COLLIDABLE.subList(0, i).parallelStream()
                         .filter(h -> h.collisionEnabled.get())
                         .filter(h -> h.check != hb.check)
                         .filter(h -> h.movableOwner != null)
@@ -54,6 +55,10 @@ public final class Hitbox {
                         .forEach(h -> resolveCollision(hb, h));
             }
         }
+    }
+    
+    private static double invMag(Point2D vector) {
+        return QuickMafs.invSqRoot(QuickMafs.square(vector.getX()) + QuickMafs.square(vector.getY()));
     }
 
     private static void resolveCollision(Hitbox hb1, Hitbox hb2) {
@@ -63,28 +68,28 @@ public final class Hitbox {
         Point2D field1 = hb1.getTranslates();
         Point2D field2 = hb2.getTranslates();
         Point2D approach = field2.subtract(field1);
+        double invMagnitude = invMag(approach);
+        double dist = hb1.visual.getRadius() + hb2.visual.getRadius() - 1 / invMagnitude;
+        Point2D approach0 = approach.multiply(invMagnitude);
         Platform.runLater(() -> {
             try {
-                double collisionFactor = 10;
+                double collisionFactor = 1;
                 if (hb1.cType == CollisionType.WEAK || hb2.cType == CollisionType.WEAK) {
-                    collisionFactor = .275;
+                    collisionFactor = .01;
                 }
                 if (hb1.mass == Double.POSITIVE_INFINITY) {
-                    Point2D approach0 = approach.normalize();
                     if (hb2.movableOwner != null) {
-                        hb2.movableOwner.shiftCenter(approach0.getX() * collisionFactor, approach0.getY() * collisionFactor);
+                        hb2.movableOwner.shiftCenter(approach0.getX() * dist * collisionFactor, approach0.getY() * dist * collisionFactor);
                     }
                 } else if (hb2.mass == Double.POSITIVE_INFINITY) {
-                    Point2D approach0 = approach.normalize();
                     if (hb1.movableOwner != null) {
-                        hb1.movableOwner.shiftCenter(-approach0.getX() * collisionFactor, -approach0.getY() * collisionFactor);
+                        hb1.movableOwner.shiftCenter(-approach0.getX() * dist * collisionFactor, -approach0.getY() * dist * collisionFactor);
                     }
                 } else {
                     double rr1 = hb2.mass / (hb1.mass + hb2.mass);
-                    double rr2 = hb1.mass / (hb1.mass + hb2.mass);
-                    Point2D approach0 = approach.normalize();
-                    hb1.movableOwner.shiftCenter(-rr1 * approach0.getX() * collisionFactor, -rr1 * approach0.getY() * collisionFactor);
-                    hb2.movableOwner.shiftCenter(rr2 * approach0.getX() * collisionFactor, rr2 * approach0.getY() * collisionFactor);
+                    double rr2 = 1 - rr1;
+                    hb1.movableOwner.shiftCenter(-rr1 * approach0.getX() * dist * collisionFactor, -rr1 * approach0.getY() * dist * collisionFactor);
+                    hb2.movableOwner.shiftCenter(rr2 * approach0.getX() * dist * collisionFactor, rr2 * approach0.getY() * dist * collisionFactor);
                 }
             } catch (Exception ex) {
             }
