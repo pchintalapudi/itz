@@ -475,11 +475,14 @@ public class Field implements AutoCloseable {
      * @param pointingVector the object representing the approximate distance
      * and direction relative to the center point in which to look for a mobile
      * goal.
+     * @param red if the robot looking for a mobile goal is red. This determines
+     * if during driver control a mobile goal is eligible to be picked up.
      * @return a mobile goal, if one is nearby the indicated point. If not, this
      * method returns null.
      */
-    public MobileGoal huntMogo(Point2D center, Point2D pointingVector) {
+    public MobileGoal huntMogo(Point2D center, Point2D pointingVector, boolean red) {
         return mogos.stream()
+                .filter(m -> (mode != ControlMode.DRIVER_CONTROL && mode != ControlMode.AUTON) || m.isRed() == red)
                 .filter(m -> !m.isVanished())
                 .filter(m -> {
                     Point2D realVector = new Point2D(m.getCenterX(), m.getCenterY()).subtract(center);
@@ -518,13 +521,37 @@ public class Field implements AutoCloseable {
      * @param pointingVector the object representing the approximate distance
      * and direction relative to the center point in which to look for a
      * stationary goal.
+     * @param red the color of the robot looking for a stationary goal. This
+     * determines if the stationary goal being looked for is of the same team as
+     * the robot.
      * @return a stationary goal, if one is nearby the indicated point. If not,
      * this method returns null.
      */
-    public StationaryGoal huntStat(Point2D center, Point2D pointingVector) {
+    public StationaryGoal huntStat(Point2D center, Point2D pointingVector, boolean red) {
+        if (mode == ControlMode.AUTON || mode == ControlMode.DRIVER_CONTROL) {
+            if (red) {
+                return checkRedStat(center, pointingVector);
+            } else {
+                return checkBlueStat(center, pointingVector);
+            }
+        } else {
+            StationaryGoal sg;
+            if ((sg = checkRedStat(center, pointingVector)) == null) {
+                sg = checkBlueStat(center, pointingVector);
+            }
+            return sg;
+        }
+    }
+
+    private StationaryGoal checkRedStat(Point2D center, Point2D pointingVector) {
         if (Math.abs(240 - center.getX() - pointingVector.getX()) < 20 && Math.abs(480 - center.getY() - pointingVector.getY()) < 20) {
             return rStat;
-        } else if (Math.abs(240 - center.getY() - pointingVector.getY()) < 20 && Math.abs(480 - center.getX() - pointingVector.getX()) < 20) {
+        }
+        return null;
+    }
+
+    private StationaryGoal checkBlueStat(Point2D center, Point2D pointingVector) {
+        if (Math.abs(240 - center.getY() - pointingVector.getY()) < 20 && Math.abs(480 - center.getX() - pointingVector.getX()) < 20) {
             return bStat;
         }
         return null;

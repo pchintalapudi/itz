@@ -600,7 +600,7 @@ public final class Robot extends Mobile implements Scoreable {
     private void mogoIntake() {
         MobileGoal mogo = Field.getOwner(this).huntMogo(new Point2D(super.getCenterX(), super.getCenterY()),
                 new Point2D(70 * Math.cos(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1),
-                        70 * Math.sin(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1)));
+                        70 * Math.sin(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1)), isRed());
         if (mogo != null) {
             privateMogo.set(mogo instanceof RedMobileGoal ? redMogo : blueMogo);
             heldMogo.set(mogo);
@@ -756,8 +756,9 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     private void runStatStack() {
-        StationaryGoal sg = Field.getOwner(this).huntStat(new Point2D(super.getCenterX(), super.getCenterY()), new Point2D(57.5 * Math.cos(Math.toRadians(node.getRotate())),
-                57.5 * Math.sin(Math.toRadians(node.getRotate()))));
+        StationaryGoal sg = Field.getOwner(this).huntStat(new Point2D(super.getCenterX(), super.getCenterY()),
+                new Point2D(57.5 * Math.cos(Math.toRadians(node.getRotate())),
+                57.5 * Math.sin(Math.toRadians(node.getRotate()))), isRed());
         if (sg != null && sg.score() / 2 < robotStatMaxStack) {
             Point2D sgCenter = new Point2D(sg.getNode().getTranslateX() + 12.5, sg.getNode().getTranslateY() + 12.5);
             heldCone.get().setCenter(super.getCenterX() + 60 * Math.cos(Math.toRadians(node.getRotate())),

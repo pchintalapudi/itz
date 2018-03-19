@@ -46,6 +46,10 @@ public class ScoreSheetController {
     private Text redPark;
     @FXML
     private Text bluePark;
+    @FXML
+    private Text redTotal;
+    @FXML
+    private Text blueTotal;
 
     /**
      *
@@ -100,5 +104,7 @@ public class ScoreSheetController {
         blueAuton.setVisible(vals[10] < 0);
         redPark.setText(String.valueOf(vals[11]));
         bluePark.setText(String.valueOf(vals[12]));
+        redTotal.setText(String.valueOf(vals[0] * 20 + vals[2] * 10 + vals[4] * 5 + vals[6] * 2 + vals[8] * 5 + (vals[10] > 0 ? 10 : 0) + vals[11] * 2));
+        blueTotal.setText(String.valueOf(vals[1] * 20 + vals[3] * 10 + vals[5] * 5 + vals[7] * 2 + vals[9] * 5 + (vals[10] < 0 ? 10 : 0) + vals[12] * 2));
     }
 }
