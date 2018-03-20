@@ -495,8 +495,8 @@ public final class Robot extends Mobile implements Scoreable {
     public void forward() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                super.shiftCenter(robotSpeed / 12 * (float) Math.cos(Math.toRadians(node.getRotate())),
-                        robotSpeed / 12 * (float) Math.sin(Math.toRadians(node.getRotate())));
+                super.shiftCenter(robotSpeed / 6 * (float) Math.cos(Math.toRadians(node.getRotate())),
+                        robotSpeed / 6 * (float) Math.sin(Math.toRadians(node.getRotate())));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -512,8 +512,8 @@ public final class Robot extends Mobile implements Scoreable {
     public void backward() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                super.shiftCenter(-robotSpeed / 12 * (float) Math.cos(Math.toRadians(node.getRotate())),
-                        -robotSpeed / 12 * (float) Math.sin(Math.toRadians(node.getRotate())));
+                super.shiftCenter(-robotSpeed / 6 * (float) Math.cos(Math.toRadians(node.getRotate())),
+                        -robotSpeed / 6 * (float) Math.sin(Math.toRadians(node.getRotate())));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -529,7 +529,7 @@ public final class Robot extends Mobile implements Scoreable {
     public void leftTurn() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                node.setRotate(node.getRotate() - robotSpeed / (Math.PI * 7));
+                node.setRotate(node.getRotate() - robotSpeed / (Math.PI * 3.5));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -545,7 +545,7 @@ public final class Robot extends Mobile implements Scoreable {
     public void rightTurn() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                node.setRotate(node.getRotate() + robotSpeed / (Math.PI * 7));
+                node.setRotate(node.getRotate() + robotSpeed / (Math.PI * 3.5));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();

@@ -118,7 +118,7 @@ public class Field implements AutoCloseable {
                 });
             }
             getRobots().forEach(Robot::pulse);
-        }, 0, 10, TimeUnit.MILLISECONDS);
+        }, 0, 20, TimeUnit.MILLISECONDS);
         Start.PULSER.scheduleWithFixedDelay(Hitbox::pulse, 0, 20, TimeUnit.MILLISECONDS);
         Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
     }
