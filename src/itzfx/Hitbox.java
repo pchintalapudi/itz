@@ -5,6 +5,7 @@
  */
 package itzfx;
 
+import itzfx.preload.Prestart;
 import itzfx.utils.QuickMafs;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,7 @@ public final class Hitbox {
             try {
                 float collisionFactor = 1;
                 if (hb1.cType == CollisionType.WEAK || hb2.cType == CollisionType.WEAK) {
-                    collisionFactor = .01f;
+                    collisionFactor = .02f;
                 }
                 if (hb1.mass == Float.POSITIVE_INFINITY) {
                     if (hb2.movableOwner != null) {

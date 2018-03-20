@@ -64,6 +64,14 @@ and open the template in the editor.
     -blue-bar-gradient:linear-gradient(to left, black 0%, -blue-alliance 40%, -blue-alliance 60%, black 100%);
     -red-bar-gradient:linear-gradient(to left, black 0%, -red-alliance 40%, -red-alliance 60%, black 100%);
     -tape:white;
+
+    /*
+    Intense blue variants
+    */
+    -blue-intense-quarter:rgba(0%, 50%, 100%, .25);
+    -blue-intense-half:rgba(0%, 50%, 100%, .5);
+    -blue-intense-triple-quarter:rgba(0%, 50%, 100%, .75);
+    -blue-intense:rgb(0%, 50%, 100%);
 }
 
 .white-background {
@@ -91,20 +99,20 @@ Button stuff
 }
 
 .button, .toggle-button {
-    -fx-border-color:#0088ff;
+    -fx-border-color:-blue-intense;
     -fx-background-color:white;
 }
 
 .button:focused, .toggle-button:focused {
-    -fx-background-color:rgba(0%, 50%, 100%, .25);
+    -fx-background-color:-blue-intense-quarter;
 }
 
 .button:hover, .toggle-button:hover {
-    -fx-background-color:rgba(0%, 50%, 100%, .5);
+    -fx-background-color:-blue-intense-half;
 }
 
 .button:pressed, .toggle-button:pressed {
-    -fx-background-color:rgba(0%, 50%, 100%, .75);
+    -fx-background-color:-blue-intense-triple-quarter;
 }
 
 .logo {
@@ -291,4 +299,8 @@ Other things
 
 .check {
     -fx-image:url(../../Images/check.png);
+}
+
+.intense-color-progress-bar {
+    -fx-accent:-blue-intense;
 }
