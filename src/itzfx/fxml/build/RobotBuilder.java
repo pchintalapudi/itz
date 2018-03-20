@@ -39,13 +39,13 @@ public class RobotBuilder {
         root.setUserData(this);
     }
 
-    private Double speed;
-    private Double autostack;
-    private Double statstack;
-    private Double mogotime;
-    private Integer maxmogo;
-    private Integer maxstat;
-    private Boolean front;
+    private float speed;
+    private float autostack;
+    private float statstack;
+    private float mogotime;
+    private int maxmogo;
+    private int maxstat;
+    private int front;
 
     /**
      * Gets all values from the different tabs and saves them in this object.

@@ -37,15 +37,15 @@ public class Loader {
      * @param red whether or not this loader is on the red alliance or the blue
      * alliance
      */
-    public Loader(double layoutX, double layoutY, boolean red) {
+    public Loader(float layoutX, float layoutY, boolean red) {
         try {
             loader = new StackPane();
             loader.getChildren().add(FXMLLoader.load(Loader.class.getResource("Loader.fxml")));
             loader.setTranslateX(layoutX);
             loader.setTranslateY(layoutY);
-            hitbox = new Hitbox(15, Hitbox.CollisionType.STRONG, loader, Double.POSITIVE_INFINITY);
-            hitbox.setXSupplier(loader::getTranslateX);
-            hitbox.setYSupplier(loader::getTranslateY);
+            hitbox = new Hitbox(15, Hitbox.CollisionType.STRONG, loader, Float.POSITIVE_INFINITY);
+            hitbox.setXSupplier(() -> (float) loader.getTranslateX());
+            hitbox.setYSupplier(() -> (float) loader.getTranslateY());
             Hitbox.register(hitbox);
             loader.getChildren().add(hitbox.getVisual());
             this.red = red;
@@ -65,7 +65,7 @@ public class Loader {
             if (load != null) {
                 Platform.runLater(() -> {
                     load.disableCollision();
-                    load.setCenter(getCenter().getX(), getCenter().getY());
+                    load.setCenter((float) getCenter().getX(), (float) getCenter().getY());
                 });
                 return load;
             }

@@ -6,7 +6,7 @@
 package itzfx;
 
 import itzfx.utils.QuickMafs;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import javafx.application.Platform;
@@ -35,7 +35,7 @@ public final class Hitbox {
 
     static {
         VISIBLE = new SimpleBooleanProperty();
-        COLLIDABLE = new LinkedList<>();
+        COLLIDABLE = new ArrayList<>();
     }
 
     /**
@@ -56,9 +56,9 @@ public final class Hitbox {
             }
         }
     }
-    
-    private static double invMag(Point2D vector) {
-        return QuickMafs.invSqRoot(QuickMafs.square(vector.getX()) + QuickMafs.square(vector.getY()));
+
+    private static float invMag(Point2D vector) {
+        return QuickMafs.invSqRoot(QuickMafs.square((float) vector.getX()) + QuickMafs.square((float) vector.getY()));
     }
 
     private static void resolveCollision(Hitbox hb1, Hitbox hb2) {
@@ -68,28 +68,28 @@ public final class Hitbox {
         Point2D field1 = hb1.getTranslates();
         Point2D field2 = hb2.getTranslates();
         Point2D approach = field2.subtract(field1);
-        double invMagnitude = invMag(approach);
-        double dist = hb1.visual.getRadius() + hb2.visual.getRadius() - 1 / invMagnitude;
+        float invMagnitude = invMag(approach);
+        float dist = (float) hb1.visual.getRadius() + (float) hb2.visual.getRadius() - 1 / invMagnitude;
         Point2D approach0 = approach.multiply(invMagnitude);
         Platform.runLater(() -> {
             try {
-                double collisionFactor = 1;
+                float collisionFactor = 1;
                 if (hb1.cType == CollisionType.WEAK || hb2.cType == CollisionType.WEAK) {
-                    collisionFactor = .01;
+                    collisionFactor = .01f;
                 }
-                if (hb1.mass == Double.POSITIVE_INFINITY) {
+                if (hb1.mass == Float.POSITIVE_INFINITY) {
                     if (hb2.movableOwner != null) {
-                        hb2.movableOwner.shiftCenter(approach0.getX() * dist * collisionFactor, approach0.getY() * dist * collisionFactor);
+                        hb2.movableOwner.shiftCenter((float) approach0.getX() * dist * collisionFactor, (float) approach0.getY() * dist * collisionFactor);
                     }
-                } else if (hb2.mass == Double.POSITIVE_INFINITY) {
+                } else if (hb2.mass == Float.POSITIVE_INFINITY) {
                     if (hb1.movableOwner != null) {
-                        hb1.movableOwner.shiftCenter(-approach0.getX() * dist * collisionFactor, -approach0.getY() * dist * collisionFactor);
+                        hb1.movableOwner.shiftCenter((float) -approach0.getX() * dist * collisionFactor, (float) -approach0.getY() * dist * collisionFactor);
                     }
                 } else {
-                    double rr1 = hb2.mass / (hb1.mass + hb2.mass);
-                    double rr2 = 1 - rr1;
-                    hb1.movableOwner.shiftCenter(-rr1 * approach0.getX() * dist * collisionFactor, -rr1 * approach0.getY() * dist * collisionFactor);
-                    hb2.movableOwner.shiftCenter(rr2 * approach0.getX() * dist * collisionFactor, rr2 * approach0.getY() * dist * collisionFactor);
+                    float rr1 = hb2.mass / (hb1.mass + hb2.mass);
+                    float rr2 = 1 - rr1;
+                    hb1.movableOwner.shiftCenter(-rr1 * (float) approach0.getX() * dist * collisionFactor, -rr1 * (float) approach0.getY() * dist * collisionFactor);
+                    hb2.movableOwner.shiftCenter(rr2 * (float) approach0.getX() * dist * collisionFactor, rr2 * (float) approach0.getY() * dist * collisionFactor);
                 }
             } catch (Exception ex) {
             }
@@ -103,9 +103,9 @@ public final class Hitbox {
             return false;
         }
     }
-    
-    private static double squareDistance(Point2D point1, Point2D point2) {
-        return Math.pow(point1.getX() - point2.getX(), 2) + Math.pow(point1.getY() - point2.getY(), 2);
+
+    private static float squareDistance(Point2D point1, Point2D point2) {
+        return (float) QuickMafs.square((float) point1.getX() - (float) point2.getX()) + (float) QuickMafs.square((float) point1.getY() - (float) point2.getY());
     }
 
     /**
@@ -146,7 +146,7 @@ public final class Hitbox {
 
     private final BooleanProperty collisionEnabled;
 
-    private Hitbox(double radius, CollisionType cType, Mobile movableOwner, Node check, double mass) {
+    private Hitbox(float radius, CollisionType cType, Mobile movableOwner, Node check, float mass) {
         visual = new Circle(radius, Color.LIME);
         collisionEnabled = new SimpleBooleanProperty(true);
         visual.visibleProperty().bind(VISIBLE.and(collisionEnabled));
@@ -166,7 +166,7 @@ public final class Hitbox {
      * colliding with each other.
      * @param mass the relative mass of the object
      */
-    public Hitbox(double radius, CollisionType cType, Node check, double mass) {
+    public Hitbox(float radius, CollisionType cType, Node check, float mass) {
         this(radius, cType, null, check, mass);
     }
 
@@ -178,12 +178,12 @@ public final class Hitbox {
      * @param movableOwner the {@link Mobile mobile object} to shift in response
      * @param mass the relative mass of the object
      */
-    public Hitbox(double radius, CollisionType cType, Mobile movableOwner, double mass) {
+    public Hitbox(float radius, CollisionType cType, Mobile movableOwner, float mass) {
         this(radius, cType, movableOwner, movableOwner.getNode(), mass);
     }
 
-    private Supplier<Double> xPos;
-    private Supplier<Double> yPos;
+    private Supplier<Float> xPos;
+    private Supplier<Float> yPos;
 
     /**
      * Sets the supplier of the x coordinate of a hitbox during collision
@@ -191,7 +191,7 @@ public final class Hitbox {
      *
      * @param xPos the x coordinate supplier
      */
-    public void setXSupplier(Supplier<Double> xPos) {
+    public void setXSupplier(Supplier<Float> xPos) {
         this.xPos = xPos;
     }
 
@@ -201,7 +201,7 @@ public final class Hitbox {
      *
      * @param yPos the y coordinate supplier
      */
-    public void setYSupplier(Supplier<Double> yPos) {
+    public void setYSupplier(Supplier<Float> yPos) {
         this.yPos = yPos;
     }
 
@@ -215,7 +215,7 @@ public final class Hitbox {
 
     private CollisionType cType;
 
-    private final double mass;
+    private final float mass;
 
     /**
      * Whether or not this hitbox is allowed to collide. This is used for

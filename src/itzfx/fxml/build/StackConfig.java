@@ -40,9 +40,9 @@ public class StackConfig {
      *
      * @return the user-entered value, or null
      */
-    public Integer getMogoStack() {
+    public int getMogoStack() {
         if (mogoStack.getText().isEmpty()) {
-            return null;
+            return Integer.MIN_VALUE;
         } else {
             return Integer.parseInt(mogoStack.getText());
         }
@@ -54,9 +54,9 @@ public class StackConfig {
      *
      * @return the user-entered value, or null
      */
-    public Integer getStatStack() {
+    public int getStatStack() {
         if (statStack.getText().isEmpty()) {
-            return null;
+            return Integer.MIN_VALUE;
         } else {
             return Integer.parseInt(statStack.getText());
         }

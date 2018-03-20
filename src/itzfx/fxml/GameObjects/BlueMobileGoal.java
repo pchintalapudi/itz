@@ -31,7 +31,7 @@ public final class BlueMobileGoal extends MobileGoal {
      * @param layoutX the x coordinate at which to place this mobile goal
      * @param layoutY the y coordinate at which to place this mobile goal
      */
-    public BlueMobileGoal(double layoutX, double layoutY) {
+    public BlueMobileGoal(float layoutX, float layoutY) {
         super(layoutX, layoutY);
         mogo = new StackPane();
         try {

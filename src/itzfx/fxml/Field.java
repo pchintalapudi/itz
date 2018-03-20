@@ -21,7 +21,7 @@ import itzfx.Mobile;
 import itzfx.Robot;
 import itzfx.scoring.ScoreReport;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +57,7 @@ public class Field implements AutoCloseable {
     private static final List<Field> FIELDS;
 
     static {
-        FIELDS = new LinkedList<>();
+        FIELDS = new ArrayList<>();
     }
 
     @FXML
@@ -84,13 +84,13 @@ public class Field implements AutoCloseable {
      * Constructs a new field, usually called by {@link FXMLLoader}.
      */
     public Field() {
-        robots = new LinkedList<>();
-        onField = new LinkedList<>();
-        redDriverLoads = new LinkedList<>();
-        blueDriverLoads = new LinkedList<>();
-        preloads = new LinkedList<>();
-        mogos = new LinkedList<>();
-        added = new LinkedList<>();
+        robots = new ArrayList<>();
+        onField = new ArrayList<>();
+        redDriverLoads = new ArrayList<>();
+        blueDriverLoads = new ArrayList<>();
+        preloads = new ArrayList<>();
+        mogos = new ArrayList<>();
+        added = new ArrayList<>();
     }
 
     @FXML
@@ -105,7 +105,6 @@ public class Field implements AutoCloseable {
         decorateScoringBars();
         scheduled = Start.PULSER.scheduleAtFixedRate(() -> {
             KeyBuffer.pulse();
-            Hitbox.pulse();
             if (sbc != null && mode != null) {
                 Platform.runLater(() -> {
                     switch (mode) {
@@ -120,6 +119,7 @@ public class Field implements AutoCloseable {
             }
             getRobots().forEach(Robot::pulse);
         }, 0, 10, TimeUnit.MILLISECONDS);
+        Start.PULSER.scheduleWithFixedDelay(Hitbox::pulse, 0, 20, TimeUnit.MILLISECONDS);
         Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
     }
 
@@ -175,10 +175,10 @@ public class Field implements AutoCloseable {
     private StackPane red10;
 
     private void decorate10(Node check, boolean red) {
-        for (double i = 2.5; i < 325; i += 10) {
-            double a = 482.5 + i / Math.sqrt(2);
-            double b = 2.5 + i / Math.sqrt(2);
-            Hitbox h = new Hitbox(2.5, Hitbox.CollisionType.WEAK, check, Double.POSITIVE_INFINITY);
+        for (float i = 2.5f; i < 325; i += 10) {
+            float a = 482.5f + i / (float) Math.sqrt(2);
+            float b = 2.5f + i / (float) Math.sqrt(2);
+            Hitbox h = new Hitbox(2.5f, Hitbox.CollisionType.WEAK, check, Float.POSITIVE_INFINITY);
             if (!red) {
                 h.setXSupplier(() -> a);
                 h.setYSupplier(() -> b);
@@ -211,15 +211,15 @@ public class Field implements AutoCloseable {
     private void dropLeftCones() {
         onField.addAll(Arrays.asList(
                 new Cone(15, 15),
-                new Cone(15, 67.5),
+                new Cone(15, 67.5f),
                 new Cone(15, 120),
                 new Cone(15, 180),
                 new Cone(15, 240),
-                new Cone(67.5, 15),
-                new Cone(67.5, 67.5),
-                new Cone(67.5, 120),
+                new Cone(67.5f, 15),
+                new Cone(67.5f, 67.5f),
+                new Cone(67.5f, 120),
                 new Cone(120, 15),
-                new Cone(120, 67.5),
+                new Cone(120, 67.5f),
                 new Cone(120, 120),
                 new Cone(120, 180),
                 new Cone(120, 240),
@@ -242,13 +242,13 @@ public class Field implements AutoCloseable {
                 new Cone(540, 705),
                 new Cone(600, 600),
                 new Cone(600, 705),
-                new Cone(652.5, 600),
-                new Cone(652.5, 705),
+                new Cone(652.5f, 600),
+                new Cone(652.5f, 705),
                 new Cone(705, 600),
                 new Cone(705, 705),
-                new Cone(600, 652.5),
-                new Cone(652.5, 652.5),
-                new Cone(705, 652.5),
+                new Cone(600, 652.5f),
+                new Cone(652.5f, 652.5f),
+                new Cone(705, 652.5f),
                 new Cone(600, 540),
                 new Cone(705, 540),
                 new Cone(600, 480),
@@ -306,28 +306,28 @@ public class Field implements AutoCloseable {
 
     private void dropBlueMogos() {
         mogos.addAll(Arrays.asList(
-                new BlueMobileGoal(180, 67.5),
+                new BlueMobileGoal(180, 67.5f),
                 new BlueMobileGoal(240, 360),
                 new BlueMobileGoal(360, 480),
-                new BlueMobileGoal(652.5, 540)
+                new BlueMobileGoal(652.5f, 540)
         ));
     }
 
     private void dropRedMogos() {
         mogos.addAll(Arrays.asList(
-                new RedMobileGoal(67.5, 180),
+                new RedMobileGoal(67.5f, 180),
                 new RedMobileGoal(360, 240),
                 new RedMobileGoal(480, 360),
-                new RedMobileGoal(540, 652.5)
+                new RedMobileGoal(540, 652.5f)
         ));
     }
 
     private void redLoader() {
-        rLoad = new Loader(0, 300 - 13.75, true);
+        rLoad = new Loader(0, 300 - 13.75f, true);
     }
 
     private void blueLoader() {
-        bLoad = new Loader(300 - 13.75, 0, false);
+        bLoad = new Loader(300 - 13.75f, 0, false);
         bLoad.getNode().setRotate(90);
     }
 
@@ -387,7 +387,7 @@ public class Field implements AutoCloseable {
             onField.forEach(Cone::reset);
             load(getRobots().get(0));
             load(getRobots().get(1));
-            List<Cone> c = new LinkedList<>(preloads);
+            List<Cone> c = new ArrayList<>(preloads);
             getRobots().forEach(r -> r.forceIntake(preloads.remove(0)));
             preloads.addAll(c);
         } catch (Exception ex) {
@@ -788,8 +788,9 @@ public class Field implements AutoCloseable {
      * @param sceneY the scene y coordinate at which the cone should be placed
      * @return the newly generated cone
      */
-    public Cone generateCone(double sceneX, double sceneY) {
-        Cone c = new Cone(center.sceneToLocal(sceneX, sceneY).getX(), center.sceneToLocal(sceneX, sceneY).getY());
+    public Cone generateCone(float sceneX, float sceneY) {
+        Point2D localCenter = center.sceneToLocal(sceneX, sceneY);
+        Cone c = new Cone((float) localCenter.getX(), (float) localCenter.getY());
         added.add(c);
         center.getChildren().add(c.getNode());
         return c;
@@ -806,9 +807,9 @@ public class Field implements AutoCloseable {
      * @param red the color of the mobile goal (true if red, false if blue)
      * @return the newly generated mobile goal
      */
-    public MobileGoal generateMobileGoal(double sceneX, double sceneY, boolean red) {
+    public MobileGoal generateMobileGoal(float sceneX, float sceneY, boolean red) {
         Point2D centerMogo = center.sceneToLocal(sceneX, sceneY);
-        MobileGoal mg = red ? new RedMobileGoal(centerMogo.getX(), centerMogo.getY()) : new BlueMobileGoal(centerMogo.getX(), centerMogo.getY());
+        MobileGoal mg = red ? new RedMobileGoal((float) centerMogo.getX(), (float) centerMogo.getY()) : new BlueMobileGoal((float) centerMogo.getX(), (float) centerMogo.getY());
         added.add(mg);
         center.getChildren().add(mg.getNode());
         return mg;

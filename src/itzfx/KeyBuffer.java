@@ -7,7 +7,7 @@ package itzfx;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -33,7 +33,7 @@ public final class KeyBuffer {
 
     static {
         KEYBUFFER = new HashMap<>();
-        Arrays.stream(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
+        Arrays.asList(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
         ONACTION = new HashMap<>();
         ONMULTI = new TreeMap<>((k1, k2) -> k1.length > k2.length ? 1 : k1.length < k2.length ? -1 : 0);
     }
@@ -80,7 +80,7 @@ public final class KeyBuffer {
         if (ONACTION.containsKey(k)) {
             ONACTION.get(k).add(c);
         } else {
-            ONACTION.put(k, new LinkedList<>(Arrays.asList(c)));
+            ONACTION.put(k, new ArrayList<>(Arrays.asList(c)));
         }
     }
 
@@ -105,7 +105,7 @@ public final class KeyBuffer {
         if (ONMULTI.containsKey(k)) {
             ONMULTI.get(k).add(c);
         } else {
-            ONMULTI.put(k, new LinkedList<>(Arrays.asList(c)));
+            ONMULTI.put(k, new ArrayList<>(Arrays.asList(c)));
         }
     }
 
@@ -141,7 +141,7 @@ public final class KeyBuffer {
      */
     public static void lock() {
         locked = true;
-        Arrays.stream(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
+        Arrays.asList(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
     }
 
     /**

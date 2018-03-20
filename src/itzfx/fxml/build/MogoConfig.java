@@ -40,11 +40,11 @@ public class MogoConfig {
      *
      * @return the value the user entered, or null
      */
-    public Double getMogoTime() {
+    public float getMogoTime() {
         if (robotInTime.getText().isEmpty()) {
-            return null;
+            return Float.MIN_VALUE;
         } else {
-            return Double.parseDouble(robotInTime.getText());
+            return Float.parseFloat(robotInTime.getText());
         }
     }
 
@@ -55,8 +55,8 @@ public class MogoConfig {
      * @return true if this is a front-intaking robot, false if not, or null if
      * this is indeterminate
      */
-    public Boolean isFrontMogo() {
-        return front.isIndeterminate() ? null : front.isSelected();
+    public int isFrontMogo() {
+        return front.isIndeterminate() ? 0 : front.isSelected() ? 1 : -1;
     }
 
     private static class DecimalFormatter extends TextFormatter<Double> {

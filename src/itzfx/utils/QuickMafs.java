@@ -11,18 +11,18 @@ package itzfx.utils;
  */
 public class QuickMafs {
 
-    public static double invSqRoot(double x) {
-//        double xhalf = 0.5d * x;
-////        long i = Double.doubleToLongBits(x);
-////        i = 0x5fe6ec85e7de30daL - (i >> 1);
-////        x = Double.longBitsToDouble(i);
-//        x = Double.longBitsToDouble(0x5fe6ec85e7de30daL - (Double.doubleToLongBits(x) >> 1));
-//        x *= (1.5d - xhalf * x * x);
-//        return x;
-        return 1 / Math.sqrt(x);
+    public static float invSqRoot(float x) {
+        float xhalf = 0.5f * x;
+//        long i = Double.floatToLongBits(x);
+//        i = 0x5fe6ec85e7de30daL - (i >> 1);
+//        x = Double.longBitsToDouble(i);
+        x = Float.intBitsToFloat(0x5f3759df - (Float.floatToIntBits(x) >> 1));
+        x *= (1.5f - xhalf * x * x);
+        return x;
+//        return (float) (1 / Math.sqrt(x));
     }
 
-    public static double square(double d) {
+    public static float square(float d) {
         return d * d;
     }
 }

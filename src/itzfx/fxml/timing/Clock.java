@@ -60,11 +60,11 @@ public class Clock {
 
     private void display(ObservableValue<? extends Number> obs, Number old, Number next) {
         int minutes = next.intValue() / 60;
-        double seconds = next.doubleValue() % 60;
+        float seconds = next.floatValue() % 60;
         int decaSeconds = (int) (seconds) / 10;
-        double singles = seconds % 10;
+        float singles = seconds % 10;
         int secs = (int) singles;
-        double dsecs = singles % 1;
+        float dsecs = singles % 1;
         int deciSeconds = (int) (dsecs * 10);
         min.display(minutes);
         secD.display(decaSeconds);

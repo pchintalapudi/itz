@@ -5,13 +5,14 @@
  */
 package itzfx;
 
+import itzfx.utils.QuickMafs;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.FloatBinding;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
@@ -28,12 +29,12 @@ import javafx.scene.input.MouseEvent;
  */
 public abstract class Mobile {
 
-    private final DoubleProperty centerX;
-    private final DoubleProperty centerY;
+    private final FloatProperty centerX;
+    private final FloatProperty centerY;
 
-    private final double layoutX;
-    private final double layoutY;
-    private double initRotate;
+    private final float layoutX;
+    private final float layoutY;
+    private float initRotate;
 
     /**
      * Constructs a new Mobile at the specified coordinates with initial rotate
@@ -42,7 +43,7 @@ public abstract class Mobile {
      * @param layoutX the initial x coordinate
      * @param layoutY the initial y coordinate
      */
-    protected Mobile(double layoutX, double layoutY) {
+    protected Mobile(float layoutX, float layoutY) {
         this(layoutX, layoutY, 0);
     }
 
@@ -54,9 +55,9 @@ public abstract class Mobile {
      * @param layoutY the initial y coordinate
      * @param initRotate the initial rotate, in degrees
      */
-    protected Mobile(double layoutX, double layoutY, double initRotate) {
-        centerX = new SimpleDoubleProperty();
-        centerY = new SimpleDoubleProperty();
+    protected Mobile(float layoutX, float layoutY, float initRotate) {
+        centerX = new SimpleFloatProperty();
+        centerY = new SimpleFloatProperty();
         this.layoutX = layoutX;
         this.layoutY = layoutY;
         this.initRotate = initRotate;
@@ -101,13 +102,13 @@ public abstract class Mobile {
      * this node will be bound. This binding determines how the center of this
      * Mobile is affected by the methods provided in this class.
      *
-     * @return a {@link DoubleBinding} that relates the {@link Mobile#centerX}
+     * @return a {@link FloatBinding} that relates the {@link Mobile#centerX}
      * property to the node's translateX property.
      */
-    protected DoubleBinding translateXBind() {
-        return Bindings.createDoubleBinding(() -> {
+    protected FloatBinding translateXBind() {
+        return Bindings.createFloatBinding(() -> {
             Node n = getNode();
-            return centerX.get() - (n.getBoundsInLocal().getWidth() / 2 + n.getBoundsInLocal().getMinX());
+            return centerX.get() - ((float) n.getBoundsInLocal().getWidth() / 2 + (float) n.getBoundsInLocal().getMinX());
         }, centerX);
     }
 
@@ -116,25 +117,25 @@ public abstract class Mobile {
      * this node will be bound. This binding determines how the center of this
      * Mobile is affected by the methods provided in this class.
      *
-     * @return a {@link DoubleBinding} that relates the {@link Mobile#centerY}
+     * @return a {@link FloatBinding} that relates the {@link Mobile#centerY}
      * property to the node's translateY property.
      */
-    protected DoubleBinding translateYBind() {
-        return Bindings.createDoubleBinding(() -> {
+    protected FloatBinding translateYBind() {
+        return Bindings.createFloatBinding(() -> {
             Node n = getNode();
-            return centerY.get() - (n.getBoundsInLocal().getHeight() / 2 + n.getBoundsInLocal().getMinY());
+            return centerY.get() - ((float) n.getBoundsInLocal().getHeight() / 2 + (float) n.getBoundsInLocal().getMinY());
         }, centerY);
     }
 
     /**
      * Shifts the center of this Mobile by the specified amounts. This is a
      * convenience method for the equivalent calls
-     * {@code shiftRight(double x); shiftDown(double y);}.
+     * {@code shiftRight(float x); shiftDown(float y);}.
      *
      * @param x the amount to shift the Mobile right by
      * @param y the amount to shift the Mobile down by
      */
-    public final void shiftCenter(double x, double y) {
+    public final void shiftCenter(float x, float y) {
         centerX.set(centerX.get() + x);
         centerY.set(centerY.get() + y);
     }
@@ -142,12 +143,12 @@ public abstract class Mobile {
     /**
      * Sets the center of this Mobile to the specified coordinates. This is a
      * convenience method for the equivalent calls
-     * {@code setX(double x); setY(double y);}.
+     * {@code setX(float x); setY(float y);}.
      *
      * @param x the new x coordinate of the center
      * @param y the new y coordinate of the center
      */
-    public final void setCenter(double x, double y) {
+    public final void setCenter(float x, float y) {
         centerX.set(x);
         centerY.set(y);
     }
@@ -157,7 +158,7 @@ public abstract class Mobile {
      *
      * @param x the new x coordinate of the center
      */
-    public final void setX(double x) {
+    public final void setX(float x) {
         centerX.set(x);
     }
 
@@ -166,7 +167,7 @@ public abstract class Mobile {
      *
      * @param y the new y coordinate of the center
      */
-    public final void setY(double y) {
+    public final void setY(float y) {
         centerY.set(y);
     }
 
@@ -175,7 +176,7 @@ public abstract class Mobile {
      *
      * @param x the amount by which to shift this Mobile to the right
      */
-    public final void shiftRight(double x) {
+    public final void shiftRight(float x) {
         centerX.set(centerX.get() + x);
     }
 
@@ -184,7 +185,7 @@ public abstract class Mobile {
      *
      * @param y the amount by which to shift this Mobile down
      */
-    public final void shiftDown(double y) {
+    public final void shiftDown(float y) {
         centerY.set(centerY.get() + y);
     }
 
@@ -193,8 +194,8 @@ public abstract class Mobile {
      *
      * @return the center x coordinate
      */
-    public final double getCenterX() {
-        return centerX.get();
+    public final float getCenterX() {
+        return (float) centerX.get();
     }
 
     /**
@@ -202,25 +203,25 @@ public abstract class Mobile {
      *
      * @return the center y coordinate
      */
-    public final double getCenterY() {
+    public final float getCenterY() {
         return centerY.get();
     }
 
     /**
-     * Gets the {@link DoubleProperty} that records the center x position.
+     * Gets the {@link FloatProperty} that records the center x position.
      *
      * @return the property maintaining the center x position
      */
-    public final DoubleProperty centerXProperty() {
+    public final FloatProperty centerXProperty() {
         return this.centerX;
     }
 
     /**
-     * Gets the {@link DoubleProperty} that records the center y position.
+     * Gets the {@link FloatProperty} that records the center y position.
      *
      * @return the property maintaining the center y position
      */
-    public final DoubleProperty centerYProperty() {
+    public final FloatProperty centerYProperty() {
         return this.centerY;
     }
 
@@ -351,12 +352,12 @@ public abstract class Mobile {
      * @return a {@link ChangeListener} that can be attached to the centerX and
      * centerY properties of a Mobile.
      */
-    protected static ChangeListener<Number> limitToField(double radius, DoubleProperty limit) {
+    protected static ChangeListener<Number> limitToField(float radius, FloatProperty limit) {
         return (ObservableValue<? extends Number> obs, Number old, Number next) -> {
-            if (next.doubleValue() < radius && next.doubleValue() > -50) {
-                limit.set(radius + Math.random());
-            } else if (next.doubleValue() + radius > 720) {
-                limit.set(720 - radius - Math.random());
+            if (next.floatValue() < radius && next.floatValue() > -50) {
+                limit.set((float) radius + (float) Math.random());
+            } else if (next.floatValue() + radius > 720) {
+                limit.set(720 - (float) radius - (float) Math.random());
             }
         };
     }
@@ -371,26 +372,27 @@ public abstract class Mobile {
      * @return a {@link ChangeListener} that prevents objects from naturally
      * entering the 20 point zone
      */
-    protected final ChangeListener<Number> exclude20(double radius) {
+    protected final ChangeListener<Number> exclude20(float radius) {
+        float sqrt2 = (float)Math.sqrt(2);
         return (ObservableValue<? extends Number> obs, Number old, Number next) -> {
             if (getCenterX() - radius < 120 && getCenterY() - getCenterX() > 600 - radius && getCenterY() - getCenterX() < 615 - radius) {
-                double dist = lineDistance(getCenterX(), getCenterY(), 1, 600 - radius);
-                shiftRight(dist / Math.sqrt(2));
-                shiftDown(-dist / Math.sqrt(2));
+                float dist = lineDistance(getCenterX(), getCenterY(), 1, 600 - radius);
+                shiftRight(dist / sqrt2);
+                shiftDown(-dist / sqrt2);
             }
             if (getCenterY() - radius < 120 && getCenterX() - getCenterY() > 600 - radius && getCenterX() - getCenterY() < 615 - radius) {
-                double dist = lineDistance(getCenterX(), getCenterY(), 1, -600 + radius);
-                shiftRight(-dist / Math.sqrt(2));
-                shiftDown(dist / Math.sqrt(2));
+                float dist = lineDistance(getCenterX(), getCenterY(), 1, -600 + radius);
+                shiftRight(-dist / sqrt2);
+                shiftDown(dist / sqrt2);
             }
         };
     }
 
-    private double lineDistance(double x, double y, double m, double k) {
-        return Math.abs(k + m * x - y) / Math.sqrt(1 + m * m);
+    private float lineDistance(float x, float y, float m, float k) {
+        return (float) Math.abs(k + m * x - y) / QuickMafs.invSqRoot(1 + QuickMafs.square(m));
     }
-    
-    protected void adjustInitRotate(double extra) {
+
+    protected void adjustInitRotate(float extra) {
         initRotate += extra;
         getNode().setRotate(getNode().getRotate() + extra);
     }

@@ -8,7 +8,7 @@ package itzfx.scoring;
 import itzfx.fxml.FXMLController;
 import itzfx.fxml.ScoreSheetController;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -55,7 +55,7 @@ public class ScoreAggregator {
      * Constructs a new ScoreAggregator.
      */
     public ScoreAggregator() {
-        reports = new LinkedList<>();
+        reports = new ArrayList<>();
     }
 
     /**
@@ -103,7 +103,7 @@ public class ScoreAggregator {
         });
         return new AtomicInteger[]{aiR, aiB};
     }
-    
+
     private AtomicInteger calculateSkillsScore() {
         AtomicInteger score = new AtomicInteger();
         reports.forEach(sr -> {
@@ -123,20 +123,20 @@ public class ScoreAggregator {
     public int[] calculateAuton() {
         AtomicInteger aiR = new AtomicInteger();
         AtomicInteger aiB = new AtomicInteger();
-        reports.stream().peek(sr -> {
+        for (ScoreReport sr : reports) {
             if (sr.getOwner().isRed()) {
                 aiR.addAndGet(sr.getOwner().score());
             } else {
                 aiB.addAndGet(sr.getOwner().score());
             }
-        }).filter(sr -> sr.getType() != ScoreType.PARKING)
-                .forEach(sr -> {
-                    if (sr.getOwner().isRed()) {
-                        aiR.addAndGet(sr.getType().getScore());
-                    } else {
-                        aiB.addAndGet(sr.getType().getScore());
-                    }
-                });
+            if (sr.getType() != ScoreType.PARKING) {
+                if (sr.getOwner().isRed()) {
+                    aiR.addAndGet(sr.getType().getScore());
+                } else {
+                    aiB.addAndGet(sr.getType().getScore());
+                }
+            }
+        }
         highStack(aiR, aiB);
         return new int[]{aiR.get(), aiB.get()};
     }

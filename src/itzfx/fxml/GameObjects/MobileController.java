@@ -22,20 +22,20 @@ public class MobileController {
     @FXML
     private Pane mobile;
 
-    private final java.awt.Point.Double mouse = new java.awt.Point.Double();
+    private final java.awt.Point.Float mouse = new java.awt.Point.Float();
 
     @FXML
     private void onPress(MouseEvent m) {
         if (m.isPrimaryButtonDown()) {
-            mouse.x = m.getX();
-            mouse.y = m.getY();
+            mouse.x = (float) m.getX();
+            mouse.y = (float) m.getY();
         }
     }
 
     @FXML
     private void onDragged(MouseEvent m) {
         if (m.isPrimaryButtonDown()) {
-            ((Mobile) mobile.getParent().getUserData()).shiftCenter(m.getX() - mouse.x, m.getY() - mouse.y);
+            ((Mobile) mobile.getParent().getUserData()).shiftCenter((float) m.getX() - mouse.x, (float) m.getY() - mouse.y);
         }
     }
 }

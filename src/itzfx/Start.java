@@ -90,11 +90,11 @@ public class Start extends Application {
     }
 
     private static void addZoomListeners(Node n) {
-        final double minZoomSoft, minZoomHard;
-        final double maxZoomSoft, maxZoomHard;
-        minZoomHard = 0.5;
-        minZoomSoft = 0.71;
-        maxZoomSoft = 1.41;
+        final float minZoomSoft, minZoomHard;
+        final float maxZoomSoft, maxZoomHard;
+        minZoomHard = 0.5f;
+        minZoomSoft = 0.71f;
+        maxZoomSoft = 1.41f;
         maxZoomHard = 2;
         n.scaleYProperty().bindBidirectional(n.scaleXProperty());
         n.setOnZoom(ze -> {
@@ -114,7 +114,7 @@ public class Start extends Application {
         cancelSingleFingerScroll(n);
     }
 
-    private static void restoreZoom(double restorationValue, DoubleProperty scale) {
+    private static void restoreZoom(float restorationValue, DoubleProperty scale) {
         Timeline tl = new Timeline();
         tl.getKeyFrames().add(new KeyFrame(Duration.millis(200), e -> tl.stop(), new KeyValue(scale, restorationValue)));
         tl.play();
@@ -152,7 +152,7 @@ public class Start extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("In The Zone (ITZ)");
         primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("Images/icon.png")));
-        final double width = 1600, height = 900;
+        final float width = 1600, height = 900;
         AnchorPane.setLeftAnchor(p, 0d);
         AnchorPane.setTopAnchor(p, 0d);
         AnchorPane.setRightAnchor(p, 0d);

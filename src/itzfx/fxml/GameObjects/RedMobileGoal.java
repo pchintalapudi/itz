@@ -31,7 +31,7 @@ public class RedMobileGoal extends MobileGoal {
      * @param layoutX the x coordinate at which to place this mobile goal
      * @param layoutY the y coordinate at which to place this mobile goal
      */
-    public RedMobileGoal(double layoutX, double layoutY) {
+    public RedMobileGoal(float layoutX, float layoutY) {
         super(layoutX, layoutY);
         mogo = new StackPane();
         try {
