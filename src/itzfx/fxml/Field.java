@@ -23,7 +23,8 @@ import itzfx.scoring.ScoreReport;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javafx.animation.Animation;
@@ -65,8 +66,6 @@ public class Field implements AutoCloseable {
     @FXML
     private Pane center;
 
-    private Future<?> scheduled;
-
     private final List<Robot> robots;
     private final List<Cone> onField;
     private final List<Cone> redDriverLoads;
@@ -93,6 +92,8 @@ public class Field implements AutoCloseable {
         added = new ArrayList<>();
     }
 
+    private PulseManager pulseManager;
+
     @FXML
     private void initialize() {
         FIELDS.add(this);
@@ -103,8 +104,24 @@ public class Field implements AutoCloseable {
         dropMogos();
         addStats();
         decorateScoringBars();
-        scheduled = Start.PULSER.scheduleAtFixedRate(() -> {
-            KeyBuffer.pulse();
+        (pulseManager = new PulseManager(Start.PULSER)).begin();
+        Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
+    }
+
+    private class PulseManager {
+
+        private final ScheduledExecutorService executor;
+        private long lastTimeChecked;
+        private final Runnable inputTask = () -> {
+            if (KeyBuffer.pulse()) {
+                lastTimeChecked = System.currentTimeMillis();
+                if (this.scorePulser == null) {
+                    beginScorePulsing();
+                    beginCollisionPulsing();
+                }
+            }
+        };
+        private final Runnable scoreTask = () -> {
             if (sbc != null && mode != null) {
                 Platform.runLater(() -> {
                     switch (mode) {
@@ -117,10 +134,67 @@ public class Field implements AutoCloseable {
                     }
                 });
             }
-            getRobots().forEach(Robot::pulse);
-        }, 0, 20, TimeUnit.MILLISECONDS);
-        Start.PULSER.scheduleWithFixedDelay(Hitbox::pulse, 0, 20, TimeUnit.MILLISECONDS);
-        Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
+        };
+        private final Runnable collisionTask = Hitbox::pulse;
+        private ScheduledFuture<?> inputPulser;
+        private ScheduledFuture<?> scorePulser;
+        private ScheduledFuture<?> collisionPulser;
+        private ScheduledFuture<?> disuseMonitor;
+
+        public PulseManager(ScheduledExecutorService executor) {
+            this.executor = executor;
+        }
+
+        public void begin() {
+            if (disuseMonitor == null) {
+                inputPulser = executor.scheduleWithFixedDelay(inputTask, 0, 17, TimeUnit.MILLISECONDS);
+                disuseMonitor = executor.scheduleWithFixedDelay(() -> {
+                    if (lastTimeChecked + 1000 < System.currentTimeMillis()) {
+                        stopScorePulsing();
+                        stopCollisionPulsing();
+                    }
+                }, 10, 5, TimeUnit.SECONDS);
+            }
+        }
+
+        private void beginScorePulsing() {
+            scorePulser = executor.scheduleWithFixedDelay(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+        }
+
+        private void beginCollisionPulsing() {
+            collisionPulser = executor.scheduleWithFixedDelay(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+        }
+
+        private void stopCollisionPulsing() {
+            if (collisionPulser != null) {
+                collisionPulser.cancel(false);
+                collisionPulser = null;
+            }
+        }
+
+        private void stopScorePulsing() {
+            if (scorePulser != null) {
+                scorePulser.cancel(false);
+                scorePulser = null;
+            }
+        }
+
+        private void stopInputPulsing() {
+            if (inputPulser != null) {
+                inputPulser.cancel(false);
+                inputPulser = null;
+            }
+        }
+
+        public void stop() {
+            stopInputPulsing();
+            stopScorePulsing();
+            stopCollisionPulsing();
+            if (disuseMonitor != null) {
+                disuseMonitor.cancel(false);
+                disuseMonitor = null;
+            }
+        }
     }
 
     private void decorateScoringBars() {
@@ -777,7 +851,7 @@ public class Field implements AutoCloseable {
     public void close() {
         timer.stop();
         Hitbox.clear();
-        scheduled.cancel(true);
+        pulseManager.stop();
     }
 
     /**

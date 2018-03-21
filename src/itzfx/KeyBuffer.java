@@ -86,13 +86,15 @@ public final class KeyBuffer {
 
     /**
      * Runs through the keys and performs all actions registered to the key.
+     * @return true if any keys were pressed
      */
-    public static void pulse() {
-        ONACTION.entrySet().parallelStream().filter(e -> KEYBUFFER.get(e.getKey()))
-                .forEach(e -> e.getValue().forEach(c -> c.accept(e.getKey())));
+    public static boolean pulse() {
+        boolean actionOccurred = ONACTION.entrySet().parallelStream().filter(e -> KEYBUFFER.get(e.getKey()))
+                .peek(e -> e.getValue().forEach(c -> c.accept(e.getKey()))).count() != 0;
         if (!ONMULTI.isEmpty()) {
-            pulseMulti();
+            actionOccurred = pulseMulti() || actionOccurred;
         }
+        return actionOccurred;
     }
 
     /**
@@ -109,9 +111,9 @@ public final class KeyBuffer {
         }
     }
 
-    private static void pulseMulti() {
-        ONMULTI.entrySet().parallelStream().filter(e -> Arrays.stream(e.getKey()).allMatch(k -> KEYBUFFER.get(k)))
-                .forEach(e -> e.getValue().forEach(c -> c.accept(e.getKey())));
+    private static boolean pulseMulti() {
+        return ONMULTI.entrySet().parallelStream().filter(e -> Arrays.stream(e.getKey()).allMatch(k -> KEYBUFFER.get(k)))
+                .peek(e -> e.getValue().forEach(c -> c.accept(e.getKey()))).count() != 0;
     }
 
     /**

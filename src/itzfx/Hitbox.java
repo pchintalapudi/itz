@@ -5,7 +5,6 @@
  */
 package itzfx;
 
-import itzfx.preload.Prestart;
 import itzfx.utils.QuickMafs;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +46,10 @@ public final class Hitbox {
     public static void pulse() {
         for (int i = COLLIDABLE.size() - 1; i > -1; i--) {
             Hitbox hb = COLLIDABLE.get(i);
-            if (hb.cType != CollisionType.PHANTOM && hb.canCollide()) {
+            if (hb.canCollide()) {
                 COLLIDABLE.subList(0, i).parallelStream()
-                        .filter(h -> h.collisionEnabled.get())
-                        .filter(h -> h.check != hb.check)
-                        .filter(h -> h.movableOwner != null)
-                        .filter(h -> inRange(hb, h))
+                        .filter(h -> h.collisionEnabled.get() && h.check != hb.check
+                                && h.movableOwner != null && inRange(hb, h))
                         .forEach(h -> resolveCollision(hb, h));
             }
         }
@@ -63,14 +60,9 @@ public final class Hitbox {
     }
 
     private static void resolveCollision(Hitbox hb1, Hitbox hb2) {
-        if (hb2.cType == CollisionType.PHANTOM) {
-            return;
-        }
-        Point2D field1 = hb1.getTranslates();
-        Point2D field2 = hb2.getTranslates();
-        Point2D approach = field2.subtract(field1);
+        Point2D approach = hb2.getTranslates().subtract(hb1.getTranslates());
         float invMagnitude = invMag(approach);
-        float dist = (float) hb1.visual.getRadius() + (float) hb2.visual.getRadius() - 1 / invMagnitude;
+        float dist = (float) hb1.radius + (float) hb2.radius - 1 / invMagnitude;
         Point2D approach0 = approach.multiply(invMagnitude);
         Platform.runLater(() -> {
             try {
@@ -99,14 +91,14 @@ public final class Hitbox {
 
     private static boolean inRange(Hitbox hb1, Hitbox hb2) {
         try {
-            return (squareDistance(hb1.getTranslates(), hb2.getTranslates()) < Math.pow(hb1.visual.getRadius() + hb2.visual.getRadius(), 2));
+            return (squareDistance(hb1.getTranslates(), hb2.getTranslates()) < QuickMafs.square((float) hb1.radius + (float) hb2.radius));
         } catch (Throwable t) {
             return false;
         }
     }
 
     private static float squareDistance(Point2D point1, Point2D point2) {
-        return (float) QuickMafs.square((float) point1.getX() - (float) point2.getX()) + (float) QuickMafs.square((float) point1.getY() - (float) point2.getY());
+        return QuickMafs.square((float) point1.getX() - (float) point2.getX()) + QuickMafs.square((float) point1.getY() - (float) point2.getY());
     }
 
     /**
@@ -143,17 +135,15 @@ public final class Hitbox {
         COLLIDABLE.clear();
     }
 
-    private final Circle visual;
+    private final float radius;
 
     private final BooleanProperty collisionEnabled;
 
     private Hitbox(float radius, CollisionType cType, Mobile movableOwner, Node check, float mass) {
-        visual = new Circle(radius, Color.LIME);
+        this.radius = radius;
         collisionEnabled = new SimpleBooleanProperty(true);
-        visual.visibleProperty().bind(VISIBLE.and(collisionEnabled));
         this.cType = cType;
         this.mass = mass;
-        visual.setMouseTransparent(true);
         this.movableOwner = movableOwner;
         this.check = check;
     }
@@ -207,8 +197,8 @@ public final class Hitbox {
     }
 
     private Point2D getTranslates() {
-        return new Point2D(xPos == null ? check.getTranslateX() + visual.getRadius() : (xPos.get()),
-                yPos == null ? check.getTranslateY() + visual.getRadius() : (yPos.get()));
+        return new Point2D(xPos == null ? check.getTranslateX() + radius : (xPos.get()),
+                yPos == null ? check.getTranslateY() + radius : (yPos.get()));
     }
 
     private final Mobile movableOwner;
@@ -271,6 +261,10 @@ public final class Hitbox {
      * @return the visual circle representing this hitbox's area.
      */
     public Circle getVisual() {
+        Circle visual;
+        visual = new Circle(radius, Color.LIME);
+        visual.visibleProperty().bind(VISIBLE.and(collisionEnabled));
+        visual.setMouseTransparent(true);
         return visual;
     }
 
@@ -289,11 +283,6 @@ public final class Hitbox {
          * but may pass through given enough effort. This is meant to allow
          * resistance to objects, but not total motion prevention.
          */
-        WEAK,
-        /**
-         * No collision at all. This is rarely used, as it is simpler to either
-         * disable the hitbox or to unregister it altogether.
-         */
-        PHANTOM;
+        WEAK;
     }
 }

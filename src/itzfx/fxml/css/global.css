@@ -12,7 +12,7 @@ and open the template in the editor.
     /*
     Base color scheme
     */
-    -cone-color:#ffff44;
+    -cone-color:#ffff00;
     -blue-mobile-goal:#2d2db4;
     -red-mobile-goal:#b42d2d;
     -red-alliance:#ff4444;
@@ -23,17 +23,17 @@ and open the template in the editor.
     /*
     Cone level colors
     */
-    -cone-base:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-cone-color, 12.5%), -cone-color);
-    -cone-level1:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-cone-color, 25%), -cone-color);
-    -cone-level2:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-cone-color, 50%), -cone-color);
+    -cone-base:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, white, derive(-cone-color, 12.5%));
+    -cone-level1:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, white, derive(-cone-color, 25%));
+    -cone-level2:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, white, derive(-cone-color, 50%));
     -cone-top:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, white, -cone-color);
 
     /*
     Cone rib colors
     */
-    -cone-base-dimmer:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-cone-color, -20%), derive(-cone-color, -5%));
-    -cone-level1-dimmer:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-cone-color, -15%), derive(-cone-color, -5%));
-    -cone-level2-dimmer:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-cone-color, 50%), derive(-cone-color, -5%));
+    -cone-base-dimmer:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(white, -20%), derive(-cone-color, -5%));
+    -cone-level1-dimmer:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(white, -10%), derive(-cone-color, -5%));
+    -cone-level2-dimmer:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(white, 0%), derive(-cone-color, -5%));
 
     /*
     Mobile Goal level colors
@@ -126,13 +126,13 @@ Cone stuff
 .cone-base, .cone-level1, .cone-level2, .cone-level3 {
     -fx-stroke:black;
     -fx-stroke-width: 0.75;
-    -fx-effect:dropshadow(gaussian, black, 5, 0, 0, 0);
+    -fx-effect:dropshadow(two-pass-box, black, 5, 0, 0, 0);
 }
 
 .cone-base-rib, .cone-level1-rib, .cone-level2-rib {
     -fx-stroke:black;
     -fx-stroke-width: 0.5;
-    -fx-effect:dropshadow(gaussian, black, 2.5, 0, 0, 0);
+    -fx-effect:dropshadow(two-pass-box, black, 2.5, 0, 0, 0);
 }
 
 .cone-base {
@@ -171,7 +171,7 @@ Mobile Goal Stuff
 .blue-mobile-goal-tip, .red-mobile-goal-tip {
     -fx-stroke:#000000;
     -fx-stroke-width:0.75;
-    -fx-effect:dropshadow(gaussian, black, 10, 0, 0, 0);
+    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
 }
 
 .blue-mobile-goal-base {
@@ -200,7 +200,7 @@ Mobile Goal Stuff
 
 .mobile-goal-insets, .mobile-goal-pockets {
     -fx-stroke:black;
-    -fx-effect:innershadow(gaussian, black, 5, 0, 0, 0);
+    -fx-effect:innershadow(two-pass-box, black, 5, 0, 0, 0);
 }
 
 .mobile-goal-insets {
@@ -218,7 +218,7 @@ Other things
 
 .stationary-goal {
     -fx-fill:-stationary-goal;
-    -fx-effect:dropshadow(gaussian, black, 10, 0, 0, 0);
+    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
 }
 
 .field {
@@ -264,7 +264,7 @@ Other things
 }
 
 .blue-bar, .red-bar {
-    -fx-effect:dropshadow(gaussian, black, 10, 0, 0, 0);
+    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
 }
 
 .blue-bar {
@@ -286,7 +286,7 @@ Other things
 
 .robot {
     -fx-image:url(../../Images/topviewicon.png);
-    -fx-effect:dropshadow(gaussian, black, 10, 0, 0, 0);
+    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
 }
 
 .vex-logo {
