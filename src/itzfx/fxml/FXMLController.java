@@ -30,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -64,6 +65,9 @@ public class FXMLController implements AutoCloseable {
     private Menu robotMenu;
 
     @FXML
+    private AnchorPane robotInfo;
+
+    @FXML
     private void initialize() {
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         field = (Field) ((Pane) ((BorderPane) ((Pane) root.getCenter()).getChildren().get(0)).getCenter()).getChildren().get(0).getUserData();
@@ -71,6 +75,7 @@ public class FXMLController implements AutoCloseable {
         sbc = (ScoringBoxController) right.getChildrenUnmodifiable().get(0).getUserData();
         field.inject(sbc);
         List<Robot> robots = field.getRobots();
+        ((RobotInfoController) robotInfo.getUserData()).injectRobots(robots);
         for (int i = 0; i < robots.size(); i++) {
             RobotMenu controller = new RobotMenu(robots.get(i), "Robot " + (i + 1));
             FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("RobotMenu.fxml"));
@@ -83,7 +88,7 @@ public class FXMLController implements AutoCloseable {
             }
         }
     }
-    
+
     public Field getField() {
         return field;
     }
@@ -167,7 +172,7 @@ public class FXMLController implements AutoCloseable {
 
     @FXML
     private CheckMenuItem showHitboxes;
-    
+
     @FXML
     private void about() {
         FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("About.fxml"));

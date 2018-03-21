@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="white-background" stylesheets="@css/global.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="white-background" stylesheets="@css/global.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
@@ -107,35 +107,36 @@
         </MenuBar>
     </top>
     <right>
-        <VBox fx:id="right" prefHeight="974.4" prefWidth="731.2" BorderPane.alignment="CENTER">
+        <VBox fx:id="right" prefHeight="974.4" prefWidth="731.2" spacing="15.0" BorderPane.alignment="CENTER">
             <children>
                 <fx:include source="ScoringBox.fxml" />
-                <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                     <children>
-                        <ImageView fitHeight="300.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true" styleClass="vex-logo" />
-                        <ImageView fitHeight="300.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true" styleClass="dvhs-robotics-logo" />
+                        <ImageView fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" styleClass="vex-logo" />
+                  <Pane prefHeight="200.0" prefWidth="200.0" />
+                        <ImageView fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" styleClass="dvhs-robotics-logo" />
                     </children>
                 </HBox>
                 <StackPane prefHeight="300.0" prefWidth="700.0">
                     <children>
-                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="710.0" tabClosingPolicy="UNAVAILABLE">
                             <tabs>
-                                <Tab text="Robot 1">
+                                <Tab closable="false" text="Robot Controllers">
+                                    <content>
+                                        <fx:include fx:id="robotInfo" source="RobotInfo.fxml" />
+                                    </content>
+                                </Tab>
+                                <Tab closable="false" text="Robot Data">
+                                    <content>
+                                        <fx:include fx:id="robotData" source="RobotData.fxml" />
+                                    </content>
+                                </Tab>
+                                <Tab closable="false" text="Robot 3">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Robot 2">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                    </content>
-                                </Tab>
-                                <Tab text="Robot 3">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                    </content>
-                                </Tab>
-                                <Tab text="Robot 4">
+                                <Tab closable="false" text="Robot 4">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>

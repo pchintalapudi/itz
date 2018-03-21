@@ -4,18 +4,20 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/" fx:controller="itzfx.fxml.RobotInfoController">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="250.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.RobotInfoController">
     <children>
-        <TableView prefHeight="250.0" prefWidth="700.0">
+        <TableView fx:id="table" prefHeight="250.0" prefWidth="700.0">
             <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
-                <TableColumn prefWidth="75.0" text="C3" />
-                <TableColumn prefWidth="75.0" text="C4" />
-                <TableColumn prefWidth="75.0" text="C5" />
-                <TableColumn prefWidth="75.0" text="C6" />
-                <TableColumn prefWidth="75.0" text="C7" />
+                <TableColumn fx:id="col0" editable="false" prefWidth="100.0" text="Robot" />
+                <TableColumn fx:id="col1" editable="false" prefWidth="100.0" text="Forward" />
+                <TableColumn fx:id="col2" editable="false" prefWidth="100.0" text="Backward" />
+                <TableColumn fx:id="col3" editable="false" prefWidth="100.0" text="Left Turn" />
+                <TableColumn fx:id="col4" editable="false" prefWidth="100.0" text="Right Turn" />
+                <TableColumn fx:id="col5" editable="false" prefWidth="100.0" text="Mobile Goal" />
+                <TableColumn fx:id="col6" editable="false" prefWidth="100.0" text="Cone" />
+                <TableColumn fx:id="col7" editable="false" prefWidth="100.0" text="Stationary Goal" />
+                <TableColumn fx:id="col8" editable="false" prefWidth="100.0" text="Autostack" />
+                <TableColumn fx:id="col9" editable="false" prefWidth="100.0" text="Driver Load" />
             </columns>
         </TableView>
     </children>

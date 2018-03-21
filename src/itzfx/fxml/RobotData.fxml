@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="250.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TableView fx:id="table" prefHeight="250.0" prefWidth="700.0">
+            <columns>
+                <TableColumn fx:id="col0" editable="false" prefWidth="100.0" text="Robot" />
+                <TableColumn fx:id="col1" editable="false" prefWidth="100.0" text="Robot Speed" />
+                <TableColumn fx:id="col2" editable="false" prefWidth="150.0" text="Mobile Goal Intake Time" />
+                <TableColumn fx:id="col3" editable="false" prefWidth="150.0" text="Mobile Goal Stack Time" />
+                <TableColumn fx:id="col4" editable="false" prefWidth="175.0" text="Stationary Goal Stack Time" />
+                <TableColumn fx:id="col5" editable="false" prefWidth="200.0" text="Max Mobile Goal Stack Height" />
+                <TableColumn fx:id="col6" editable="false" prefWidth="225.0" text="Max Stationary Goal Stack Height" />
+                <TableColumn fx:id="col7" editable="false" prefWidth="200.0" text="Mobile Goal Intake at Front" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

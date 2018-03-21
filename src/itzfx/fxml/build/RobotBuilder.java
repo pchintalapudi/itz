@@ -6,6 +6,7 @@
 package itzfx.fxml.build;
 
 import itzfx.Robot;
+import itzfx.RobotProperties;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
@@ -69,6 +70,6 @@ public class RobotBuilder {
      * @param r the robot to set the values of
      */
     public void fillRobot(Robot r) {
-        r.acceptValues(speed, mogotime, autostack, statstack, maxmogo, maxstat, front);
+        r.acceptValues(RobotProperties.create(speed, mogotime, autostack, statstack, maxmogo, maxstat, front));
     }
 }
