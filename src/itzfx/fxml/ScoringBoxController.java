@@ -5,8 +5,10 @@
  */
 package itzfx.fxml;
 
+import itzfx.ControlMode;
 import itzfx.fxml.timing.Clock;
 import itzfx.scoring.ScoreAggregator;
+import java.util.Collections;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -14,6 +16,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -44,6 +48,9 @@ public class ScoringBoxController {
 
     @FXML
     private SplitPane scoreDivider;
+    
+    @FXML
+    private ComboBox<ControlMode> comboBox;
 
     private Clock clock;
 
@@ -70,6 +77,8 @@ public class ScoringBoxController {
         skillsScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sScore.get()), sScore));
         root.setUserData(this);
         clock = (Clock) timerPane.getUserData();
+        Collections.addAll(comboBox.getItems(), ControlMode.values());
+        comboBox.getSelectionModel().select(ControlMode.FREE_PLAY);
     }
 
     /**
@@ -139,6 +148,10 @@ public class ScoringBoxController {
 
     public void emphasizeNone() {
         scoreDivider.setDividerPositions(.667f);
+    }
+    
+    public SelectionModel<ControlMode> getControlModeSelectionModel() {
+        return comboBox.getSelectionModel();
     }
 
     /**

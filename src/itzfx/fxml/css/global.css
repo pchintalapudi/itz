@@ -312,3 +312,20 @@ Other things
 .intense-color-progress-bar {
     -fx-accent:-blue-intense;
 }
+
+.field-mode-selector {
+    -fx-background-color:white;
+    -fx-border-color:-blue-intense;
+}
+
+.field-mode-selector:focused {
+    -fx-background-color:-blue-intense-quarter;
+}
+
+.field-mode-selector:hover {
+    -fx-background-color:-blue-intense-half;
+}
+
+.field-mode-selector:pressed {
+    -fx-background-color:-blue-intense-triple-quarter;
+}

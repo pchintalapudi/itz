@@ -708,6 +708,7 @@ public class Field implements AutoCloseable {
      */
     public void inject(ScoringBoxController sbc) {
         this.sbc = sbc;
+        sbc.getControlModeSelectionModel().selectedItemProperty().addListener((o, b, s) -> doSetMode(s));
         System.out.println(sbc);
         sbc.setAggregator(scores);
         time = sbc.getTime();
@@ -730,6 +731,10 @@ public class Field implements AutoCloseable {
      * @param cm the mode to set
      */
     public void setMode(ControlMode cm) {
+        sbc.getControlModeSelectionModel().select(cm);
+    }
+    
+    private void doSetMode(ControlMode cm) {
         this.mode = cm;
         reregisterMode(cm);
         switchToDriver = false;
