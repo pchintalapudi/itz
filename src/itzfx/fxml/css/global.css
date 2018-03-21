@@ -82,12 +82,20 @@ and open the template in the editor.
     -fx-fill:white;
 }
 
+.white-border {
+    -fx-border-color:white;
+}
+
 .black-background {
     -fx-background-color:black;
 }
 
 .black-fill {
     -fx-fill:black;
+}
+
+.black-border {
+    -fx-border-color:black;
 }
 
 /*

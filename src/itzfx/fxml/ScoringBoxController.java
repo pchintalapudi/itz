@@ -152,6 +152,6 @@ public class ScoringBoxController {
 
     @FXML
     private void generateSkillsReport() {
-
+        sa.showSkillsReport();
     }
 }
