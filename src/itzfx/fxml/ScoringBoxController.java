@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
@@ -40,6 +41,9 @@ public class ScoringBoxController {
 
     @FXML
     private AnchorPane timerPane;
+
+    @FXML
+    private SplitPane scoreDivider;
 
     private Clock clock;
 
@@ -124,7 +128,19 @@ public class ScoringBoxController {
         bScore.set(temp[1]);
         sScore.set(sa.calculateSkills());
     }
-    
+
+    public void emphasizeSkills() {
+        scoreDivider.setDividerPositions(0);
+    }
+
+    public void emphasizeTeams() {
+        scoreDivider.setDividerPositions(1);
+    }
+
+    public void emphasizeNone() {
+        scoreDivider.setDividerPositions(.667f);
+    }
+
     /**
      * Displays a score sheet, formatted like an actual referee's score sheet.
      * Does not work for skills score
@@ -133,9 +149,9 @@ public class ScoringBoxController {
     private void generateReport() {
         sa.showReport();
     }
-    
+
     @FXML
     private void generateSkillsReport() {
-        
+
     }
 }

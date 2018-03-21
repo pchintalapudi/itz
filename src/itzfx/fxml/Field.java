@@ -830,16 +830,32 @@ public class Field implements AutoCloseable {
         timer.getKeyFrames().clear();
         if (time != null && cm != null) {
             time.set(cm.getTime());
-        }
-        timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), this::lockout, new KeyValue(time, 0)));
-        KeyBuffer.unlock();
-        getRobots().stream().peek(Robot::resume).forEach(Robot::prime);
-        if (cm == ControlMode.AUTON || cm == ControlMode.PROGRAMMING_SKILLS) {
-            getRobots().stream().peek(Robot::eraseController).forEach(Robot::runProgram);
-        } else {
-            getRobots().forEach(Robot::driverControl);
-        }
-        if (cm == ControlMode.DRIVER_SKILLS || cm == ControlMode.PROGRAMMING_SKILLS) {
+            timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), this::lockout, new KeyValue(time, 0)));
+            KeyBuffer.unlock();
+            getRobots().stream().peek(Robot::resume).forEach(Robot::prime);
+            switch (cm) {
+                case AUTON:
+                case PROGRAMMING_SKILLS:
+                    getRobots().forEach(r -> {
+                        r.eraseController();
+                        r.prime();
+                    });
+                    break;
+                default:
+                    getRobots().forEach(Robot::driverControl);
+            }
+            switch (cm) {
+                case DRIVER_SKILLS:
+                case PROGRAMMING_SKILLS:
+                    sbc.emphasizeSkills();
+                    break;
+                case DRIVER_CONTROL:
+                case AUTON:
+                    sbc.emphasizeTeams();
+                    break;
+                default:
+                    sbc.emphasizeNone();
+            }
         }
     }
 
