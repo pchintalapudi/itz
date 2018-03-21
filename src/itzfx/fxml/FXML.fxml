@@ -112,9 +112,9 @@
                 <fx:include source="ScoringBox.fxml" />
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                     <children>
-                        <ImageView fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" styleClass="vex-logo" />
+                        <ImageView fitHeight="300.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true" styleClass="vex-logo" />
                   <Pane prefHeight="200.0" prefWidth="200.0" />
-                        <ImageView fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" styleClass="dvhs-robotics-logo" />
+                        <ImageView fitHeight="300.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true" styleClass="dvhs-robotics-logo" />
                     </children>
                 </HBox>
                 <StackPane prefHeight="300.0" prefWidth="700.0">

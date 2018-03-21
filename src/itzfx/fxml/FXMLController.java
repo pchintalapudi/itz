@@ -66,6 +66,8 @@ public class FXMLController implements AutoCloseable {
 
     @FXML
     private AnchorPane robotInfo;
+    @FXML
+    private AnchorPane robotData;
 
     @FXML
     private void initialize() {
@@ -76,6 +78,7 @@ public class FXMLController implements AutoCloseable {
         field.inject(sbc);
         List<Robot> robots = field.getRobots();
         ((RobotInfoController) robotInfo.getUserData()).injectRobots(robots);
+        ((RobotDataController) robotData.getUserData()).injectRobots(robots);
         for (int i = 0; i < robots.size(); i++) {
             RobotMenu controller = new RobotMenu(robots.get(i), "Robot " + (i + 1));
             FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("RobotMenu.fxml"));

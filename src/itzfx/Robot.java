@@ -32,8 +32,12 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.FloatBinding;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
@@ -125,15 +129,12 @@ public final class Robot extends Mobile implements Scoreable {
         mogoUndo();
         linkActions();
         setController(KeyControl.Defaults.SINGLE.getKC());
-        preassignValues();
+        properties = RobotProperties.getDefault();
+        orps.update(properties);
     }
 
     private void register() {
         Field.getOwner(this).getAggregator().registerReport(sr);
-    }
-
-    private void preassignValues() {
-        properties = RobotProperties.getDefault();
     }
 
     /**
@@ -960,6 +961,7 @@ public final class Robot extends Mobile implements Scoreable {
      */
     public void acceptValues(RobotProperties rp) {
         properties = RobotProperties.getFilledVersion(rp, properties);
+        orps.update(properties);
     }
 
     /**
@@ -1052,5 +1054,104 @@ public final class Robot extends Mobile implements Scoreable {
 
     public ObjectProperty<KeyCode> loadKeyProperty() {
         return okcs.keys()[8];
+    }
+    
+    private final ObservableRobotPropertiesStruct orps = new ObservableRobotPropertiesStruct();
+    
+    private class ObservableRobotPropertiesStruct {
+        private final FloatProperty speed = new SimpleFloatProperty();
+        private final FloatProperty mogointaketime = new SimpleFloatProperty();
+        private final FloatProperty statstacktime = new SimpleFloatProperty();
+        private final FloatProperty autostacktime = new SimpleFloatProperty();
+        private final IntegerProperty maxmogostack = new SimpleIntegerProperty();
+        private final IntegerProperty maxstatstack = new SimpleIntegerProperty();
+        private final BooleanProperty mogofront = new SimpleBooleanProperty();
+
+        /**
+         * @return the speed
+         */
+        public FloatProperty getSpeed() {
+            return speed;
+        }
+
+        /**
+         * @return the mogointaketime
+         */
+        public FloatProperty getMogointaketime() {
+            return mogointaketime;
+        }
+
+        /**
+         * @return the statstacktime
+         */
+        public FloatProperty getStatstacktime() {
+            return statstacktime;
+        }
+
+        /**
+         * @return the autostacktime
+         */
+        public FloatProperty getAutostacktime() {
+            return autostacktime;
+        }
+
+        /**
+         * @return the maxmogostack
+         */
+        public IntegerProperty getMaxmogostack() {
+            return maxmogostack;
+        }
+
+        /**
+         * @return the maxstatstack
+         */
+        public IntegerProperty getMaxstatstack() {
+            return maxstatstack;
+        }
+
+        /**
+         * @return the mogofront
+         */
+        public BooleanProperty getMogofront() {
+            return mogofront;
+        }
+        
+        public void update(RobotProperties rp) {
+            speed.set(rp.getRobotSpeed());
+            mogointaketime.set(rp.getRobotMogoIntakeTime());
+            statstacktime.set(rp.getRobotStatTime());
+            autostacktime.set(rp.getRobotAutostackTime());
+            maxmogostack.set(rp.getRobotMogoMaxStack());
+            maxstatstack.set(rp.getRobotStatMaxStack());
+            mogofront.set(rp.isRobotMogoFront() > 0);
+        }
+    }
+    
+    public FloatProperty speedProperty() {
+        return orps.getSpeed();
+    }
+    
+    public FloatProperty mogoIntakeTimeProperty() {
+        return orps.getMogointaketime();
+    }
+    
+    public FloatProperty autostackTimeProperty() {
+        return orps.getAutostacktime();
+    }
+    
+    public FloatProperty statStackTimeProperty() {
+        return orps.getStatstacktime();
+    }
+    
+    public IntegerProperty maxMogoStackProperty() {
+        return orps.getMaxmogostack();
+    }
+    
+    public IntegerProperty maxStatStackProperty() {
+        return orps.getMaxstatstack();
+    }
+    
+    public BooleanProperty mogoFrontProperty() {
+        return orps.getMogofront();
     }
 }
