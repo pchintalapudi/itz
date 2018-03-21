@@ -84,6 +84,8 @@ public final class Robot extends Mobile implements Scoreable {
     private final BooleanProperty red;
 
     private final ScoreReport sr;
+    
+    private final ImageView iv;
 
     /**
      * Creates a robot at the specified coordinates with the specified initial
@@ -101,7 +103,7 @@ public final class Robot extends Mobile implements Scoreable {
         realRobot.setEffect(new DropShadow());
         node.getChildren().add(realRobot);
         node.setOnMouseDragged((MouseEvent m) -> super.setCenter((float) m.getSceneX() - 120, (float) m.getSceneY() - 120 - 45));
-        ImageView iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/Images/topviewicon.png"), 90, 90, false, true));
+        iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/Images/topviewicon.png"), 90, 90, false, true));
         iv.setRotate(90);
         realRobot.getChildren().add(new Pane(iv));
         Rectangle cover = new Rectangle(90, 90);
@@ -221,6 +223,10 @@ public final class Robot extends Mobile implements Scoreable {
             heldCone.get().reappear();
             heldCone.set(null);
         }
+    }
+    
+    private void switchImage() {
+        FileUI.load(iv.getScene().getWindow(), f -> iv.setImage(new Image(f.toURI().toString(), 90, 90, true, true)), "Image", "*.jpg", "*.png");
     }
 
     private void hitboxing() {
@@ -487,6 +493,12 @@ public final class Robot extends Mobile implements Scoreable {
             driverControl();
         });
         rightClick.getItems().add(dc);
+        MenuItem si = new MenuItem("Set Robot Image");
+        si.setOnAction(e -> {
+            e.consume();
+            switchImage();
+        });
+        rightClick.getItems().add(si);
     }
 
     /**

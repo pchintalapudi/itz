@@ -8,12 +8,14 @@ package itzfx.data;
 import itzfx.KeyControl;
 import itzfx.Robot;
 import java.io.File;
+import java.util.Arrays;
 import java.util.function.Consumer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
+import javafx.util.Pair;
 
 /**
  * This class provides useful UI methods for saving and loading files. The
@@ -160,6 +162,16 @@ public class FileUI {
         fc.getExtensionFilters().add(new ExtensionFilter(descriptor, extension));
         File f = fc.showOpenDialog(owner);
         if (f != null) {
+            action.accept(f);
+        }
+    }
+    
+    public static void load(Window owner, Consumer<File> action, String descriptor, String... extensions) {
+        FileChooser fc = new FileChooser();
+        fc.setInitialDirectory(Retrieval.getDataDirectory());
+        fc.getExtensionFilters().add(new ExtensionFilter(descriptor, extensions));
+        File f;
+        if ((f = fc.showOpenDialog(owner)) != null) {
             action.accept(f);
         }
     }

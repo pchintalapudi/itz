@@ -74,6 +74,7 @@ public class Start extends Application {
             super.notifyPreloader(new ProgressNotification(0));
             FXMLLoader loader = new FXMLLoader(Start.class.getResource("fxml/FXML.fxml"));
             p = loader.load();
+            p.setOnMousePressed(m -> p.requestFocus());
 //            addZoomListeners(p);
             fxml = loader.getController();
             fxml.inject(this);
