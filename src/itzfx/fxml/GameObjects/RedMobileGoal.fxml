@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Arc?>
 <?import javafx.scene.shape.Circle?>
 
-<Pane fx:id="mobile" cache="true" cacheHint="SPEED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onDragged" onMousePressed="#onPress" prefHeight="50.0" prefWidth="50.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.GameObjects.MobileController">
+<Pane fx:id="mobile" cache="true" cacheHint="SPEED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onDragged" onMousePressed="#onPress" prefHeight="50.0" prefWidth="50.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.GameObjects.MobileController">
     <children>
         <Circle layoutX="25.0" layoutY="25.0" radius="25.0" stroke="BLACK" strokeType="INSIDE">
             <effect>

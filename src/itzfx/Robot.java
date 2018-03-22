@@ -75,15 +75,17 @@ public final class Robot extends Mobile implements Scoreable {
 
     private final ObjectProperty<Paint> filter;
 
-    private final BooleanProperty active;
+    private final BooleanProperty active, driveBaseMovable, red;
 
-    private final BooleanProperty driveBaseMovable;
-
-    private final BooleanProperty red;
+    {
+        active = new SimpleBooleanProperty(true);
+        driveBaseMovable = new SimpleBooleanProperty(true);
+        red = new SimpleBooleanProperty(true);
+    }
 
     private final ScoreReport sr;
 
-    private final ImageView iv;
+    private final ImageView iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/Images/topviewicon.png"), 90, 90, false, true));
 
     /**
      * Creates a robot at the specified coordinates with the specified initial
@@ -96,33 +98,23 @@ public final class Robot extends Mobile implements Scoreable {
      */
     public Robot(float layoutX, float layoutY, float initRotate) {
         super(layoutX, layoutY, initRotate);
-        node = new StackPane();
-        realRobot = new StackPane();
-        realRobot.setEffect(new DropShadow());
-        node.getChildren().add(realRobot);
-        node.setOnMouseDragged((MouseEvent m) -> super.setCenter((float) m.getSceneX() - 120, (float) m.getSceneY() - 120 - 45));
-        iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/Images/topviewicon.png"), 90, 90, false, true));
-        iv.setRotate(90);
-        realRobot.getChildren().add(new Pane(iv));
         Rectangle cover = new Rectangle(90, 90);
         filter = cover.fillProperty();
-        realRobot.getChildren().add(cover);
+        realRobot = new StackPane(new Pane(iv), cover);
+        realRobot.setEffect(new DropShadow());
+        node = new StackPane(realRobot);
+        node.setOnMouseDragged((MouseEvent m) -> super.setCenter((float) m.getSceneX() - 120, (float) m.getSceneY() - 120 - 45));
+        iv.setRotate(90);
         hb = new Hitbox(45, Hitbox.CollisionType.STRONG, this, 18);
         hitboxing();
         filter.set(new Color(1, 0, 0, .03));
-        red = new SimpleBooleanProperty(true);
         filter.bind(Bindings.createObjectBinding(() -> red.get() ? new Color(1, 0, 0, .05) : new Color(0, 0, 1, .05), red));
-        active = new SimpleBooleanProperty(true);
-        actions = new ArrayList<>(9);
-        driveBaseMovable = new SimpleBooleanProperty(true);
         sr = new ScoreReport(this);
         sr.setScoreType(ScoreType.ZONE_NONE);
         redMogo = new RedMobileGoal(25, 45);
         blueMogo = new BlueMobileGoal(25, 45);
-        node.getChildren().add(redMogo.getNode());
-        node.getChildren().add(blueMogo.getNode());
         privateCone = new Cone(90, 45);
-        node.getChildren().add(privateCone.getNode());
+        node.getChildren().addAll(redMogo.getNode(), blueMogo.getNode(), privateCone.getNode());
         privateCone.permaDisableCollisions();
         privateCone.vanish();
         properties();
@@ -246,7 +238,7 @@ public final class Robot extends Mobile implements Scoreable {
         actions.add(k -> load());
     }
 
-    private final List<Consumer<KeyCode>> actions;
+    private final List<Consumer<KeyCode>> actions = new ArrayList<>(9);
 
     private KeyControl controller;
 
@@ -960,7 +952,11 @@ public final class Robot extends Mobile implements Scoreable {
      * @param rp
      */
     public void acceptValues(RobotProperties rp) {
+        RobotProperties temp = properties;
         properties = RobotProperties.getFilledVersion(rp, properties);
+        if (properties.isRobotMogoFront() != temp.isRobotMogoFront()) {
+            adjustInitRotate(180);
+        }
         orps.update(properties);
     }
 
@@ -1055,10 +1051,11 @@ public final class Robot extends Mobile implements Scoreable {
     public ObjectProperty<KeyCode> loadKeyProperty() {
         return okcs.keys()[8];
     }
-    
+
     private final ObservableRobotPropertiesStruct orps = new ObservableRobotPropertiesStruct();
-    
+
     private class ObservableRobotPropertiesStruct {
+
         private final FloatProperty speed = new SimpleFloatProperty();
         private final FloatProperty mogointaketime = new SimpleFloatProperty();
         private final FloatProperty statstacktime = new SimpleFloatProperty();
@@ -1115,7 +1112,7 @@ public final class Robot extends Mobile implements Scoreable {
         public BooleanProperty getMogofront() {
             return mogofront;
         }
-        
+
         public void update(RobotProperties rp) {
             speed.set(rp.getRobotSpeed());
             mogointaketime.set(rp.getRobotMogoIntakeTime());
@@ -1126,31 +1123,31 @@ public final class Robot extends Mobile implements Scoreable {
             mogofront.set(rp.isRobotMogoFront() > 0);
         }
     }
-    
+
     public FloatProperty speedProperty() {
         return orps.getSpeed();
     }
-    
+
     public FloatProperty mogoIntakeTimeProperty() {
         return orps.getMogointaketime();
     }
-    
+
     public FloatProperty autostackTimeProperty() {
         return orps.getAutostacktime();
     }
-    
+
     public FloatProperty statStackTimeProperty() {
         return orps.getStatstacktime();
     }
-    
+
     public IntegerProperty maxMogoStackProperty() {
         return orps.getMaxmogostack();
     }
-    
+
     public IntegerProperty maxStatStackProperty() {
         return orps.getMaxstatstack();
     }
-    
+
     public BooleanProperty mogoFrontProperty() {
         return orps.getMogofront();
     }

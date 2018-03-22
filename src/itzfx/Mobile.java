@@ -396,4 +396,8 @@ public abstract class Mobile {
         initRotate += extra;
         getNode().setRotate(getNode().getRotate() + extra);
     }
+    
+    public void resetRotate() {
+        getNode().setRotate(initRotate);
+    }
 }
