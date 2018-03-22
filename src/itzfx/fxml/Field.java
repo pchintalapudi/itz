@@ -117,7 +117,7 @@ public class Field implements AutoCloseable {
         private final Runnable inputTask = () -> {
             if (KeyBuffer.pulse()) {
                 lastTimeChecked = System.currentTimeMillis();
-                if (this.scorePulser == null) {
+                if (this.scorePulser == null || this.collisionPulser == null) {
                     beginScorePulsing();
                     beginCollisionPulsing();
                 }
@@ -478,6 +478,7 @@ public class Field implements AutoCloseable {
                 r.getNode().setRotate(r.getNode().getRotate() + 0.01);
             });
             preloads.addAll(c);
+            pulseManager.beginScorePulsing();
         } catch (Exception ex) {
         }
     }

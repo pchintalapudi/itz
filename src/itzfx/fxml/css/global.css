@@ -64,6 +64,7 @@ and open the template in the editor.
     -blue-bar-gradient:linear-gradient(to left, black 0%, -blue-alliance 40%, -blue-alliance 60%, black 100%);
     -red-bar-gradient:linear-gradient(to left, black 0%, -red-alliance 40%, -red-alliance 60%, black 100%);
     -tape:white;
+    -off-white:derive(white, -5%);
 
     /*
     Intense blue variants
@@ -340,4 +341,83 @@ Images
 
 .logo {
     -fx-image:url(../../Images/phoenixWlogo.png);
+}
+
+/*
+Info screen things
+*/
+
+.blue-tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color:white;
+}
+
+.blue-tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color:-off-white;
+}
+
+.blue-tab-pane > .tab-header-area > .headers-region > .tab:hover {
+    -fx-background-color:-blue-intense-quarter;
+}
+
+.blue-tab-pane > .tab-header-area > .headers-region > .tab:pressed {
+    -fx-background-color:-blue-intense-triple-quarter;
+}
+
+.blue-tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color:-blue-intense-half;
+}
+
+.blue-table-view > .column-header-background > .nested-column-header > .table-column {
+    -fx-background-color:white;
+}
+
+.blue-table-view > .column-header-background > .nested-column-header > .table-column:pressed {
+    -fx-background-color:-blue-intense-half;
+}
+
+/*
+Scrollbar styling
+*/
+
+.scroll-bar:horizontal > .thumb,
+.scroll-bar:vertical > .thumb{
+    -fx-background-color:white;
+}
+
+.scroll-bar:horizontal:hover > .thumb,
+.scroll-bar:vertical:hover > .thumb {
+    -fx-background-color:-blue-intense-quarter;
+}
+
+.scroll-bar:horizontal:pressed > .thumb,
+.scroll-bar:vertical:pressed > .thumb {
+    -fx-background-color:-blue-intense-half;
+}
+
+/*
+Menubar styling
+*/
+
+.flat-menu-bar {
+    -fx-background-color:-off-white;
+}
+
+/*
+SplitPane styling
+*/
+
+
+.split-pane:horizontal > .split-pane-divider,
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color:-off-white;
+}
+
+.split-pane:horizontal > .split-pane-divider:hover,
+.split-pane:vertical > .split-pane-divider:hover {
+    -fx-background-color:-blue-intense-quarter;
+}
+
+.split-pane:horizontal > .split-pane-divider:pressed,
+.split-pane:vertical > .split-pane-divider:pressed {
+    -fx-background-color:-blue-intense-half;
 }

@@ -19,7 +19,7 @@
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="white-background" stylesheets="@css/global.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
     <top>
-        <MenuBar BorderPane.alignment="CENTER">
+        <MenuBar styleClass="flat-menu-bar" BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
@@ -119,7 +119,7 @@
                 </HBox>
                 <StackPane prefHeight="300.0" prefWidth="700.0">
                     <children>
-                        <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="710.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="710.0" styleClass="blue-tab-pane" tabClosingPolicy="UNAVAILABLE">
                             <tabs>
                                 <Tab closable="false" text="Robot Controllers">
                                     <content>
