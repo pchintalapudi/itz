@@ -35,7 +35,7 @@ public final class Cone extends Mobile {
      * @param layoutX the x coordinate the cone is created at
      * @param layoutY the y coordinate the cone is created at
      */
-    public Cone(double layoutX, double layoutY) {
+    public Cone(float layoutX, float layoutY) {
         super(layoutX, layoutY);
         try {
             Parent loaded = FXMLLoader.load(Cone.class.getResource("Cone.fxml"));

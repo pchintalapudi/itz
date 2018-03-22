@@ -7,7 +7,7 @@ package itzfx;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -33,7 +33,7 @@ public final class KeyBuffer {
 
     static {
         KEYBUFFER = new HashMap<>();
-        Arrays.stream(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
+        Arrays.asList(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
         ONACTION = new HashMap<>();
         ONMULTI = new TreeMap<>((k1, k2) -> k1.length > k2.length ? 1 : k1.length < k2.length ? -1 : 0);
     }
@@ -80,19 +80,21 @@ public final class KeyBuffer {
         if (ONACTION.containsKey(k)) {
             ONACTION.get(k).add(c);
         } else {
-            ONACTION.put(k, new LinkedList<>(Arrays.asList(c)));
+            ONACTION.put(k, new ArrayList<>(Arrays.asList(c)));
         }
     }
 
     /**
      * Runs through the keys and performs all actions registered to the key.
+     * @return true if any keys were pressed
      */
-    public static void pulse() {
-        ONACTION.entrySet().parallelStream().filter(e -> KEYBUFFER.get(e.getKey()))
-                .forEach(e -> e.getValue().forEach(c -> c.accept(e.getKey())));
+    public static boolean pulse() {
+        boolean actionOccurred = ONACTION.entrySet().parallelStream().filter(e -> KEYBUFFER.get(e.getKey()))
+                .peek(e -> e.getValue().forEach(c -> c.accept(e.getKey()))).count() != 0;
         if (!ONMULTI.isEmpty()) {
-            pulseMulti();
+            actionOccurred = pulseMulti() || actionOccurred;
         }
+        return actionOccurred;
     }
 
     /**
@@ -105,13 +107,13 @@ public final class KeyBuffer {
         if (ONMULTI.containsKey(k)) {
             ONMULTI.get(k).add(c);
         } else {
-            ONMULTI.put(k, new LinkedList<>(Arrays.asList(c)));
+            ONMULTI.put(k, new ArrayList<>(Arrays.asList(c)));
         }
     }
 
-    private static void pulseMulti() {
-        ONMULTI.entrySet().parallelStream().filter(e -> Arrays.stream(e.getKey()).allMatch(k -> KEYBUFFER.get(k)))
-                .forEach(e -> e.getValue().forEach(c -> c.accept(e.getKey())));
+    private static boolean pulseMulti() {
+        return ONMULTI.entrySet().parallelStream().filter(e -> Arrays.stream(e.getKey()).allMatch(k -> KEYBUFFER.get(k)))
+                .peek(e -> e.getValue().forEach(c -> c.accept(e.getKey()))).count() != 0;
     }
 
     /**
@@ -141,7 +143,7 @@ public final class KeyBuffer {
      */
     public static void lock() {
         locked = true;
-        Arrays.stream(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
+        Arrays.asList(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
     }
 
     /**

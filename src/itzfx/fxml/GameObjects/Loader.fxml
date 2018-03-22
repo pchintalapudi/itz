@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Polygon?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.5" prefWidth="27.5" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<Pane cache="true" cacheHint="SPEED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.5" prefWidth="27.5" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Polygon stroke="BLACK" strokeType="INSIDE">
             <points>

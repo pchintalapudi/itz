@@ -1,0 +1,423 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Mar 16, 2018, 10:01:13 PM
+    Author     : prem
+*/
+
+* {
+    /*
+    Base color scheme
+    */
+    -cone-color:#ffff00;
+    -blue-mobile-goal:#2d2db4;
+    -red-mobile-goal:#b42d2d;
+    -red-alliance:#ff4444;
+    -blue-alliance:#4444ff;
+    -tile-color:#787878;
+    -perimeter-color:#000000;
+
+    /*
+    Cone level colors
+    */
+    -cone-base:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, white, derive(-cone-color, 12.5%));
+    -cone-level1:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, white, derive(-cone-color, 25%));
+    -cone-level2:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, white, derive(-cone-color, 50%));
+    -cone-top:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, white, -cone-color);
+
+    /*
+    Cone rib colors
+    */
+    -cone-base-dimmer:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(white, -20%), derive(-cone-color, -5%));
+    -cone-level1-dimmer:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(white, -10%), derive(-cone-color, -5%));
+    -cone-level2-dimmer:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(white, 0%), derive(-cone-color, -5%));
+
+    /*
+    Mobile Goal level colors
+    */
+    -blue-mobile-goal-base:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, -blue-mobile-goal, -blue-alliance);
+    -blue-mobile-goal-mid:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-blue-mobile-goal, -35%), -blue-alliance);
+    -blue-mobile-goal-wedge:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-blue-mobile-goal, -75%), -blue-alliance);
+    -blue-mobile-goal-tip:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-blue-mobile-goal, 50%), -blue-alliance);
+
+    -red-mobile-goal-base:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-red-mobile-goal, 20%), -red-alliance);
+    -red-mobile-goal-mid:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-red-mobile-goal, 35%), -red-alliance);
+    -red-mobile-goal-tip:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(-red-mobile-goal, 50%), -red-alliance);
+
+    /*
+    Stationary Goal gradient
+    */
+    -stationary-goal:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(white, -80%) 0%, black 50%);
+
+    /*
+    Transparent colors
+    */
+    -blue-alliance-transp:rgba(68, 68, 255, 0.1);
+    -red-alliance-transp:rgba(255, 68, 68, 0.1);
+
+    /*
+    Other colors
+    */
+    -blue-bar-gradient:linear-gradient(to left, black 0%, -blue-alliance 40%, -blue-alliance 60%, black 100%);
+    -red-bar-gradient:linear-gradient(to left, black 0%, -red-alliance 40%, -red-alliance 60%, black 100%);
+    -tape:white;
+    -off-white:derive(white, -5%);
+
+    /*
+    Intense blue variants
+    */
+    -blue-intense-quarter:rgba(0%, 50%, 100%, .25);
+    -blue-intense-half:rgba(0%, 50%, 100%, .5);
+    -blue-intense-triple-quarter:rgba(0%, 50%, 100%, .75);
+    -blue-intense:rgb(0%, 50%, 100%);
+}
+
+.white-background {
+    -fx-background-color:white;
+}
+
+.white-fill {
+    -fx-fill:white;
+}
+
+.white-border {
+    -fx-border-color:white;
+}
+
+.black-background {
+    -fx-background-color:black;
+}
+
+.black-fill {
+    -fx-fill:black;
+}
+
+.black-border {
+    -fx-border-color:black;
+}
+
+/*
+Button stuff
+*/
+
+.button, .toggle-button, .cancel-button {
+    -fx-border-radius:5;
+}
+
+.button, .toggle-button {
+    -fx-border-color:-blue-intense;
+    -fx-background-color:white;
+}
+
+.button:focused, .toggle-button:focused {
+    -fx-background-color:-blue-intense-quarter;
+}
+
+.button:hover, .toggle-button:hover {
+    -fx-background-color:-blue-intense-half;
+}
+
+.button:pressed, .toggle-button:pressed {
+    -fx-background-color:-blue-intense-triple-quarter;
+}
+
+/*
+Cone stuff
+*/
+
+.cone-base, .cone-level1, .cone-level2, .cone-level3 {
+    -fx-stroke:black;
+    -fx-stroke-width: 0.75;
+    -fx-effect:dropshadow(two-pass-box, black, 5, 0, 0, 0);
+}
+
+.cone-base-rib, .cone-level1-rib, .cone-level2-rib {
+    -fx-stroke:black;
+    -fx-stroke-width: 0.5;
+    -fx-effect:dropshadow(two-pass-box, black, 2.5, 0, 0, 0);
+}
+
+.cone-base {
+    -fx-fill:-cone-base;
+}
+
+.cone-level1 {
+    -fx-fill:-cone-level1;
+}
+
+.cone-level2 {
+    -fx-fill:-cone-level2;
+}
+
+.cone-level3 {
+    -fx-fill:-cone-top;
+}
+
+.cone-base-rib {
+    -fx-fill:-cone-base-dimmer;
+}
+
+.cone-level1-rib {
+    -fx-fill:-cone-level1-dimmer;
+}
+
+.cone-level2-rib {
+    -fx-fill:-cone-level2-dimmer;
+}
+
+/*
+Mobile Goal Stuff
+*/
+
+.blue-mobile-goal-base, .red-mobile-goal-base, .blue-mobile-goal-mid, .red-mobile-goal-mid,
+.blue-mobile-goal-tip, .red-mobile-goal-tip {
+    -fx-stroke:#000000;
+    -fx-stroke-width:0.75;
+    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
+}
+
+.blue-mobile-goal-base {
+    -fx-fill:-blue-mobile-goal-base;
+}
+
+.blue-mobile-goal-mid {
+    -fx-fill:-blue-mobile-goal-mid;
+}
+
+.blue-mobile-goal-tip {
+    -fx-fill:-blue-mobile-goal-tip;
+}
+
+.red-mobile-goal-base {
+    -fx-fill:-red-mobile-goal-base;
+}
+
+.red-mobile-goal-mid {
+    -fx-fill:-red-mobile-goal-mid;
+}
+
+.red-mobile-goal-tip {
+    -fx-fill:-red-mobile-goal-tip;
+}
+
+.mobile-goal-insets, .mobile-goal-pockets {
+    -fx-stroke:black;
+    -fx-effect:innershadow(two-pass-box, black, 5, 0, 0, 0);
+}
+
+.mobile-goal-insets {
+    -fx-fill:rgba(0, 0, 0, 0.15);
+}
+
+.mobile-goal-pockets {
+    -fx-stroke-width:0.5;
+    -fx-fill:rgba(0, 0, 0, 0.5);
+}
+
+/*
+Other things
+*/
+
+.stationary-goal {
+    -fx-fill:-stationary-goal;
+    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
+}
+
+.field {
+    -fx-border-color:-perimeter-color;
+    -fx-border-width:5;
+}
+
+.tile {
+    -fx-fill:-tile-color;
+    -fx-stroke:black;
+}
+
+.red-alliance-tile {
+    -fx-fill:-red-alliance;
+}
+
+.blue-alliance-tile {
+    -fx-fill:-blue-alliance;
+}
+
+.blue-bar, .red-bar {
+    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
+}
+
+.blue-bar {
+    -fx-fill:-blue-bar-gradient;
+}
+
+.red-bar {
+    -fx-fill:-red-bar-gradient;
+}
+
+.tape {
+    -fx-fill:-tape;
+}
+
+.bordered {
+    -fx-border-color:black;
+    -fx-border-width:5;
+}
+
+.intense-color-progress-bar {
+    -fx-accent:-blue-intense;
+}
+
+/*
+Alliance marking
+*/
+
+.blue-alliance {
+    -fx-fill:-blue-alliance;
+}
+
+.red-alliance {
+    -fx-fill:-red-alliance;
+}
+
+.blue-alliance-backing {
+    -fx-background-color:-blue-alliance;
+}
+
+.red-alliance-backing {
+    -fx-background-color:-red-alliance;
+}
+
+.blue-alliance-border {
+    -fx-border-color:-blue-alliance;
+}
+
+.red-alliance-border {
+    -fx-border-color:-red-alliance;
+}
+
+/*
+Field mode selector
+*/
+
+.field-mode-selector {
+    -fx-background-color:white;
+    -fx-border-color:-blue-intense;
+}
+
+.field-mode-selector:focused {
+    -fx-background-color:-blue-intense-quarter;
+}
+
+.field-mode-selector:hover {
+    -fx-background-color:-blue-intense-half;
+}
+
+.field-mode-selector:pressed {
+    -fx-background-color:-blue-intense-triple-quarter;
+}
+
+/*
+Images
+*/
+
+.robot {
+    -fx-image:url(../../Images/topviewicon.png);
+    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
+}
+
+.vex-logo {
+    -fx-image:url(../../Images/VEXEDR-stacked-red-transp-1000px.png);
+}
+
+.dvhs-robotics-logo {
+    -fx-image:url(../../Images/dvhsroboticslogo2015.png);
+}
+
+.check {
+    -fx-image:url(../../Images/check.png);
+}
+
+.logo {
+    -fx-image:url(../../Images/phoenixWlogo.png);
+}
+
+/*
+Info screen things
+*/
+
+.blue-tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color:white;
+}
+
+.blue-tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color:-off-white;
+}
+
+.blue-tab-pane > .tab-header-area > .headers-region > .tab:hover {
+    -fx-background-color:-blue-intense-quarter;
+}
+
+.blue-tab-pane > .tab-header-area > .headers-region > .tab:pressed {
+    -fx-background-color:-blue-intense-triple-quarter;
+}
+
+.blue-tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color:-blue-intense-half;
+}
+
+.blue-table-view > .column-header-background > .nested-column-header > .table-column {
+    -fx-background-color:white;
+}
+
+.blue-table-view > .column-header-background > .nested-column-header > .table-column:pressed {
+    -fx-background-color:-blue-intense-half;
+}
+
+/*
+Scrollbar styling
+*/
+
+.scroll-bar:horizontal > .thumb,
+.scroll-bar:vertical > .thumb{
+    -fx-background-color:white;
+}
+
+.scroll-bar:horizontal:hover > .thumb,
+.scroll-bar:vertical:hover > .thumb {
+    -fx-background-color:-blue-intense-quarter;
+}
+
+.scroll-bar:horizontal:pressed > .thumb,
+.scroll-bar:vertical:pressed > .thumb {
+    -fx-background-color:-blue-intense-half;
+}
+
+/*
+Menubar styling
+*/
+
+.flat-menu-bar {
+    -fx-background-color:-off-white;
+}
+
+/*
+SplitPane styling
+*/
+
+
+.split-pane:horizontal > .split-pane-divider,
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color:-off-white;
+}
+
+.split-pane:horizontal > .split-pane-divider:hover,
+.split-pane:vertical > .split-pane-divider:hover {
+    -fx-background-color:-blue-intense-quarter;
+}
+
+.split-pane:horizontal > .split-pane-divider:pressed,
+.split-pane:vertical > .split-pane-divider:pressed {
+    -fx-background-color:-blue-intense-half;
+}

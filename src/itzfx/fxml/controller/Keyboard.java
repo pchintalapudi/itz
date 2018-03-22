@@ -64,7 +64,7 @@ public class Keyboard {
         List<KeyCode> row6 = Arrays.asList(KeyCode.CONTROL, KeyCode.META, KeyCode.ALT, KeyCode.SPACE, KeyCode.ROMAN_CHARACTERS,
                 KeyCode.JAPANESE_HIRAGANA, KeyCode.ALPHANUMERIC, KeyCode.ALL_CANDIDATES, KeyCode.LEFT,
                 KeyCode.DOWN, KeyCode.RIGHT, KeyCode.NUMPAD0, KeyCode.DECIMAL);
-        Iterator<KeyCode> it = Arrays.asList(row1, row2, row3, row4, row5, row6).stream().flatMap(r -> r.stream()).collect(Collectors.toList()).iterator();
+        Iterator<KeyCode> it = Arrays.asList(row1, row2, row3, row4, row5, row6).stream().flatMap(r -> r.stream()).iterator();
         mappings = keyGroup.getChildren().stream().sequential().filter(n -> n instanceof Rectangle)
                 .map(n -> (Rectangle) n).collect(Collectors.toMap(r -> it.next(), Function.identity()));
         mappings.entrySet().stream().forEach(e -> e.getValue().addEventFilter(MouseEvent.MOUSE_PRESSED, m -> {

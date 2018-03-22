@@ -42,11 +42,11 @@ public class RobotConfig {
      *
      * @return the user-entered value, or null
      */
-    public Double getSpeed() {
+    public float getSpeed() {
         if (robotSpeed.getText().isEmpty()) {
-            return null;
+            return Float.MIN_VALUE;
         } else {
-            return Double.parseDouble(robotSpeed.getText());
+            return Float.parseFloat(robotSpeed.getText());
         }
     }
 
@@ -56,11 +56,11 @@ public class RobotConfig {
      *
      * @return the user-entered value, or null
      */
-    public Double getAutostackTime() {
+    public float getAutostackTime() {
         if (this.robotAutostackTime.getText().isEmpty()) {
-            return null;
+            return Float.MIN_VALUE;
         } else {
-            return Double.parseDouble(this.robotAutostackTime.getText());
+            return Float.parseFloat(this.robotAutostackTime.getText());
         }
     }
 
@@ -70,15 +70,15 @@ public class RobotConfig {
      *
      * @return the user-entered value, or null
      */
-    public Double getStatTime() {
+    public float getStatTime() {
         if (this.robotStatTime.getText().isEmpty()) {
-            return null;
+            return Float.MIN_VALUE;
         } else {
-            return Double.parseDouble(this.robotAutostackTime.getText());
+            return Float.parseFloat(this.robotAutostackTime.getText());
         }
     }
 
-    private static class DecimalFormatter extends TextFormatter<Double> {
+    private static class DecimalFormatter extends TextFormatter<Float> {
 
         public DecimalFormatter() {
             super(c -> {

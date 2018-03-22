@@ -21,9 +21,10 @@ import itzfx.Mobile;
 import itzfx.Robot;
 import itzfx.scoring.ScoreReport;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javafx.animation.Animation;
@@ -57,15 +58,13 @@ public class Field implements AutoCloseable {
     private static final List<Field> FIELDS;
 
     static {
-        FIELDS = new LinkedList<>();
+        FIELDS = new ArrayList<>();
     }
 
     @FXML
     private BorderPane field;
     @FXML
     private Pane center;
-
-    private Future<?> scheduled;
 
     private final List<Robot> robots;
     private final List<Cone> onField;
@@ -84,14 +83,16 @@ public class Field implements AutoCloseable {
      * Constructs a new field, usually called by {@link FXMLLoader}.
      */
     public Field() {
-        robots = new LinkedList<>();
-        onField = new LinkedList<>();
-        redDriverLoads = new LinkedList<>();
-        blueDriverLoads = new LinkedList<>();
-        preloads = new LinkedList<>();
-        mogos = new LinkedList<>();
-        added = new LinkedList<>();
+        robots = new ArrayList<>();
+        onField = new ArrayList<>();
+        redDriverLoads = new ArrayList<>();
+        blueDriverLoads = new ArrayList<>();
+        preloads = new ArrayList<>();
+        mogos = new ArrayList<>();
+        added = new ArrayList<>();
     }
+
+    private PulseManager pulseManager;
 
     @FXML
     private void initialize() {
@@ -103,31 +104,105 @@ public class Field implements AutoCloseable {
         dropMogos();
         addStats();
         decorateScoringBars();
-        scheduled = Start.PULSER.scheduleAtFixedRate(() -> {
-            KeyBuffer.pulse();
-            Hitbox.pulse();
+        (pulseManager = new PulseManager(Start.PULSER)).begin();
+        Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
+        pulseManager.beginCollisionPulsing();
+        pulseManager.beginScorePulsing();
+    }
+
+    private class PulseManager {
+
+        private final ScheduledExecutorService executor;
+        private long lastTimeChecked;
+        private final Runnable inputTask = () -> {
+            if (KeyBuffer.pulse()) {
+                lastTimeChecked = System.currentTimeMillis();
+                if (this.scorePulser == null || this.collisionPulser == null) {
+                    beginScorePulsing();
+                    beginCollisionPulsing();
+                }
+            }
+        };
+        private final Runnable scoreTask = () -> {
             if (sbc != null && mode != null) {
                 Platform.runLater(() -> {
                     switch (mode) {
-                        case DRIVER_CONTROL:
-                        case FREE_PLAY:
-                            sbc.pulseMatch();
-                            break;
                         case AUTON:
                             sbc.pulseAuton();
                             break;
-                        case DRIVER_SKILLS:
-                        case PROGRAMMING_SKILLS:
-                            sbc.pulseSkills();
-                            break;
                         default:
+                            sbc.pulse();
                             break;
                     }
                 });
             }
-            getRobots().forEach(Robot::pulse);
-        }, 0, 10, TimeUnit.MILLISECONDS);
-        Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
+        };
+        private final Runnable collisionTask = Hitbox::pulse;
+        private ScheduledFuture<?> inputPulser;
+        private ScheduledFuture<?> scorePulser;
+        private ScheduledFuture<?> collisionPulser;
+        private ScheduledFuture<?> disuseMonitor;
+
+        public PulseManager(ScheduledExecutorService executor) {
+            this.executor = executor;
+        }
+
+        public void begin() {
+            if (disuseMonitor == null) {
+                inputPulser = executor.scheduleWithFixedDelay(inputTask, 0, 17, TimeUnit.MILLISECONDS);
+                disuseMonitor = executor.scheduleWithFixedDelay(() -> {
+                    if (lastTimeChecked + 1000 < System.currentTimeMillis()) {
+                        stopScorePulsing();
+                        stopCollisionPulsing();
+                    }
+                }, 10, 5, TimeUnit.SECONDS);
+                beginCollisionPulsing();
+                beginScorePulsing();
+            }
+        }
+
+        private void beginScorePulsing() {
+            if (scorePulser == null) {
+                scorePulser = executor.scheduleWithFixedDelay(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+            }
+        }
+
+        private void beginCollisionPulsing() {
+            if (collisionPulser == null) {
+                collisionPulser = executor.scheduleWithFixedDelay(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+            }
+        }
+
+        private void stopCollisionPulsing() {
+            if (collisionPulser != null) {
+                collisionPulser.cancel(false);
+                collisionPulser = null;
+            }
+        }
+
+        private void stopScorePulsing() {
+            if (scorePulser != null) {
+                scorePulser.cancel(false);
+                scorePulser = null;
+            }
+        }
+
+        private void stopInputPulsing() {
+            if (inputPulser != null) {
+                inputPulser.cancel(false);
+                inputPulser = null;
+            }
+        }
+
+        public void stop() {
+            stopInputPulsing();
+            stopScorePulsing();
+            stopCollisionPulsing();
+            if (disuseMonitor != null) {
+                disuseMonitor.cancel(false);
+                disuseMonitor = null;
+            }
+        }
     }
 
     private void decorateScoringBars() {
@@ -182,10 +257,10 @@ public class Field implements AutoCloseable {
     private StackPane red10;
 
     private void decorate10(Node check, boolean red) {
-        for (double i = 2.5; i < 325; i += 10) {
-            double a = 482.5 + i / Math.sqrt(2);
-            double b = 2.5 + i / Math.sqrt(2);
-            Hitbox h = new Hitbox(2.5, Hitbox.CollisionType.WEAK, check, Double.POSITIVE_INFINITY);
+        for (float i = 2.5f; i < 325; i += 10) {
+            float a = 482.5f + i / (float) Math.sqrt(2);
+            float b = 2.5f + i / (float) Math.sqrt(2);
+            Hitbox h = new Hitbox(2.5f, Hitbox.CollisionType.WEAK, check, Float.POSITIVE_INFINITY);
             if (!red) {
                 h.setXSupplier(() -> a);
                 h.setYSupplier(() -> b);
@@ -218,15 +293,15 @@ public class Field implements AutoCloseable {
     private void dropLeftCones() {
         onField.addAll(Arrays.asList(
                 new Cone(15, 15),
-                new Cone(15, 67.5),
+                new Cone(15, 67.5f),
                 new Cone(15, 120),
                 new Cone(15, 180),
                 new Cone(15, 240),
-                new Cone(67.5, 15),
-                new Cone(67.5, 67.5),
-                new Cone(67.5, 120),
+                new Cone(67.5f, 15),
+                new Cone(67.5f, 67.5f),
+                new Cone(67.5f, 120),
                 new Cone(120, 15),
-                new Cone(120, 67.5),
+                new Cone(120, 67.5f),
                 new Cone(120, 120),
                 new Cone(120, 180),
                 new Cone(120, 240),
@@ -249,13 +324,13 @@ public class Field implements AutoCloseable {
                 new Cone(540, 705),
                 new Cone(600, 600),
                 new Cone(600, 705),
-                new Cone(652.5, 600),
-                new Cone(652.5, 705),
+                new Cone(652.5f, 600),
+                new Cone(652.5f, 705),
                 new Cone(705, 600),
                 new Cone(705, 705),
-                new Cone(600, 652.5),
-                new Cone(652.5, 652.5),
-                new Cone(705, 652.5),
+                new Cone(600, 652.5f),
+                new Cone(652.5f, 652.5f),
+                new Cone(705, 652.5f),
                 new Cone(600, 540),
                 new Cone(705, 540),
                 new Cone(600, 480),
@@ -313,28 +388,28 @@ public class Field implements AutoCloseable {
 
     private void dropBlueMogos() {
         mogos.addAll(Arrays.asList(
-                new BlueMobileGoal(180, 67.5),
+                new BlueMobileGoal(180, 67.5f),
                 new BlueMobileGoal(240, 360),
                 new BlueMobileGoal(360, 480),
-                new BlueMobileGoal(652.5, 540)
+                new BlueMobileGoal(652.5f, 540)
         ));
     }
 
     private void dropRedMogos() {
         mogos.addAll(Arrays.asList(
-                new RedMobileGoal(67.5, 180),
+                new RedMobileGoal(67.5f, 180),
                 new RedMobileGoal(360, 240),
                 new RedMobileGoal(480, 360),
-                new RedMobileGoal(540, 652.5)
+                new RedMobileGoal(540, 652.5f)
         ));
     }
 
     private void redLoader() {
-        rLoad = new Loader(0, 300 - 13.75, true);
+        rLoad = new Loader(0, 300 - 13.75f, true);
     }
 
     private void blueLoader() {
-        bLoad = new Loader(300 - 13.75, 0, false);
+        bLoad = new Loader(300 - 13.75f, 0, false);
         bLoad.getNode().setRotate(90);
     }
 
@@ -394,9 +469,16 @@ public class Field implements AutoCloseable {
             onField.forEach(Cone::reset);
             load(getRobots().get(0));
             load(getRobots().get(1));
-            List<Cone> c = new LinkedList<>(preloads);
-            getRobots().forEach(r -> r.forceIntake(preloads.remove(0)));
+            List<Cone> c = new ArrayList<>(preloads);
+            getRobots().forEach(r -> {
+                r.forceIntake(preloads.remove(0));
+                if (r.getController().equals(KeyControl.Defaults.BLANK.getKC())) {
+                    r.vanish();
+                }
+                r.getNode().setRotate(r.getNode().getRotate() + 0.01);
+            });
             preloads.addAll(c);
+            pulseManager.beginScorePulsing();
         } catch (Exception ex) {
         }
     }
@@ -482,11 +564,14 @@ public class Field implements AutoCloseable {
      * @param pointingVector the object representing the approximate distance
      * and direction relative to the center point in which to look for a mobile
      * goal.
+     * @param red if the robot looking for a mobile goal is red. This determines
+     * if during driver control a mobile goal is eligible to be picked up.
      * @return a mobile goal, if one is nearby the indicated point. If not, this
      * method returns null.
      */
-    public MobileGoal huntMogo(Point2D center, Point2D pointingVector) {
+    public MobileGoal huntMogo(Point2D center, Point2D pointingVector, boolean red) {
         return mogos.stream()
+                .filter(m -> (mode != ControlMode.DRIVER_CONTROL && mode != ControlMode.AUTON) || m.isRed() == red)
                 .filter(m -> !m.isVanished())
                 .filter(m -> {
                     Point2D realVector = new Point2D(m.getCenterX(), m.getCenterY()).subtract(center);
@@ -525,13 +610,37 @@ public class Field implements AutoCloseable {
      * @param pointingVector the object representing the approximate distance
      * and direction relative to the center point in which to look for a
      * stationary goal.
+     * @param red the color of the robot looking for a stationary goal. This
+     * determines if the stationary goal being looked for is of the same team as
+     * the robot.
      * @return a stationary goal, if one is nearby the indicated point. If not,
      * this method returns null.
      */
-    public StationaryGoal huntStat(Point2D center, Point2D pointingVector) {
+    public StationaryGoal huntStat(Point2D center, Point2D pointingVector, boolean red) {
+        if (mode == ControlMode.AUTON || mode == ControlMode.DRIVER_CONTROL) {
+            if (red) {
+                return checkRedStat(center, pointingVector);
+            } else {
+                return checkBlueStat(center, pointingVector);
+            }
+        } else {
+            StationaryGoal sg;
+            if ((sg = checkRedStat(center, pointingVector)) == null) {
+                sg = checkBlueStat(center, pointingVector);
+            }
+            return sg;
+        }
+    }
+
+    private StationaryGoal checkRedStat(Point2D center, Point2D pointingVector) {
         if (Math.abs(240 - center.getX() - pointingVector.getX()) < 20 && Math.abs(480 - center.getY() - pointingVector.getY()) < 20) {
             return rStat;
-        } else if (Math.abs(240 - center.getY() - pointingVector.getY()) < 20 && Math.abs(480 - center.getX() - pointingVector.getX()) < 20) {
+        }
+        return null;
+    }
+
+    private StationaryGoal checkBlueStat(Point2D center, Point2D pointingVector) {
+        if (Math.abs(240 - center.getY() - pointingVector.getY()) < 20 && Math.abs(480 - center.getX() - pointingVector.getX()) < 20) {
             return bStat;
         }
         return null;
@@ -614,6 +723,7 @@ public class Field implements AutoCloseable {
      */
     public void inject(ScoringBoxController sbc) {
         this.sbc = sbc;
+        sbc.getControlModeSelectionModel().selectedItemProperty().addListener((o, b, s) -> doSetMode(s));
         System.out.println(sbc);
         sbc.setAggregator(scores);
         time = sbc.getTime();
@@ -636,6 +746,10 @@ public class Field implements AutoCloseable {
      * @param cm the mode to set
      */
     public void setMode(ControlMode cm) {
+        sbc.getControlModeSelectionModel().select(cm);
+    }
+
+    private void doSetMode(ControlMode cm) {
         this.mode = cm;
         reregisterMode(cm);
         switchToDriver = false;
@@ -736,16 +850,32 @@ public class Field implements AutoCloseable {
         timer.getKeyFrames().clear();
         if (time != null && cm != null) {
             time.set(cm.getTime());
-        }
-        timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), this::lockout, new KeyValue(time, 0)));
-        KeyBuffer.unlock();
-        getRobots().stream().peek(Robot::resume).forEach(Robot::prime);
-        if (cm == ControlMode.AUTON || cm == ControlMode.PROGRAMMING_SKILLS) {
-            getRobots().stream().peek(Robot::eraseController).forEach(Robot::runProgram);
-        } else {
-            getRobots().forEach(Robot::driverControl);
-        }
-        if (cm == ControlMode.DRIVER_SKILLS || cm == ControlMode.PROGRAMMING_SKILLS) {
+            timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), this::lockout, new KeyValue(time, 0)));
+            KeyBuffer.unlock();
+            getRobots().stream().peek(Robot::resume).forEach(Robot::prime);
+            switch (cm) {
+                case AUTON:
+                case PROGRAMMING_SKILLS:
+                    getRobots().forEach(r -> {
+                        r.eraseController();
+                        r.prime();
+                    });
+                    break;
+                default:
+                    getRobots().forEach(Robot::driverControl);
+            }
+            switch (cm) {
+                case DRIVER_SKILLS:
+                case PROGRAMMING_SKILLS:
+                    sbc.emphasizeSkills();
+                    break;
+                case DRIVER_CONTROL:
+                case AUTON:
+                    sbc.emphasizeTeams();
+                    break;
+                default:
+                    sbc.emphasizeNone();
+            }
         }
     }
 
@@ -757,7 +887,7 @@ public class Field implements AutoCloseable {
     public void close() {
         timer.stop();
         Hitbox.clear();
-        scheduled.cancel(true);
+        pulseManager.stop();
     }
 
     /**
@@ -768,8 +898,9 @@ public class Field implements AutoCloseable {
      * @param sceneY the scene y coordinate at which the cone should be placed
      * @return the newly generated cone
      */
-    public Cone generateCone(double sceneX, double sceneY) {
-        Cone c = new Cone(center.sceneToLocal(sceneX, sceneY).getX(), center.sceneToLocal(sceneX, sceneY).getY());
+    public Cone generateCone(float sceneX, float sceneY) {
+        Point2D localCenter = center.sceneToLocal(sceneX, sceneY);
+        Cone c = new Cone((float) localCenter.getX(), (float) localCenter.getY());
         added.add(c);
         center.getChildren().add(c.getNode());
         return c;
@@ -786,9 +917,9 @@ public class Field implements AutoCloseable {
      * @param red the color of the mobile goal (true if red, false if blue)
      * @return the newly generated mobile goal
      */
-    public MobileGoal generateMobileGoal(double sceneX, double sceneY, boolean red) {
+    public MobileGoal generateMobileGoal(float sceneX, float sceneY, boolean red) {
         Point2D centerMogo = center.sceneToLocal(sceneX, sceneY);
-        MobileGoal mg = red ? new RedMobileGoal(centerMogo.getX(), centerMogo.getY()) : new BlueMobileGoal(centerMogo.getX(), centerMogo.getY());
+        MobileGoal mg = red ? new RedMobileGoal((float) centerMogo.getX(), (float) centerMogo.getY()) : new BlueMobileGoal((float) centerMogo.getX(), (float) centerMogo.getY());
         added.add(mg);
         center.getChildren().add(mg.getNode());
         return mg;

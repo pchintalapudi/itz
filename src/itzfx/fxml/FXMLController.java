@@ -9,7 +9,6 @@ import itzfx.Start;
 import itzfx.ControlMode;
 import itzfx.Hitbox;
 import itzfx.Robot;
-import itzfx.data.FileUI;
 import itzfx.preload.Prestart;
 import java.io.IOException;
 import java.util.Arrays;
@@ -31,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -65,18 +65,25 @@ public class FXMLController implements AutoCloseable {
     private Menu robotMenu;
 
     @FXML
+    private AnchorPane robotInfo;
+    @FXML
+    private AnchorPane robotData;
+    @FXML
+    private ImageView logo;
+    @FXML
+    private Pane fieldPane;
+
+    @FXML
     private void initialize() {
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         field = (Field) ((Pane) ((BorderPane) ((Pane) root.getCenter()).getChildren().get(0)).getCenter()).getChildren().get(0).getUserData();
         Hitbox.VISIBLE.bind(showHitboxes.selectedProperty());
         sbc = (ScoringBoxController) right.getChildrenUnmodifiable().get(0).getUserData();
         field.inject(sbc);
-        field.getRobots().forEach(r -> r.recordingProperty().addListener((o, b, s) -> {
-            if (!s) {
-                FileUI.saveRerun(r, root.getScene().getWindow());
-            }
-        }));
+        logo.rotateProperty().bind(fieldPane.rotateProperty().negate());
         List<Robot> robots = field.getRobots();
+        ((RobotInfoController) robotInfo.getUserData()).injectRobots(robots);
+        ((RobotDataController) robotData.getUserData()).injectRobots(robots);
         for (int i = 0; i < robots.size(); i++) {
             RobotMenu controller = new RobotMenu(robots.get(i), "Robot " + (i + 1));
             FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("RobotMenu.fxml"));
@@ -89,7 +96,7 @@ public class FXMLController implements AutoCloseable {
             }
         }
     }
-    
+
     public Field getField() {
         return field;
     }
@@ -173,7 +180,7 @@ public class FXMLController implements AutoCloseable {
 
     @FXML
     private CheckMenuItem showHitboxes;
-    
+
     @FXML
     private void about() {
         FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("About.fxml"));
@@ -187,6 +194,10 @@ public class FXMLController implements AutoCloseable {
         } catch (IOException ex) {
             Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void setRotate(double rotate) {
+        fieldPane.setRotate(rotate);
     }
 
     /**

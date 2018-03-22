@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Arc?>
 <?import javafx.scene.shape.Circle?>
 
-<Pane fx:id="mobile" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onDragged" onMousePressed="#onPress" prefHeight="50.0" prefWidth="50.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.GameObjects.MobileController">
+<Pane fx:id="mobile" cache="true" cacheHint="SPEED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onDragged" onMousePressed="#onPress" prefHeight="50.0" prefWidth="50.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.GameObjects.MobileController">
     <children>
         <Circle layoutX="25.0" layoutY="25.0" radius="25.0" stroke="BLACK" strokeType="INSIDE">
             <effect>
@@ -19,7 +19,6 @@
                 <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                     <stops>
                         <Stop color="#4444ff" />
-                        <Stop color="#4444ff" offset="0.0075" />
                         <Stop color="#2d2db4" offset="1.0" />
                     </stops>
                 </RadialGradient>

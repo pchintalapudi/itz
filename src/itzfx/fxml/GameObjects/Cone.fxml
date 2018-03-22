@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Arc?>
 <?import javafx.scene.shape.Circle?>
 
-<Pane fx:id="mobile" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onDragged" onMousePressed="#onPress" prefHeight="30.0" prefWidth="30.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.GameObjects.MobileController">
+<Pane fx:id="mobile" cache="true" cacheHint="SPEED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onDragged" onMousePressed="#onPress" prefHeight="30.0" prefWidth="30.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.GameObjects.MobileController">
     <children>
         <Circle layoutX="15.0" layoutY="15.0" radius="15.0" stroke="BLACK" strokeType="INSIDE">
             <effect>
@@ -24,114 +24,116 @@
                 </RadialGradient>
             </fill>
         </Circle>
-      <Group layoutX="15.0" layoutY="15.0">
-         <children>
-            <Arc fill="YELLOW" length="20.0" radiusX="15.0" radiusY="15.0" startAngle="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-            <Arc fill="YELLOW" length="20.0" radiusX="15.0" radiusY="15.0" startAngle="125.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-            <Arc fill="YELLOW" length="20.0" radiusX="15.0" radiusY="15.0" startAngle="215.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-            <Arc fill="YELLOW" length="20.0" radiusX="15.0" radiusY="15.0" startAngle="305.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-         </children>
-      </Group>
+        <Group layoutX="15.0" layoutY="15.0">
+            <children>
+                <Arc fill="YELLOW" length="20.0" radiusX="15.0" radiusY="15.0" startAngle="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+                <Arc fill="YELLOW" length="20.0" radiusX="15.0" radiusY="15.0" startAngle="125.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+                <Arc fill="YELLOW" length="20.0" radiusX="15.0" radiusY="15.0" startAngle="215.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+                <Arc fill="YELLOW" length="20.0" radiusX="15.0" radiusY="15.0" startAngle="305.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+            </children>
+        </Group>
         <Circle layoutX="15.0" layoutY="15.0" radius="11.25" stroke="BLACK" strokeType="INSIDE">
-         <fill>
-            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop color="WHITE" />
-                  <Stop color="YELLOW" offset="1.0" />
-               </stops>
-            </RadialGradient>
-         </fill>
-         <effect>
-            <DropShadow color="#00000080" />
-         </effect></Circle>
-      <Group layoutX="15.0" layoutY="15.0" rotate="45.0">
-         <children>
-            <Arc fill="YELLOW" length="20.0" radiusX="11.25" radiusY="11.25" startAngle="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-            <Arc fill="YELLOW" length="20.0" radiusX="11.25" radiusY="11.25" startAngle="125.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-            <Arc fill="YELLOW" length="20.0" radiusX="11.25" radiusY="11.25" startAngle="215.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-            <Arc fill="YELLOW" length="20.0" radiusX="11.25" radiusY="11.25" startAngle="305.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-         </children>
-      </Group>
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop color="WHITE" />
+                        <Stop color="YELLOW" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </fill>
+            <effect>
+                <DropShadow color="#00000080" />
+            </effect>
+        </Circle>
+        <Group layoutX="15.0" layoutY="15.0" rotate="45.0">
+            <children>
+                <Arc fill="YELLOW" length="20.0" radiusX="11.25" radiusY="11.25" startAngle="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+                <Arc fill="YELLOW" length="20.0" radiusX="11.25" radiusY="11.25" startAngle="125.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+                <Arc fill="YELLOW" length="20.0" radiusX="11.25" radiusY="11.25" startAngle="215.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+                <Arc fill="YELLOW" length="20.0" radiusX="11.25" radiusY="11.25" startAngle="305.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+            </children>
+        </Group>
         <Circle layoutX="15.0" layoutY="15.0" radius="7.5" stroke="BLACK" strokeType="INSIDE">
-         <fill>
-            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop color="WHITE" />
-                  <Stop color="YELLOW" offset="1.0" />
-               </stops>
-            </RadialGradient>
-         </fill>
-         <effect>
-            <DropShadow color="#00000080" />
-         </effect></Circle>
-      <Group layoutX="15.0" layoutY="15.0">
-         <children>
-            <Arc fill="YELLOW" length="20.0" radiusX="7.5" radiusY="7.5" startAngle="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-            <Arc fill="YELLOW" length="20.0" radiusX="7.5" radiusY="7.5" startAngle="125.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-            <Arc fill="YELLOW" length="20.0" radiusX="7.5" radiusY="7.5" startAngle="215.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-            <Arc fill="YELLOW" length="20.0" radiusX="7.5" radiusY="7.5" startAngle="305.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
-               <effect>
-                  <ColorAdjust brightness="-0.25" />
-               </effect>
-            </Arc>
-         </children>
-      </Group>
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop color="WHITE" />
+                        <Stop color="YELLOW" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </fill>
+            <effect>
+                <DropShadow color="#00000080" />
+            </effect>
+        </Circle>
+        <Group layoutX="15.0" layoutY="15.0">
+            <children>
+                <Arc fill="YELLOW" length="20.0" radiusX="7.5" radiusY="7.5" startAngle="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+                <Arc fill="YELLOW" length="20.0" radiusX="7.5" radiusY="7.5" startAngle="125.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+                <Arc fill="YELLOW" length="20.0" radiusX="7.5" radiusY="7.5" startAngle="215.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+                <Arc fill="YELLOW" length="20.0" radiusX="7.5" radiusY="7.5" startAngle="305.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" type="ROUND">
+                    <effect>
+                        <ColorAdjust brightness="-0.25" />
+                    </effect>
+                </Arc>
+            </children>
+        </Group>
         <Circle layoutX="15.0" layoutY="15.0" radius="3.25" stroke="BLACK" strokeType="INSIDE">
-         <fill>
-            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop color="WHITE" />
-                  <Stop color="YELLOW" offset="1.0" />
-               </stops>
-            </RadialGradient>
-         </fill>
-         <effect>
-            <DropShadow color="#00000080" />
-         </effect>
-      </Circle>
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop color="WHITE" />
+                        <Stop color="YELLOW" offset="1.0" />
+                    </stops>
+                </RadialGradient>
+            </fill>
+            <effect>
+                <DropShadow color="#00000080" />
+            </effect>
+        </Circle>
     </children>
 </Pane>

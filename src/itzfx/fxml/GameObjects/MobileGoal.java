@@ -11,7 +11,7 @@ import itzfx.scoring.ScoreType;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.Scoreable;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -47,9 +47,9 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
      * @param layoutX the specified x coordinate
      * @param layoutY the specified y coordinate
      */
-    protected MobileGoal(double layoutX, double layoutY) {
+    protected MobileGoal(float layoutX, float layoutY) {
         super(layoutX, layoutY);
-        this.stacked = FXCollections.observableList(new LinkedList<>());
+        this.stacked = FXCollections.observableList(new ArrayList<>());
         this.stackLabel = new Text();
         sr = new ScoreReport(this);
         countModifier = new SimpleIntegerProperty();

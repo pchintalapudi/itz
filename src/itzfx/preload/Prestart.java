@@ -60,7 +60,6 @@ public class Prestart extends Preloader {
             FXMLLoader loader = new FXMLLoader(Prestart.class.getResource("Prestart.fxml"));
             loader.setController(this);
             Parent p = loader.load();
-            p.getStylesheets().add("/itzfx/fxml/Resources.css");
             stage.setScene(new Scene(p));
         } catch (IOException ex) {
             Logger.getLogger(Prestart.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,9 +89,12 @@ public class Prestart extends Preloader {
     private static final List<String> FALSE_FILES = Arrays.asList("Core-files",
             "JavaFX 8.0", "sun.misc.Unsafe", "Netbeans IDE", "Eclipse", "5776E",
             "DVHS Robotics", "College Essays", "Lol you saw this", "Give me the monitor",
-            "Got into MIT", "\"The physics\"", "Robots are 18 pounds", "Broken cortexes",
+            "Got into MIT", "\"The physics\"", "Robots are 21 pounds", "Broken cortexes",
             "V5", "Rerun works!!", "Some random code", "You can't see me", "Why are you even reading this?",
-            "Just get on with life", "'; DROP TABLE bots;");
+            "Just get on with life", "'; DROP TABLE bots;", "Waitlisted John Hopkin",
+            "UCSD Yield Protected", "Learn to code boi", "Sleepy people are watching",
+            "USABO Finalist", "chinpreme.js", "I should be working on my essay",
+            "This list is too long");
 
     private static Iterator<String> ffIterator = FALSE_FILES.iterator();
 

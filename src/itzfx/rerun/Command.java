@@ -5,8 +5,8 @@
  */
 package itzfx.rerun;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
@@ -105,6 +105,6 @@ public enum Command {
      * @return the newly decoded FIFO collection of commands
      */
     public static Queue<List<Command>> decode(List<String> commands) {
-        return commands.stream().map(s -> s.split(" ")).map(Arrays::asList).map(l -> l.stream().map(Command::valueOf).collect(Collectors.toList())).collect(Collectors.toCollection(LinkedList::new));
+        return commands.stream().map(s -> s.split(" ")).map(Arrays::asList).map(l -> l.stream().map(Command::valueOf).collect(Collectors.toList())).collect(Collectors.toCollection(ArrayDeque::new));
     }
 }

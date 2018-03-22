@@ -5,8 +5,10 @@
  */
 package itzfx.fxml;
 
+import itzfx.ControlMode;
 import itzfx.fxml.timing.Clock;
 import itzfx.scoring.ScoreAggregator;
+import java.util.Collections;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -14,6 +16,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.SelectionModel;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
@@ -37,12 +42,15 @@ public class ScoringBoxController {
 
     @FXML
     private Text skillsScore;
-    
-    @FXML
-    private Parent skillsPane;
 
     @FXML
     private AnchorPane timerPane;
+
+    @FXML
+    private SplitPane scoreDivider;
+    
+    @FXML
+    private ComboBox<ControlMode> comboBox;
 
     private Clock clock;
 
@@ -69,6 +77,8 @@ public class ScoringBoxController {
         skillsScore.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sScore.get()), sScore));
         root.setUserData(this);
         clock = (Clock) timerPane.getUserData();
+        Collections.addAll(comboBox.getItems(), ControlMode.values());
+        comboBox.getSelectionModel().select(ControlMode.FREE_PLAY);
     }
 
     /**
@@ -115,31 +125,46 @@ public class ScoringBoxController {
      */
     public void determineAutonWinner() {
         sa.determineAutonWinner();
-        skillsPane.setVisible(false);
     }
 
     /**
      * Updates the displayed scores using a calculation that generates scores
      * during the driver control period.
      */
-    public void pulseMatch() {
+    public void pulse() {
         int[] temp = sa.calculateMatch();
         rScore.set(temp[0]);
         bScore.set(temp[1]);
-        skillsPane.setVisible(false);
+        sScore.set(sa.calculateSkills());
     }
 
-    public void pulseSkills() {
-        int temp = sa.calculateSkills();
-        sScore.set(temp);
-        skillsPane.setVisible(true);
+    public void emphasizeSkills() {
+        scoreDivider.setDividerPositions(0);
+    }
+
+    public void emphasizeTeams() {
+        scoreDivider.setDividerPositions(1);
+    }
+
+    public void emphasizeNone() {
+        scoreDivider.setDividerPositions(.667f);
     }
     
+    public SelectionModel<ControlMode> getControlModeSelectionModel() {
+        return comboBox.getSelectionModel();
+    }
+
     /**
      * Displays a score sheet, formatted like an actual referee's score sheet.
      * Does not work for skills score
      */
-    public void generateReport() {
+    @FXML
+    private void generateReport() {
         sa.showReport();
+    }
+
+    @FXML
+    private void generateSkillsReport() {
+        sa.showSkillsReport();
     }
 }

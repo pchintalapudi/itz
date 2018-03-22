@@ -22,17 +22,14 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Preloader.ProgressNotification;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -71,10 +68,10 @@ public class Start extends Application {
     public void init() {
         try {
             super.notifyPreloader(new ProgressNotification(0));
-            FXMLLoader loader = new FXMLLoader(Start.class.getResource("/itzfx/fxml/FXML.fxml"));
+            FXMLLoader loader = new FXMLLoader(Start.class.getResource("fxml/FXML.fxml"));
             p = loader.load();
-            p.getStylesheets().add("/itzfx/fxml/Resources.css");
-            addZoomListeners(p);
+            p.setOnMousePressed(m -> p.requestFocus());
+//            addZoomListeners(p);
             fxml = loader.getController();
             fxml.inject(this);
             Thread current = Thread.currentThread();
@@ -90,11 +87,11 @@ public class Start extends Application {
     }
 
     private static void addZoomListeners(Node n) {
-        final double minZoomSoft, minZoomHard;
-        final double maxZoomSoft, maxZoomHard;
-        minZoomHard = 0.5;
-        minZoomSoft = 0.71;
-        maxZoomSoft = 1.41;
+        final float minZoomSoft, minZoomHard;
+        final float maxZoomSoft, maxZoomHard;
+        minZoomHard = 0.5f;
+        minZoomSoft = 0.71f;
+        maxZoomSoft = 1.41f;
         maxZoomHard = 2;
         n.scaleYProperty().bindBidirectional(n.scaleXProperty());
         n.setOnZoom(ze -> {
@@ -114,7 +111,7 @@ public class Start extends Application {
         cancelSingleFingerScroll(n);
     }
 
-    private static void restoreZoom(double restorationValue, DoubleProperty scale) {
+    private static void restoreZoom(float restorationValue, DoubleProperty scale) {
         Timeline tl = new Timeline();
         tl.getKeyFrames().add(new KeyFrame(Duration.millis(200), e -> tl.stop(), new KeyValue(scale, restorationValue)));
         tl.play();
@@ -152,21 +149,44 @@ public class Start extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("In The Zone (ITZ)");
         primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("Images/icon.png")));
+        final float width = 1600, height = 900;
         AnchorPane.setLeftAnchor(p, 0d);
         AnchorPane.setTopAnchor(p, 0d);
         AnchorPane.setRightAnchor(p, 0d);
         AnchorPane.setBottomAnchor(p, 0d);
-        AnchorPane windowScale = new AnchorPane(new Group(p));
-        StackPane root = new StackPane(windowScale);
-        NumberBinding maxScale = Bindings.min(root.widthProperty().divide(1500),
-                                      root.heightProperty().divide(1000));
-        windowScale.scaleXProperty().bind(maxScale);
-        windowScale.scaleYProperty().bind(maxScale);
-        Scene scene = new Scene(root, 1500, 1000);
+        AnchorPane windowScale = new AnchorPane(p);
+        Scene scene = new Scene(windowScale, width, height);
+        addRotateListeners(scene);
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
-        System.out.println(Runtime.getRuntime().availableProcessors() + " " + Thread.activeCount());
+    }
+
+    private void addRotateListeners(Scene scene) {
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, k -> {
+            if (k.isAltDown() && k.isShiftDown() && k.getCode() != null) {
+                switch (k.getCode()) {
+                    case RIGHT:
+                        fxml.setRotate(90);
+                        k.consume();
+                        break;
+                    case LEFT:
+                        fxml.setRotate(-90);
+                        k.consume();
+                        break;
+                    case UP:
+                        fxml.setRotate(0);
+                        k.consume();
+                        break;
+                    case DOWN:
+                        fxml.setRotate(180);
+                        k.consume();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     /**

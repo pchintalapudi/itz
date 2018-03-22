@@ -10,7 +10,7 @@ import itzfx.scoring.ScoreType;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.Scoreable;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -50,8 +50,8 @@ public final class StationaryGoal implements Scoreable {
      * @param layoutY
      * @param red
      */
-    public StationaryGoal(double layoutX, double layoutY, boolean red) {
-        this.stacked = FXCollections.observableList(new LinkedList<>());
+    public StationaryGoal(float layoutX, float layoutY, boolean red) {
+        this.stacked = FXCollections.observableList(new ArrayList<>());
         this.countModifier = new SimpleIntegerProperty();
         Label stackLabel = new Label();
         statGoal = new StackPane();
@@ -65,7 +65,7 @@ public final class StationaryGoal implements Scoreable {
         });
         stackLabel.visibleProperty().bind(Bindings.createBooleanBinding(() -> stacked.size() + countModifier.get() > 0, stacked, countModifier));
         stackLabel.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(stacked.size() + countModifier.intValue()), stacked, countModifier));
-        this.hitbox = new Hitbox(12.5, Hitbox.CollisionType.STRONG, statGoal, Double.POSITIVE_INFINITY);
+        this.hitbox = new Hitbox(12.5f, Hitbox.CollisionType.STRONG, statGoal, Float.POSITIVE_INFINITY);
         Hitbox.register(hitbox);
         try {
             statGoal.getChildren().add(FXMLLoader.load(StationaryGoal.class.getResource("StationaryGoal.fxml")));

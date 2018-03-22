@@ -7,8 +7,9 @@ package itzfx.scoring;
 
 import itzfx.fxml.FXMLController;
 import itzfx.fxml.ScoreSheetController;
+import itzfx.fxml.SkillsScoreSheetController;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -20,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -55,7 +57,7 @@ public class ScoreAggregator {
      * Constructs a new ScoreAggregator.
      */
     public ScoreAggregator() {
-        reports = new LinkedList<>();
+        reports = new ArrayList<>();
     }
 
     /**
@@ -103,7 +105,7 @@ public class ScoreAggregator {
         });
         return new AtomicInteger[]{aiR, aiB};
     }
-    
+
     private AtomicInteger calculateSkillsScore() {
         AtomicInteger score = new AtomicInteger();
         reports.forEach(sr -> {
@@ -123,20 +125,20 @@ public class ScoreAggregator {
     public int[] calculateAuton() {
         AtomicInteger aiR = new AtomicInteger();
         AtomicInteger aiB = new AtomicInteger();
-        reports.stream().peek(sr -> {
+        reports.forEach(sr -> {
             if (sr.getOwner().isRed()) {
                 aiR.addAndGet(sr.getOwner().score());
             } else {
                 aiB.addAndGet(sr.getOwner().score());
             }
-        }).filter(sr -> sr.getType() != ScoreType.PARKING)
-                .forEach(sr -> {
-                    if (sr.getOwner().isRed()) {
-                        aiR.addAndGet(sr.getType().getScore());
-                    } else {
-                        aiB.addAndGet(sr.getType().getScore());
-                    }
-                });
+            if (sr.getType() != ScoreType.PARKING) {
+                if (sr.getOwner().isRed()) {
+                    aiR.addAndGet(sr.getType().getScore());
+                } else {
+                    aiB.addAndGet(sr.getType().getScore());
+                }
+            }
+        });
         highStack(aiR, aiB);
         return new int[]{aiR.get(), aiB.get()};
     }
@@ -306,20 +308,43 @@ public class ScoreAggregator {
         FXMLLoader loader = new FXMLLoader(ScoreAggregator.class.getResource("/itzfx/fxml/ScoreSheet.fxml"));
         try {
             Pane load = (loader.load());
-            load.getStylesheets().add("/itzfx/fxml/Resources.css");
             StackPane report = new StackPane(load);
             report.setPadding(new Insets(10));
             ScoreSheetController ssc = loader.getController();
             ssc.update(new int[]{red20, blue20, red10, blue10, red5, blue5, redCones, blueCones, redStacks, blueStacks, auton, redPark, bluePark});
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
-            System.out.println(show.getDialogPane().getChildren());
+            show.setTitle("Match Score Report");
+            show.setHeaderText("Match Report");
             show.getDialogPane().setContent(report);
             show.getDialogPane().getChildren().stream().peek(n -> n.setStyle("-fx-background-color:#ffffff")).filter(n -> n instanceof ButtonBar).map(n -> (ButtonBar) n)
                     .flatMap(bb -> bb.getButtons().stream())
                     .filter(n -> n instanceof Button).map(n -> (Button) n).peek(b -> b.getStyleClass().clear())
-                    .peek(b -> b.getStyleClass().add("button")).peek(b -> b.getStylesheets().add("itzfx/fxml/Resources.css"))
-                    .filter(b -> b.getText().equals("Cancel")).forEach(b -> b.getStyleClass().add("cancel-button"));
-            show.getButtonTypes().get(0);
+                    .peek(b -> b.getStyleClass().add("button")).filter(b -> b.getText().equals("Cancel"))
+                    .forEach(b -> b.getStyleClass().add("cancel-button"));
+            show.showAndWait().filter(bt -> bt.getButtonData() == ButtonData.OK_DONE)
+                    .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(report)));
+        } catch (IOException ex) {
+            Logger.getLogger(ScoreAggregator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void showSkillsReport() {
+        updateReport();
+        FXMLLoader loader = new FXMLLoader(ScoreAggregator.class.getResource("/itzfx/fxml/SkillsScoreSheet.fxml"));
+        try {
+            Pane load = (loader.load());
+            StackPane report = new StackPane(load);
+            report.setPadding(new Insets(10));
+            loader.<SkillsScoreSheetController>getController().update(new int[]{red20 + blue20, red10 + blue10, red5 + blue5, redCones + blueCones, redPark + bluePark});
+            Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
+            show.setTitle("Skills Score Report");
+            show.setHeaderText("Skills Report");
+            show.getDialogPane().setContent(report);
+            show.getDialogPane().getChildren().stream().peek(n -> n.setStyle("-fx-background-color:#ffffff")).filter(n -> n instanceof ButtonBar).map(n -> (ButtonBar) n)
+                    .flatMap(bb -> bb.getButtons().stream())
+                    .filter(n -> n instanceof Button).map(n -> (Button) n).peek(b -> b.getStyleClass().clear())
+                    .peek(b -> b.getStyleClass().add("button")).filter(b -> b.getText().equals("Cancel"))
+                    .forEach(b -> b.getStyleClass().add("cancel-button"));
             show.showAndWait().filter(bt -> bt.getButtonData() == ButtonData.OK_DONE)
                     .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(report)));
         } catch (IOException ex) {

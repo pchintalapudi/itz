@@ -19,32 +19,34 @@ public enum ControlMode {
      * The control mode representing driver control, with a length of 105
      * seconds (1:45).
      */
-    DRIVER_CONTROL(105),
+    DRIVER_CONTROL(105, "Driver Control"),
     /**
      * The control mode representing the autonomous period, with a length of 15
      * seconds.
      */
-    AUTON(15),
+    AUTON(15, "Autonomous"),
     /**
      * The control mode representing the driver skills period, with a length of
      * 60 seconds.
      */
-    DRIVER_SKILLS(60),
+    DRIVER_SKILLS(60, "Driver Skills"),
     /**
      * The control mode representing the programming skills period, with a
      * length of 60 seconds.
      */
-    PROGRAMMING_SKILLS(60),
+    PROGRAMMING_SKILLS(60, "Programming Skills"),
     /**
      * The control mode representing an untimed game, with the idea of just pure
      * practice.
      */
-    FREE_PLAY(0);
+    FREE_PLAY(0, "Free Play");
 
     private final int seconds;
+    private final String userFriendlyString;
 
-    private ControlMode(int seconds) {
+    private ControlMode(int seconds, String userFriendlyString) {
         this.seconds = seconds;
+        this.userFriendlyString = userFriendlyString;
     }
 
     /**
@@ -54,5 +56,10 @@ public enum ControlMode {
      */
     public int getTime() {
         return seconds;
+    }
+
+    @Override
+    public String toString() {
+        return userFriendlyString;
     }
 }

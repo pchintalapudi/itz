@@ -10,8 +10,9 @@ import itzfx.data.FileUI;
 import itzfx.data.Retrieval;
 import itzfx.fxml.FXMLController;
 import java.math.BigDecimal;
+import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -87,7 +88,7 @@ import javafx.stage.Window;
 public final class Translate {
 
     private static Deque<Segment> translate(Queue<List<Command>> commands) {
-        Deque<Segment> graduated = new LinkedList<>();
+        Deque<Segment> graduated = new ArrayDeque<>();
         reduceToggles(commands);
         reduceDrives(commands);
         List<Command> singular = commands.stream().filter(l -> !l.isEmpty()).map(l -> l.get(0)).collect(Collectors.toList());
@@ -115,7 +116,7 @@ public final class Translate {
      * @see Translate#to10Millis(itzfx.rerun.Translate.Segment)
      */
     public static List<String> translateTime(Queue<List<Command>> commands) {
-        return translate(commands).stream().filter(Translate::filterZeroes).map(Translate::to10Millis).collect(Collectors.toCollection(LinkedList::new));
+        return translate(commands).stream().filter(Translate::filterZeroes).map(Translate::to10Millis).collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -133,7 +134,7 @@ public final class Translate {
      * @see Translate#toDistance(itzfx.rerun.Translate.Segment, itzfx.Robot)
      */
     public static List<String> translateDistance(Queue<List<Command>> commands, Robot r) {
-        return translate(commands).stream().filter(Translate::filterZeroes).map(s -> toDistance(s, r)).collect(Collectors.toCollection(LinkedList::new));
+        return translate(commands).stream().filter(Translate::filterZeroes).map(s -> toDistance(s, r)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private static boolean filterZeroes(Segment s) {
@@ -189,21 +190,21 @@ public final class Translate {
     private static String toDistance(Segment s, Robot r) {
         switch (s.c) {
             case FORWARD:
-                return "move(127, 127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(127, 127, " + truncate(s.length / 10f * r.getSpeed()) + ");";
             case LEFT_TURN:
-                return "move(-127, 127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(-127, 127, " + truncate(s.length / 10f * r.getSpeed()) + ");";
             case BACKWARD:
-                return "move(-127, -127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(-127, -127, " + truncate(s.length / 10f * r.getSpeed()) + ");";
             case RIGHT_TURN:
-                return "move(127, -127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(127, -127, " + truncate(s.length / 10f * r.getSpeed()) + ");";
             case FR:
-                return "move(127, 0, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(127, 0, " + truncate(s.length / 10f * r.getSpeed()) + ");";
             case BR:
-                return "move(0, -127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(0, -127, " + truncate(s.length / 10f * r.getSpeed()) + ");";
             case FL:
-                return "move(0, 127, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(0, 127, " + truncate(s.length / 10f * r.getSpeed()) + ");";
             case BL:
-                return "move(-127, 0, " + truncate(s.length / 10.0 * r.getSpeed()) + ");";
+                return "move(-127, 0, " + truncate(s.length / 10f * r.getSpeed()) + ");";
             case MOGO:
                 return "startTask(mogoTask);";
             case CONE:
@@ -218,8 +219,8 @@ public final class Translate {
         return null;
     }
 
-    private static double truncate(double in) {
-        return new BigDecimal(String.valueOf(in)).movePointRight(3).intValue() / 1000.0;
+    private static float truncate(float in) {
+        return new BigDecimal(String.valueOf(in)).movePointRight(3).intValue() / 1000.0f;
     }
 
     private static void reduceToggles(Queue<List<Command>> commands) {

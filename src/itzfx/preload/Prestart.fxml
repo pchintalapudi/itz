@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -11,20 +10,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="700.0" styleClass="white-background" stylesheets="@../fxml/css/global.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
    <left>
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-         <image>
-            <Image url="@../Images/phoenixWlogo.png" />
-         </image>
-      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" styleClass="logo" BorderPane.alignment="CENTER" />
    </left>
    <right>
-      <ImageView fitHeight="166.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-         <image>
-            <Image url="@../Images/VEXEDR-stacked-red-transp-1000px.png" />
-         </image>
-      </ImageView>
+      <ImageView fitHeight="166.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" styleClass="vex-logo" BorderPane.alignment="CENTER" />
    </right>
    <center>
       <StackPane prefHeight="89.0" prefWidth="327.0" BorderPane.alignment="CENTER">
@@ -42,7 +33,7 @@
                   </StackPane>
                   <StackPane>
                      <children>
-                        <ProgressBar fx:id="bar" prefWidth="200.0" progress="0.0" />
+                        <ProgressBar fx:id="bar" prefWidth="200.0" progress="0.0" styleClass="intense-color-progress-bar" />
                      </children>
                   </StackPane>
                </children>

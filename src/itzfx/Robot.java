@@ -17,9 +17,10 @@ import itzfx.rerun.Rerun;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.ScoreType;
 import itzfx.scoring.Scoreable;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
@@ -29,10 +30,14 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.FloatBinding;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
@@ -64,25 +69,23 @@ public final class Robot extends Mobile implements Scoreable {
     private final StackPane node;
     private final StackPane realRobot;
 
-    private double robotSpeed;
-    private double robotMogoIntakeTime;
-    private double robotAutostackTime;
-    private double robotStatTime;
-    private int robotMogoMaxStack;
-    private int robotStatMaxStack;
-    private boolean robotMogoFront;
+    private RobotProperties properties;
 
     private final Hitbox hb;
 
     private final ObjectProperty<Paint> filter;
 
-    private final BooleanProperty active;
+    private final BooleanProperty active, driveBaseMovable, red;
 
-    private final BooleanProperty driveBaseMovable;
-
-    private final BooleanProperty red;
+    {
+        active = new SimpleBooleanProperty(true);
+        driveBaseMovable = new SimpleBooleanProperty(true);
+        red = new SimpleBooleanProperty(true);
+    }
 
     private final ScoreReport sr;
+
+    private final ImageView iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/Images/topviewicon.png"), 90, 90, false, true));
 
     /**
      * Creates a robot at the specified coordinates with the specified initial
@@ -93,55 +96,37 @@ public final class Robot extends Mobile implements Scoreable {
      * @param layoutY the y coordinate to place the robot at
      * @param initRotate the initial rotation of the robot
      */
-    public Robot(double layoutX, double layoutY, double initRotate) {
+    public Robot(float layoutX, float layoutY, float initRotate) {
         super(layoutX, layoutY, initRotate);
-        node = new StackPane();
-        realRobot = new StackPane();
-        realRobot.setEffect(new DropShadow());
-        node.getChildren().add(realRobot);
-        node.setOnMouseDragged((MouseEvent m) -> super.setCenter(m.getSceneX() - 120, m.getSceneY() - 120 - 45));
-        ImageView iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/Images/topviewicon.png"), 90, 90, false, true));
-        iv.setRotate(90);
-        realRobot.getChildren().add(new Pane(iv));
         Rectangle cover = new Rectangle(90, 90);
         filter = cover.fillProperty();
-        realRobot.getChildren().add(cover);
+        realRobot = new StackPane(new Pane(iv), cover);
+        realRobot.setEffect(new DropShadow());
+        node = new StackPane(realRobot);
+        node.setOnMouseDragged((MouseEvent m) -> super.setCenter((float) m.getSceneX() - 120, (float) m.getSceneY() - 120 - 45));
+        iv.setRotate(90);
         hb = new Hitbox(45, Hitbox.CollisionType.STRONG, this, 18);
         hitboxing();
         filter.set(new Color(1, 0, 0, .03));
-        red = new SimpleBooleanProperty(true);
         filter.bind(Bindings.createObjectBinding(() -> red.get() ? new Color(1, 0, 0, .05) : new Color(0, 0, 1, .05), red));
-        active = new SimpleBooleanProperty(true);
-        actions = new LinkedList<>();
-        driveBaseMovable = new SimpleBooleanProperty(true);
         sr = new ScoreReport(this);
         sr.setScoreType(ScoreType.ZONE_NONE);
         redMogo = new RedMobileGoal(25, 45);
         blueMogo = new BlueMobileGoal(25, 45);
-        node.getChildren().add(redMogo.getNode());
-        node.getChildren().add(blueMogo.getNode());
         privateCone = new Cone(90, 45);
-        node.getChildren().add(privateCone.getNode());
+        node.getChildren().addAll(redMogo.getNode(), blueMogo.getNode(), privateCone.getNode());
         privateCone.permaDisableCollisions();
         privateCone.vanish();
         properties();
         mogoUndo();
         linkActions();
         setController(KeyControl.Defaults.SINGLE.getKC());
-        preassignValues();
+        properties = RobotProperties.getDefault();
+        orps.update(properties);
     }
 
     private void register() {
         Field.getOwner(this).getAggregator().registerReport(sr);
-    }
-
-    private void preassignValues() {
-        robotSpeed = 24;
-        robotMogoIntakeTime = 2.2;
-        robotAutostackTime = 2;
-        robotStatTime = 2.5;
-        robotMogoMaxStack = 12;
-        robotStatMaxStack = 5;
     }
 
     /**
@@ -181,10 +166,10 @@ public final class Robot extends Mobile implements Scoreable {
      * {@inheritDoc}
      */
     @Override
-    protected DoubleBinding translateXBind() {
-        return Bindings.createDoubleBinding(() -> {
+    protected FloatBinding translateXBind() {
+        return Bindings.createFloatBinding(() -> {
             Node n = realRobot;
-            return super.centerXProperty().get() - (n.getBoundsInLocal().getWidth() / 2 + n.getBoundsInLocal().getMinX());
+            return super.centerXProperty().get() - ((float) n.getBoundsInLocal().getWidth() / 2 + (float) n.getBoundsInLocal().getMinX());
         }, super.centerXProperty());
     }
 
@@ -192,10 +177,10 @@ public final class Robot extends Mobile implements Scoreable {
      * {@inheritDoc}
      */
     @Override
-    protected DoubleBinding translateYBind() {
-        return Bindings.createDoubleBinding(() -> {
+    protected FloatBinding translateYBind() {
+        return Bindings.createFloatBinding(() -> {
             Node n = realRobot;
-            return super.centerYProperty().get() - (n.getBoundsInLocal().getHeight() / 2 + n.getBoundsInLocal().getMinY());
+            return super.centerYProperty().get() - ((float) n.getBoundsInLocal().getHeight() / 2 + (float) n.getBoundsInLocal().getMinY());
         }, super.centerYProperty());
     }
 
@@ -209,17 +194,21 @@ public final class Robot extends Mobile implements Scoreable {
         mogoAnimation.stop();
         stackAnimation.stop();
         if (heldMogo.get() != null) {
-            heldMogo.get().setCenter(super.getCenterX() + privateMogo.get().getNode().getTranslateX() * Math.cos(Math.toRadians(node.getRotate())),
-                    super.getCenterY() + privateMogo.get().getNode().getTranslateX() * Math.sin(Math.toRadians(node.getRotate())));
+            heldMogo.get().setCenter(super.getCenterX() + (float) privateMogo.get().getNode().getTranslateX() * (float) Math.cos(Math.toRadians(node.getRotate())),
+                    super.getCenterY() + (float) privateMogo.get().getNode().getTranslateX() * (float) Math.sin(Math.toRadians(node.getRotate())));
             heldMogo.get().reappear();
             heldMogo.set(null);
         }
         if (heldCone.get() != null) {
-            heldCone.get().setCenter(super.getCenterX() + privateCone.getCenterX() * Math.cos(Math.toRadians(node.getRotate())),
-                    super.getCenterY() + privateCone.getCenterX() * Math.sin(Math.toRadians(node.getRotate())));
+            heldCone.get().setCenter(super.getCenterX() + privateCone.getCenterX() * (float) Math.cos(Math.toRadians(node.getRotate())),
+                    super.getCenterY() + privateCone.getCenterX() * (float) Math.sin(Math.toRadians(node.getRotate())));
             heldCone.get().reappear();
             heldCone.set(null);
         }
+    }
+
+    private void switchImage() {
+        FileUI.load(iv.getScene().getWindow(), f -> iv.setImage(new Image(f.toURI().toString(), 90, 90, true, true)), "Image", "*.jpg", "*.png");
     }
 
     private void hitboxing() {
@@ -249,7 +238,7 @@ public final class Robot extends Mobile implements Scoreable {
         actions.add(k -> load());
     }
 
-    private final List<Consumer<KeyCode>> actions;
+    private final List<Consumer<KeyCode>> actions = new ArrayList<>(9);
 
     private KeyControl controller;
 
@@ -291,6 +280,7 @@ public final class Robot extends Mobile implements Scoreable {
                 actions.stream().forEach(a -> KeyBuffer.register(iteratorNew.next(), a));
             }
             this.controller = controller;
+            okcs.setKeys(controller);
         }
     }
 
@@ -370,7 +360,7 @@ public final class Robot extends Mobile implements Scoreable {
                 pulse.add(Command.NONE);
             }
             saved.add(pulse);
-            pulse = new LinkedList<>();
+            pulse = new ArrayList<>(2);
         }
     }
 
@@ -378,6 +368,10 @@ public final class Robot extends Mobile implements Scoreable {
      * Begins recording a rerun.
      */
     public void record() {
+        if (!recording.get()) {
+            pulse.clear();
+            saved.clear();
+        }
         recording.set(true);
     }
 
@@ -482,6 +476,12 @@ public final class Robot extends Mobile implements Scoreable {
             driverControl();
         });
         rightClick.getItems().add(dc);
+        MenuItem si = new MenuItem("Set Robot Image");
+        si.setOnAction(e -> {
+            e.consume();
+            switchImage();
+        });
+        rightClick.getItems().add(si);
     }
 
     /**
@@ -490,8 +490,8 @@ public final class Robot extends Mobile implements Scoreable {
     public void forward() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                super.shiftCenter(robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
-                        robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
+                super.shiftCenter(properties.getRobotSpeed() / 6 * (float) Math.cos(Math.toRadians(node.getRotate())),
+                        properties.getRobotSpeed() / 6 * (float) Math.sin(Math.toRadians(node.getRotate())));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -507,8 +507,8 @@ public final class Robot extends Mobile implements Scoreable {
     public void backward() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                super.shiftCenter(-robotSpeed / 12 * Math.cos(Math.toRadians(node.getRotate())),
-                        -robotSpeed / 12 * Math.sin(Math.toRadians(node.getRotate())));
+                super.shiftCenter(-properties.getRobotSpeed() / 6 * (float) Math.cos(Math.toRadians(node.getRotate())),
+                        -properties.getRobotSpeed() / 6 * (float) Math.sin(Math.toRadians(node.getRotate())));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -524,7 +524,7 @@ public final class Robot extends Mobile implements Scoreable {
     public void leftTurn() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                node.setRotate(node.getRotate() - robotSpeed / (Math.PI * 7));
+                node.setRotate(node.getRotate() - properties.getRobotSpeed() / (Math.PI * 3.5));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -540,7 +540,7 @@ public final class Robot extends Mobile implements Scoreable {
     public void rightTurn() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                node.setRotate(node.getRotate() + robotSpeed / (Math.PI * 7));
+                node.setRotate(node.getRotate() + properties.getRobotSpeed() / (Math.PI * 3.5));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -555,8 +555,8 @@ public final class Robot extends Mobile implements Scoreable {
      *
      * @return the speed of the robot
      */
-    public double getSpeed() {
-        return robotSpeed;
+    public float getSpeed() {
+        return properties.getRobotSpeed();
     }
 
     private final BooleanProperty movingMogo = new SimpleBooleanProperty();
@@ -594,20 +594,20 @@ public final class Robot extends Mobile implements Scoreable {
 
     private void mogoIntake() {
         MobileGoal mogo = Field.getOwner(this).huntMogo(new Point2D(super.getCenterX(), super.getCenterY()),
-                new Point2D(70 * Math.cos(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1),
-                        70 * Math.sin(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1)));
+                new Point2D(70 * Math.cos(Math.toRadians(node.getRotate())) * (properties.isRobotMogoFront() > 0 ? 1 : -1),
+                        70 * Math.sin(Math.toRadians(node.getRotate())) * (properties.isRobotMogoFront() > 0 ? 1 : -1)), isRed());
         if (mogo != null) {
             privateMogo.set(mogo instanceof RedMobileGoal ? redMogo : blueMogo);
             heldMogo.set(mogo);
             mogo.vanish();
             heldMogo.get().shiftStack(privateMogo.get());
-            privateMogo.get().getNode().setTranslateX(robotMogoFront ? 70 : -70);
+            privateMogo.get().getNode().setTranslateX(properties.isRobotMogoFront() > 0 ? 70 : -70);
             privateMogo.get().reappear();
             movingMogo.set(true);
             mogoAnimation.stop();
             mogoAnimation.getKeyFrames().clear();
-            mogoAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotMogoIntakeTime), this::finishMogoIntake,
-                    new KeyValue(privateMogo.get().getNode().translateXProperty(), robotMogoFront ? 25 : -25)));
+            mogoAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.properties.getRobotMogoIntakeTime()), this::finishMogoIntake,
+                    new KeyValue(privateMogo.get().getNode().translateXProperty(), properties.isRobotMogoFront() > 0 ? 25 : -25)));
             mogoAnimation.play();
         }
     }
@@ -622,8 +622,8 @@ public final class Robot extends Mobile implements Scoreable {
         movingMogo.set(true);
         mogoAnimation.stop();
         mogoAnimation.getKeyFrames().clear();
-        mogoAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotMogoIntakeTime), this::finishMogoOuttake,
-                new KeyValue(privateMogo.get().getNode().translateXProperty(), robotMogoFront ? 70 : -70)));
+        mogoAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.properties.getRobotMogoIntakeTime()), this::finishMogoOuttake,
+                new KeyValue(privateMogo.get().getNode().translateXProperty(), properties.isRobotMogoFront() > 0 ? 70 : -70)));
         mogoAnimation.play();
     }
 
@@ -632,8 +632,8 @@ public final class Robot extends Mobile implements Scoreable {
         mogoAnimation.stop();
         privateMogo.get().vanish();
         privateMogo.get().shiftStack(heldMogo.get());
-        heldMogo.get().setCenter(super.getCenterX() + 70 * Math.cos(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1),
-                super.getCenterY() + 70 * Math.sin(Math.toRadians(node.getRotate())) * (robotMogoFront ? 1 : -1));
+        heldMogo.get().setCenter(super.getCenterX() + 70 * (float) Math.cos(Math.toRadians(node.getRotate())) * (properties.isRobotMogoFront() > 0 ? 1 : -1),
+                super.getCenterY() + 70 * (float) Math.sin(Math.toRadians(node.getRotate())) * (properties.isRobotMogoFront() > 0 ? 1 : -1));
         heldMogo.get().reappear();
         heldMogo.set(null);
         movingMogo.set(false);
@@ -682,8 +682,8 @@ public final class Robot extends Mobile implements Scoreable {
 
     private void coneOuttake() {
         privateCone.vanish();
-        heldCone.get().setCenter(super.getCenterX() + 60 * Math.cos(Math.toRadians(node.getRotate())),
-                super.getCenterY() + 60 * Math.sin(Math.toRadians(node.getRotate())));
+        heldCone.get().setCenter(super.getCenterX() + 60 * (float) Math.cos(Math.toRadians(node.getRotate())),
+                super.getCenterY() + 60 * (float) Math.sin(Math.toRadians(node.getRotate())));
         heldCone.get().reappear();
         heldCone.set(null);
     }
@@ -695,7 +695,7 @@ public final class Robot extends Mobile implements Scoreable {
      * following the check.
      */
     public void autostack() {
-        if (active.get() && heldMogo.get() != null && !movingCone.get() && privateMogo.get().score() / 2 < this.robotMogoMaxStack) {
+        if (active.get() && heldMogo.get() != null && !movingCone.get() && privateMogo.get().score() / 2 < this.properties.getRobotMogoMaxStack()) {
             if (heldCone.get() == null) {
                 Platform.runLater(() -> {
                     coneIntake();
@@ -718,8 +718,8 @@ public final class Robot extends Mobile implements Scoreable {
         stackAnimation.stop();
         stackAnimation.getKeyFrames().clear();
         movingCone.set(true);
-        stackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotAutostackTime), this::finishAutostack,
-                new KeyValue(privateCone.centerXProperty(), robotMogoFront ? 70 : 25)));
+        stackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.properties.getRobotAutostackTime()), this::finishAutostack,
+                new KeyValue(privateCone.centerXProperty(), properties.isRobotMogoFront() > 0 ? 70 : 25)));
         stackAnimation.play();
     }
 
@@ -751,12 +751,13 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     private void runStatStack() {
-        StationaryGoal sg = Field.getOwner(this).huntStat(new Point2D(super.getCenterX(), super.getCenterY()), new Point2D(57.5 * Math.cos(Math.toRadians(node.getRotate())),
-                57.5 * Math.sin(Math.toRadians(node.getRotate()))));
-        if (sg != null && sg.score() / 2 < robotStatMaxStack) {
+        StationaryGoal sg = Field.getOwner(this).huntStat(new Point2D(super.getCenterX(), super.getCenterY()),
+                new Point2D(57.5 * Math.cos(Math.toRadians(node.getRotate())),
+                        57.5 * Math.sin(Math.toRadians(node.getRotate()))), isRed());
+        if (sg != null && sg.score() / 2 < properties.getRobotStatMaxStack()) {
             Point2D sgCenter = new Point2D(sg.getNode().getTranslateX() + 12.5, sg.getNode().getTranslateY() + 12.5);
-            heldCone.get().setCenter(super.getCenterX() + 60 * Math.cos(Math.toRadians(node.getRotate())),
-                    super.getCenterY() + 60 * Math.sin(Math.toRadians(node.getRotate())));
+            heldCone.get().setCenter(super.getCenterX() + 60 * (float) Math.cos(Math.toRadians(node.getRotate())),
+                    super.getCenterY() + 60 * (float) Math.sin(Math.toRadians(node.getRotate())));
             privateCone.vanish();
             heldCone.get().reappear();
             heldCone.get().disableCollision();
@@ -764,7 +765,7 @@ public final class Robot extends Mobile implements Scoreable {
             movingCone.set(true);
             stackAnimation.stop();
             stackAnimation.getKeyFrames().clear();
-            stackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.robotStatTime), e -> finishStat(e, sg),
+            stackAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(this.properties.getRobotStatTime()), e -> finishStat(e, sg),
                     new KeyValue(heldCone.get().centerXProperty(), sgCenter.getX()), new KeyValue(heldCone.get().centerYProperty(), sgCenter.getY())));
             stackAnimation.play();
         }
@@ -905,6 +906,11 @@ public final class Robot extends Mobile implements Scoreable {
         }
         setController(controller);
         active.set(true);
+        if (heldCone.get() != null) {
+            Cone c = heldCone.get();
+            heldCone.set(null);
+            forceIntake(c);
+        }
     }
 
     /**
@@ -942,46 +948,16 @@ public final class Robot extends Mobile implements Scoreable {
      * quickly updating this robot after a robot build session. If any values
      * are null, the previous values for those quantities are used.
      *
-     * @param robotSpeed the new speed of the robot
-     * @param robotMogoIntakeTime the time taken to intake or outtake a mobile
-     * goal
-     * @param robotAutostackTime the time taken to autostack a cone on a mobile
-     * goal, on average
-     * @param robotStatTime the time taken to stack a cone on a stationary goal,
-     * on average
-     * @param robotMaxMogo the maximum number of cones that can be stacked on a
-     * mobile goal
-     * @param robotMaxStat the maximum number of cones that can be stacked on a
-     * stationary goal
-     * @param mogoIntakeFront true if the robot intakes the mobile goal from the
-     * front, false if it intakes from the back
+     *
+     * @param rp
      */
-    public void acceptValues(Double robotSpeed, Double robotMogoIntakeTime, Double robotAutostackTime,
-            Double robotStatTime, Integer robotMaxMogo, Integer robotMaxStat, Boolean mogoIntakeFront) {
-        if (robotSpeed != null) {
-            this.robotSpeed = robotSpeed;
+    public void acceptValues(RobotProperties rp) {
+        RobotProperties temp = properties;
+        properties = RobotProperties.getFilledVersion(rp, properties);
+        if (properties.isRobotMogoFront() != temp.isRobotMogoFront()) {
+            adjustInitRotate(180);
         }
-        if (robotMogoIntakeTime != null) {
-            this.robotMogoIntakeTime = robotMogoIntakeTime;
-        }
-        if (robotAutostackTime != null) {
-            this.robotAutostackTime = robotAutostackTime;
-        }
-        if (robotStatTime != null) {
-            this.robotStatTime = robotStatTime;
-        }
-        if (robotMaxMogo != null) {
-            this.robotMogoMaxStack = robotMaxMogo;
-        }
-        if (robotMaxStat != null) {
-            this.robotStatMaxStack = robotMaxStat;
-        }
-        if (mogoIntakeFront != null) {
-            if (this.robotMogoFront ^ mogoIntakeFront) {
-                adjustInitRotate(180);
-            }
-            this.robotMogoFront = mogoIntakeFront;
-        }
+        orps.update(properties);
     }
 
     /**
@@ -990,10 +966,7 @@ public final class Robot extends Mobile implements Scoreable {
      * @return a string with all the data of this robot
      */
     public String fileData() {
-        return "" + robotSpeed + " " + robotMogoIntakeTime + " "
-                + robotAutostackTime + " " + robotStatTime + " "
-                + robotMogoMaxStack + " " + robotStatMaxStack + " "
-                + robotMogoFront;
+        return properties.fileData();
     }
 
     /**
@@ -1005,17 +978,177 @@ public final class Robot extends Mobile implements Scoreable {
      */
     public static void fillRobot(Robot r, String fileData) {
         String[] values = fileData.split(" ");
-        double rs = Double.parseDouble(values[0]);
-        double rmit = Double.parseDouble(values[1]);
-        double rat = Double.parseDouble(values[2]);
-        double rst = Double.parseDouble(values[3]);
+        float rs = Float.parseFloat(values[0]);
+        float rmit = Float.parseFloat(values[1]);
+        float rat = Float.parseFloat(values[2]);
+        float rst = Float.parseFloat(values[3]);
         int rmms = Integer.parseInt(values[4]);
         int rsms = Integer.parseInt(values[5]);
         boolean rmf = Boolean.parseBoolean(values[6]);
-        r.acceptValues(rs, rmit, rat, rst, rmms, rsms, rmf);
+        r.acceptValues(RobotProperties.create(rs, rmit, rat, rst, rmms, rsms, rmf ? 1 : -1));
     }
 
-    private final Queue<List<Command>> saved = new LinkedList<>();
+    private final Queue<List<Command>> saved = new ArrayDeque<>(1000);
 
-    private List<Command> pulse = new LinkedList<>();
+    private List<Command> pulse = new ArrayList<>(2);
+
+    //Link to controller table.
+    private final ObservableKeyCodeStruct okcs = new ObservableKeyCodeStruct();
+
+    private class ObservableKeyCodeStruct {
+
+        private final ObjectProperty<KeyCode>[] keys = new ObjectProperty[9];
+
+        public ObservableKeyCodeStruct() {
+            for (int i = 0; i < keys.length; i++) {
+                keys[i] = new SimpleObjectProperty<>();
+            }
+        }
+
+        public void setKeys(KeyControl kc) {
+            for (int i = 0; i < keys.length; i++) {
+                keys[i].set(kc.keys()[i]);
+            }
+        }
+
+        public ObjectProperty<KeyCode>[] keys() {
+            return keys;
+        }
+    }
+
+    public ObjectProperty<KeyCode> forwardKeyProperty() {
+        return okcs.keys()[0];
+    }
+
+    public ObjectProperty<KeyCode> leftKeyProperty() {
+        return okcs.keys()[1];
+    }
+
+    public ObjectProperty<KeyCode> backKeyProperty() {
+        return okcs.keys()[2];
+    }
+
+    public ObjectProperty<KeyCode> rightKeyProperty() {
+        return okcs.keys()[3];
+    }
+
+    public ObjectProperty<KeyCode> mobileGoalKeyProperty() {
+        return okcs.keys()[4];
+    }
+
+    public ObjectProperty<KeyCode> autostackKeyProperty() {
+        return okcs.keys()[5];
+    }
+
+    public ObjectProperty<KeyCode> coneKeyProperty() {
+        return okcs.keys()[6];
+    }
+
+    public ObjectProperty<KeyCode> statKeyProperty() {
+        return okcs.keys()[7];
+    }
+
+    public ObjectProperty<KeyCode> loadKeyProperty() {
+        return okcs.keys()[8];
+    }
+
+    private final ObservableRobotPropertiesStruct orps = new ObservableRobotPropertiesStruct();
+
+    private class ObservableRobotPropertiesStruct {
+
+        private final FloatProperty speed = new SimpleFloatProperty();
+        private final FloatProperty mogointaketime = new SimpleFloatProperty();
+        private final FloatProperty statstacktime = new SimpleFloatProperty();
+        private final FloatProperty autostacktime = new SimpleFloatProperty();
+        private final IntegerProperty maxmogostack = new SimpleIntegerProperty();
+        private final IntegerProperty maxstatstack = new SimpleIntegerProperty();
+        private final BooleanProperty mogofront = new SimpleBooleanProperty();
+
+        /**
+         * @return the speed
+         */
+        public FloatProperty getSpeed() {
+            return speed;
+        }
+
+        /**
+         * @return the mogointaketime
+         */
+        public FloatProperty getMogointaketime() {
+            return mogointaketime;
+        }
+
+        /**
+         * @return the statstacktime
+         */
+        public FloatProperty getStatstacktime() {
+            return statstacktime;
+        }
+
+        /**
+         * @return the autostacktime
+         */
+        public FloatProperty getAutostacktime() {
+            return autostacktime;
+        }
+
+        /**
+         * @return the maxmogostack
+         */
+        public IntegerProperty getMaxmogostack() {
+            return maxmogostack;
+        }
+
+        /**
+         * @return the maxstatstack
+         */
+        public IntegerProperty getMaxstatstack() {
+            return maxstatstack;
+        }
+
+        /**
+         * @return the mogofront
+         */
+        public BooleanProperty getMogofront() {
+            return mogofront;
+        }
+
+        public void update(RobotProperties rp) {
+            speed.set(rp.getRobotSpeed());
+            mogointaketime.set(rp.getRobotMogoIntakeTime());
+            statstacktime.set(rp.getRobotStatTime());
+            autostacktime.set(rp.getRobotAutostackTime());
+            maxmogostack.set(rp.getRobotMogoMaxStack());
+            maxstatstack.set(rp.getRobotStatMaxStack());
+            mogofront.set(rp.isRobotMogoFront() > 0);
+        }
+    }
+
+    public FloatProperty speedProperty() {
+        return orps.getSpeed();
+    }
+
+    public FloatProperty mogoIntakeTimeProperty() {
+        return orps.getMogointaketime();
+    }
+
+    public FloatProperty autostackTimeProperty() {
+        return orps.getAutostacktime();
+    }
+
+    public FloatProperty statStackTimeProperty() {
+        return orps.getStatstacktime();
+    }
+
+    public IntegerProperty maxMogoStackProperty() {
+        return orps.getMaxmogostack();
+    }
+
+    public IntegerProperty maxStatStackProperty() {
+        return orps.getMaxstatstack();
+    }
+
+    public BooleanProperty mogoFrontProperty() {
+        return orps.getMogofront();
+    }
 }
