@@ -123,10 +123,6 @@ Button stuff
     -fx-background-color:-blue-intense-triple-quarter;
 }
 
-.logo {
-    -fx-image:url(../../Images/phoenixWlogo.png);
-}
-
 /*
 Cone stuff
 */
@@ -247,6 +243,35 @@ Other things
     -fx-fill:-blue-alliance;
 }
 
+.blue-bar, .red-bar {
+    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
+}
+
+.blue-bar {
+    -fx-fill:-blue-bar-gradient;
+}
+
+.red-bar {
+    -fx-fill:-red-bar-gradient;
+}
+
+.tape {
+    -fx-fill:-tape;
+}
+
+.bordered {
+    -fx-border-color:black;
+    -fx-border-width:5;
+}
+
+.intense-color-progress-bar {
+    -fx-accent:-blue-intense;
+}
+
+/*
+Alliance marking
+*/
+
 .blue-alliance {
     -fx-fill:-blue-alliance;
 }
@@ -271,26 +296,30 @@ Other things
     -fx-border-color:-red-alliance;
 }
 
-.blue-bar, .red-bar {
-    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
+/*
+Field mode selector
+*/
+
+.field-mode-selector {
+    -fx-background-color:white;
+    -fx-border-color:-blue-intense;
 }
 
-.blue-bar {
-    -fx-fill:-blue-bar-gradient;
+.field-mode-selector:focused {
+    -fx-background-color:-blue-intense-quarter;
 }
 
-.red-bar {
-    -fx-fill:-red-bar-gradient;
+.field-mode-selector:hover {
+    -fx-background-color:-blue-intense-half;
 }
 
-.tape {
-    -fx-fill:-tape;
+.field-mode-selector:pressed {
+    -fx-background-color:-blue-intense-triple-quarter;
 }
 
-.bordered {
-    -fx-border-color:black;
-    -fx-border-width:5;
-}
+/*
+Images
+*/
 
 .robot {
     -fx-image:url(../../Images/topviewicon.png);
@@ -309,23 +338,6 @@ Other things
     -fx-image:url(../../Images/check.png);
 }
 
-.intense-color-progress-bar {
-    -fx-accent:-blue-intense;
-}
-
-.field-mode-selector {
-    -fx-background-color:white;
-    -fx-border-color:-blue-intense;
-}
-
-.field-mode-selector:focused {
-    -fx-background-color:-blue-intense-quarter;
-}
-
-.field-mode-selector:hover {
-    -fx-background-color:-blue-intense-half;
-}
-
-.field-mode-selector:pressed {
-    -fx-background-color:-blue-intense-triple-quarter;
+.logo {
+    -fx-image:url(../../Images/phoenixWlogo.png);
 }

@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="white-background" stylesheets="@css/global.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="white-background" stylesheets="@css/global.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
@@ -152,7 +152,7 @@
         </VBox>
     </right>
     <center>
-        <Pane BorderPane.alignment="CENTER">
+        <Pane fx:id="fieldPane" BorderPane.alignment="CENTER">
             <children>
                 <BorderPane layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="870.0" prefWidth="850.0">
                     <top>
@@ -186,7 +186,7 @@
                         </Pane>
                     </center>
                     <left>
-                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="120.0" BorderPane.alignment="CENTER">
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="120.0" translateY="-10.0" BorderPane.alignment="CENTER">
                             <top>
                                 <Rectangle height="5.0" strokeType="INSIDE" styleClass="red-alliance" width="120.0" BorderPane.alignment="CENTER" />
                             </top>

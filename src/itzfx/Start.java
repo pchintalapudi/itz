@@ -31,6 +31,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
@@ -162,14 +163,41 @@ public class Start extends Application {
         AnchorPane windowScale = new AnchorPane(new Group(p));
         StackPane root = new StackPane(windowScale);
         NumberBinding maxScale = Bindings.min(root.widthProperty().divide(width),
-                                      root.heightProperty().divide(height));
+                root.heightProperty().divide(height));
         windowScale.scaleXProperty().bind(maxScale);
         windowScale.scaleYProperty().bind(maxScale);
         Scene scene = new Scene(root, width, height);
+        addRotateListeners(scene);
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
-        System.out.println(Runtime.getRuntime().availableProcessors() + " " + Thread.activeCount());
+    }
+
+    private void addRotateListeners(Scene scene) {
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, k -> {
+            if (k.isAltDown() && k.isShiftDown() && k.getCode() != null) {
+                switch (k.getCode()) {
+                    case RIGHT:
+                        fxml.setRotate(90);
+                        k.consume();
+                        break;
+                    case LEFT:
+                        fxml.setRotate(-90);
+                        k.consume();
+                        break;
+                    case UP:
+                        fxml.setRotate(0);
+                        k.consume();
+                        break;
+                    case DOWN:
+                        fxml.setRotate(180);
+                        k.consume();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     /**

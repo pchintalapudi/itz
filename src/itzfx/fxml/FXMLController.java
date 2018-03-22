@@ -68,6 +68,10 @@ public class FXMLController implements AutoCloseable {
     private AnchorPane robotInfo;
     @FXML
     private AnchorPane robotData;
+    @FXML
+    private ImageView logo;
+    @FXML
+    private Pane fieldPane;
 
     @FXML
     private void initialize() {
@@ -76,6 +80,7 @@ public class FXMLController implements AutoCloseable {
         Hitbox.VISIBLE.bind(showHitboxes.selectedProperty());
         sbc = (ScoringBoxController) right.getChildrenUnmodifiable().get(0).getUserData();
         field.inject(sbc);
+        logo.rotateProperty().bind(fieldPane.rotateProperty().negate());
         List<Robot> robots = field.getRobots();
         ((RobotInfoController) robotInfo.getUserData()).injectRobots(robots);
         ((RobotDataController) robotData.getUserData()).injectRobots(robots);
@@ -189,6 +194,10 @@ public class FXMLController implements AutoCloseable {
         } catch (IOException ex) {
             Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void setRotate(double rotate) {
+        fieldPane.setRotate(rotate);
     }
 
     /**
