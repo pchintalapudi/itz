@@ -112,9 +112,9 @@
                 <fx:include source="ScoringBox.fxml" />
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                     <children>
-                        <ImageView fitHeight="300.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true" styleClass="vex-logo" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                        <ImageView fitHeight="300.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true" styleClass="dvhs-robotics-logo" />
+                        <ImageView fitHeight="220.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true" styleClass="vex-logo" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" />
+                        <ImageView fitHeight="220.0" fitWidth="320.0" pickOnBounds="true" preserveRatio="true" styleClass="dvhs-robotics-logo" />
                     </children>
                 </HBox>
                 <StackPane prefHeight="300.0" prefWidth="700.0">
@@ -131,9 +131,9 @@
                                         <fx:include fx:id="robotData" source="RobotData.fxml" />
                                     </content>
                                 </Tab>
-                                <Tab closable="false" text="Robot 3">
+                                <Tab closable="false" text="Program Data">
                                     <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                        <fx:include source="SystemStats.fxml" />
                                     </content>
                                 </Tab>
                                 <Tab closable="false" text="Robot 4">
