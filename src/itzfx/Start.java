@@ -159,14 +159,8 @@ public class Start extends Application {
         AnchorPane.setTopAnchor(p, 0d);
         AnchorPane.setRightAnchor(p, 0d);
         AnchorPane.setBottomAnchor(p, 0d);
-        p.setClip(new Rectangle(0, 0, width, height));
-        AnchorPane windowScale = new AnchorPane(new Group(p));
-        StackPane root = new StackPane(windowScale);
-        NumberBinding maxScale = Bindings.min(root.widthProperty().divide(width),
-                root.heightProperty().divide(height));
-        windowScale.scaleXProperty().bind(maxScale);
-        windowScale.scaleYProperty().bind(maxScale);
-        Scene scene = new Scene(root, width, height);
+        AnchorPane windowScale = new AnchorPane(p);
+        Scene scene = new Scene(windowScale, width, height);
         addRotateListeners(scene);
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
