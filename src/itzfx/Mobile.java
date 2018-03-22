@@ -389,7 +389,7 @@ public abstract class Mobile {
     }
 
     private float lineDistance(float x, float y, float m, float k) {
-        return (float) Math.abs(k + m * x - y) / QuickMafs.invSqRoot(1 + QuickMafs.square(m));
+        return (float) Math.abs(k + m * x - y) * QuickMafs.invSqRoot(1 + QuickMafs.square(m));
     }
 
     protected void adjustInitRotate(float extra) {

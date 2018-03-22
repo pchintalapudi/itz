@@ -6,6 +6,7 @@
 package itzfx;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javafx.scene.input.KeyCode;
 
@@ -124,6 +125,68 @@ public final class KeyControl {
         return Arrays.stream(keys()).map(k -> k.getName()).collect(Collectors.joining(" "));
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.forward);
+        hash = 89 * hash + Objects.hashCode(this.left);
+        hash = 89 * hash + Objects.hashCode(this.backward);
+        hash = 89 * hash + Objects.hashCode(this.right);
+        hash = 89 * hash + Objects.hashCode(this.mogo);
+        hash = 89 * hash + Objects.hashCode(this.autostack);
+        hash = 89 * hash + Objects.hashCode(this.cone);
+        hash = 89 * hash + Objects.hashCode(this.stat);
+        hash = 89 * hash + Objects.hashCode(this.load);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final KeyControl other = (KeyControl) obj;
+        if (this.forward != other.forward) {
+            return false;
+        }
+        if (this.left != other.left) {
+            return false;
+        }
+        if (this.backward != other.backward) {
+            return false;
+        }
+        if (this.right != other.right) {
+            return false;
+        }
+        if (this.mogo != other.mogo) {
+            return false;
+        }
+        if (this.autostack != other.autostack) {
+            return false;
+        }
+        if (this.cone != other.cone) {
+            return false;
+        }
+        if (this.stat != other.stat) {
+            return false;
+        }
+        if (this.load != other.load) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "KeyControl{" + "forward=" + forward + ", left=" + left + ", backward=" + backward + ", right=" + right + ", mogo=" + mogo + ", autostack=" + autostack + ", cone=" + cone + ", stat=" + stat + ", load=" + load + '}';
+    }
+
     /**
      * Converts data from a file into a recognizable control format.
      *
@@ -131,6 +194,10 @@ public final class KeyControl {
      * @return the new KeyControl representing a control format
      */
     public static KeyControl getKeyControl(String fileData) {
-        return new KeyControl(Arrays.stream(fileData.split(" ")).map(KeyCode::valueOf).toArray(KeyCode[]::new));
+        String[] data = fileData.split(" ");
+        if (data.length > 9) {
+            return Defaults.valueOf(data[9]).getKC();
+        }
+        return new KeyControl(Arrays.stream(data).map(KeyCode::getKeyCode).toArray(KeyCode[]::new));
     }
 }

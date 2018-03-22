@@ -34,13 +34,11 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -108,6 +106,8 @@ public class Field implements AutoCloseable {
         decorateScoringBars();
         (pulseManager = new PulseManager(Start.PULSER)).begin();
         Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
+        pulseManager.beginCollisionPulsing();
+        pulseManager.beginScorePulsing();
     }
 
     private class PulseManager {
@@ -162,11 +162,15 @@ public class Field implements AutoCloseable {
         }
 
         private void beginScorePulsing() {
-            scorePulser = executor.scheduleWithFixedDelay(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+            if (scorePulser == null) {
+                scorePulser = executor.scheduleWithFixedDelay(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+            }
         }
 
         private void beginCollisionPulsing() {
-            collisionPulser = executor.scheduleWithFixedDelay(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+            if (collisionPulser == null) {
+                collisionPulser = executor.scheduleWithFixedDelay(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+            }
         }
 
         private void stopCollisionPulsing() {
@@ -466,33 +470,16 @@ public class Field implements AutoCloseable {
             load(getRobots().get(0));
             load(getRobots().get(1));
             List<Cone> c = new ArrayList<>(preloads);
-            pulseManager.begin();
             getRobots().forEach(r -> {
                 r.forceIntake(preloads.remove(0));
-//                if (field.getScene() != null) {
-////                    fireEvents(r.getController().keys());
-////                    Start.PULSER.schedule(() -> r.resetRotate(), 150, TimeUnit.MILLISECONDS);
-//                }
+                if (r.getController().equals(KeyControl.Defaults.BLANK.getKC())) {
+                    r.vanish();
+                }
+                r.getNode().setRotate(r.getNode().getRotate() + 0.01);
             });
             preloads.addAll(c);
         } catch (Exception ex) {
         }
-    }
-
-    private void fireEvents(KeyCode[] keys) {
-        Start.PULSER.schedule(() -> Platform.runLater(() -> {
-            Event.fireEvent(field.getScene(), new KeyEvent(KeyEvent.KEY_PRESSED,
-                    keys[3].getName(), keys[3].getName(), keys[3], false, false, false, false));
-        }), 50, TimeUnit.MILLISECONDS);
-        Start.PULSER.schedule(() -> Platform.runLater(() -> {
-            Event.fireEvent(field.getScene(), new KeyEvent(KeyEvent.KEY_RELEASED,
-                    keys[3].getName(), keys[3].getName(), keys[3], false, false, false, false));
-            Event.fireEvent(field.getScene(), new KeyEvent(KeyEvent.KEY_PRESSED,
-                    keys[1].getName(), keys[1].getName(), keys[1], false, false, false, false));
-        }), 90, TimeUnit.MILLISECONDS);
-        Start.PULSER.schedule(() -> Platform.runLater(() -> Event.fireEvent(field.getScene(),
-                new KeyEvent(KeyEvent.KEY_RELEASED, keys[1].getName(), keys[1].getName(),
-                        keys[1], false, false, false, false))), 130, TimeUnit.MILLISECONDS);
     }
 
     /**
