@@ -68,7 +68,7 @@ public final class Hitbox {
             try {
                 float collisionFactor = 1;
                 if (hb1.cType == CollisionType.WEAK || hb2.cType == CollisionType.WEAK) {
-                    collisionFactor = .005f;
+                    collisionFactor = .02f;
                 }
                 if (hb1.mass == Float.POSITIVE_INFINITY) {
                     if (hb2.movableOwner != null) {
