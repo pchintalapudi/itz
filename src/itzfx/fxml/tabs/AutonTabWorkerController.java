@@ -34,8 +34,10 @@ public class AutonTabWorkerController {
         autonName.textProperty().addListener((o, b, s) -> {
             if (DEFAULT_AUTON_TEXT.equals(s)) {
                 autonName.getStyleClass().add("error-text");
+                autonName.getStyleClass().remove("success-text");
             } else {
                 autonName.getStyleClass().remove("error-text");
+                autonName.getStyleClass().add("success-text");
             }
         });
         recordingCheckBox.selectedProperty().addListener((o, b, s) -> {

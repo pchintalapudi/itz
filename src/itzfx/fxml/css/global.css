@@ -465,6 +465,18 @@ Error text
 }
 
 /*
+Success text
+*/
+
+.success-text {
+    -fx-fill:green;
+}
+
+.success-text:hover {
+    -fx-fill:derive(green, 10%);
+}
+
+/*
 Checkbox styling
 */
 
@@ -478,4 +490,25 @@ Checkbox styling
 .flat-check-box:selected > .text {
     -fx-background-color:-green-base;
     -fx-fill:-green-base;
+}
+
+/*
+Key styling
+*/
+
+.key > .base,
+.key > .face {
+    -fx-fill:white;
+    -fx-stroke:black;
+    -fx-stroke-width:0.5;
+}
+
+.key > .depth {
+    -fx-stroke:black;
+    -fx-stroke-width:0.5;
+}
+
+.indicator {
+    -fx-fill:white;
+    -fx-stroke:black;
 }
