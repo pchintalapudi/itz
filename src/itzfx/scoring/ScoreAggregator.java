@@ -165,8 +165,7 @@ public class ScoreAggregator {
     }
 
     /**
-     * Calculates the skills score. This method is currently unimplemented
-     * correctly, and will be fixed in a future update.
+     * Calculates the skills score.
      *
      * @return the calculated skills score
      */

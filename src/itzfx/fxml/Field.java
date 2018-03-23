@@ -160,6 +160,15 @@ public class Field implements AutoCloseable {
                 beginScorePulsing();
             }
         }
+        
+        public void autonPulsing() {
+            ScheduledFuture<?> collisions = executor.scheduleAtFixedRate(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+            ScheduledFuture<?> scores = executor.scheduleAtFixedRate(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+            Start.PULSER.schedule(() -> {
+                collisions.cancel(false);
+                scores.cancel(false);
+            }, 17, TimeUnit.SECONDS);
+        }
 
         private void beginScorePulsing() {
             if (scorePulser == null) {
@@ -856,10 +865,12 @@ public class Field implements AutoCloseable {
             switch (cm) {
                 case AUTON:
                 case PROGRAMMING_SKILLS:
-                    getRobots().forEach(r -> {
+                    for (Robot r : getRobots()) {
                         r.eraseController();
                         r.prime();
-                    });
+                    }
+                    getRobots().forEach(Robot::runProgram);
+                    pulseManager.autonPulsing();
                     break;
                 default:
                     getRobots().forEach(Robot::driverControl);

@@ -20,9 +20,11 @@ import itzfx.scoring.Scoreable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Queue;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -142,9 +144,9 @@ public final class Robot extends Mobile implements Scoreable {
     /**
      * Determines whether this robot has the specified mobile goal. This is
      * generally invoked by the
-     * {@link Field#getOwner(itzfx.fxml.game.objects.MobileGoal)} method to check
-     * whether the mobile goal seeking an owner is in fact held by this robot on
-     * a certain field.
+     * {@link Field#getOwner(itzfx.fxml.game.objects.MobileGoal)} method to
+     * check whether the mobile goal seeking an owner is in fact held by this
+     * robot on a certain field.
      *
      * @param mogo the {@link MobileGoal} to test
      * @return true if this robot is holding the specified Mobile Goal
@@ -348,14 +350,15 @@ public final class Robot extends Mobile implements Scoreable {
         return red;
     }
 
-    private final BooleanProperty recording = new SimpleBooleanProperty();
+    private boolean recording;
+    private ScheduledFuture<?> recordingTask;
 
     /**
      * Every call, if this robot is recording a rerun, a new set of commands is
      * buffered to the rerun.
      */
     public void pulse() {
-        if (recording.get()) {
+        if (recording) {
             if (pulse.isEmpty()) {
                 pulse.add(Command.NONE);
             }
@@ -368,11 +371,12 @@ public final class Robot extends Mobile implements Scoreable {
      * Begins recording a rerun.
      */
     public void record() {
-        if (!recording.get()) {
+        if (!recording) {
             pulse.clear();
             saved.clear();
         }
-        recording.set(true);
+        recording = true;
+        recordingTask = Start.PULSER.scheduleAtFixedRate(this::pulse, 0, 17, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -381,16 +385,6 @@ public final class Robot extends Mobile implements Scoreable {
      * @return true if the robot is currently recording
      */
     public boolean isRecording() {
-        return recording.get();
-    }
-
-    /**
-     * Returns the {@link BooleanProperty} monitoring the recording state of
-     * this robot.
-     *
-     * @return the property determining whether or not this robot is recording
-     */
-    public BooleanProperty recordingProperty() {
         return recording;
     }
 
@@ -398,7 +392,10 @@ public final class Robot extends Mobile implements Scoreable {
      * Stops recording the current rerun.
      */
     public void stopRecording() {
-        recording.set(false);
+        recording = false;
+        if (recordingTask != null) {
+            recordingTask.cancel(false);
+        }
     }
 
     /**
@@ -414,7 +411,13 @@ public final class Robot extends Mobile implements Scoreable {
                 saved.poll();
             }
         }
+        if (!saved.isEmpty()) {
+            while(saved.peekLast().get(0) == Command.NONE) {
+                saved.pollLast();
+            }
+        }
         List<String> recorded = Command.encode(saved);
+        System.out.println(recorded);
         saved.clear();
         return recorded;
     }
@@ -490,8 +493,8 @@ public final class Robot extends Mobile implements Scoreable {
     public void forward() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                super.shiftCenter(properties.getRobotSpeed() / 6 * (float) Math.cos(Math.toRadians(node.getRotate())),
-                        properties.getRobotSpeed() / 6 * (float) Math.sin(Math.toRadians(node.getRotate())));
+                super.shiftCenter(properties.getRobotSpeed() * 5 / 36 * (float) Math.cos(Math.toRadians(node.getRotate())),
+                        properties.getRobotSpeed() * 5 / 36 * (float) Math.sin(Math.toRadians(node.getRotate())));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -507,8 +510,8 @@ public final class Robot extends Mobile implements Scoreable {
     public void backward() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                super.shiftCenter(-properties.getRobotSpeed() / 6 * (float) Math.cos(Math.toRadians(node.getRotate())),
-                        -properties.getRobotSpeed() / 6 * (float) Math.sin(Math.toRadians(node.getRotate())));
+                super.shiftCenter(-properties.getRobotSpeed() * 5 / 36 * (float) Math.cos(Math.toRadians(node.getRotate())),
+                        -properties.getRobotSpeed() * 5 / 36 * (float) Math.sin(Math.toRadians(node.getRotate())));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -524,7 +527,7 @@ public final class Robot extends Mobile implements Scoreable {
     public void leftTurn() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                node.setRotate(node.getRotate() - properties.getRobotSpeed() / (Math.PI * 3.5));
+                node.setRotate(node.getRotate() - properties.getRobotSpeed() / (Math.PI * 4.2));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -540,7 +543,7 @@ public final class Robot extends Mobile implements Scoreable {
     public void rightTurn() {
         if (active.get() && driveBaseMovable.get()) {
             Platform.runLater(() -> {
-                node.setRotate(node.getRotate() + properties.getRobotSpeed() / (Math.PI * 3.5));
+                node.setRotate(node.getRotate() + properties.getRobotSpeed() / (Math.PI * 4.2));
             });
             if (isPrimed()) {
                 Field.getOwner(this).play();
@@ -988,7 +991,7 @@ public final class Robot extends Mobile implements Scoreable {
         r.acceptValues(RobotProperties.create(rs, rmit, rat, rst, rmms, rsms, rmf ? 1 : -1));
     }
 
-    private final Queue<List<Command>> saved = new ArrayDeque<>(1000);
+    private final Deque<List<Command>> saved = new ArrayDeque<>(1000);
 
     private List<Command> pulse = new ArrayList<>(2);
 
