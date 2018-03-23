@@ -6,11 +6,11 @@
 package itzfx;
 
 import itzfx.data.FileUI;
-import itzfx.fxml.GameObjects.MobileGoal;
-import itzfx.fxml.GameObjects.StationaryGoal;
-import itzfx.fxml.GameObjects.RedMobileGoal;
-import itzfx.fxml.GameObjects.BlueMobileGoal;
-import itzfx.fxml.GameObjects.Cone;
+import itzfx.fxml.game.objects.MobileGoal;
+import itzfx.fxml.game.objects.StationaryGoal;
+import itzfx.fxml.game.objects.RedMobileGoal;
+import itzfx.fxml.game.objects.BlueMobileGoal;
+import itzfx.fxml.game.objects.Cone;
 import itzfx.fxml.Field;
 import itzfx.rerun.Command;
 import itzfx.rerun.Rerun;
@@ -85,7 +85,7 @@ public final class Robot extends Mobile implements Scoreable {
 
     private final ScoreReport sr;
 
-    private final ImageView iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/Images/topviewicon.png"), 90, 90, false, true));
+    private final ImageView iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/images/topviewicon.png"), 90, 90, false, true));
 
     /**
      * Creates a robot at the specified coordinates with the specified initial
@@ -142,7 +142,7 @@ public final class Robot extends Mobile implements Scoreable {
     /**
      * Determines whether this robot has the specified mobile goal. This is
      * generally invoked by the
-     * {@link Field#getOwner(itzfx.fxml.GameObjects.MobileGoal)} method to check
+     * {@link Field#getOwner(itzfx.fxml.game.objects.MobileGoal)} method to check
      * whether the mobile goal seeking an owner is in fact held by this robot on
      * a certain field.
      *

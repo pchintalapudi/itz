@@ -6,4 +6,4 @@
 /**
  * This package contains the FXML files and controller code for the look and control of game objects (cones, mobile goals, etc.).
  */
-package itzfx.fxml.GameObjects;
+package itzfx.fxml.game.objects;

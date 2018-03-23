@@ -10,6 +10,7 @@ import itzfx.fxml.ScoreSheetController;
 import itzfx.fxml.SkillsScoreSheetController;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -36,20 +37,6 @@ import javafx.scene.layout.StackPane;
 public class ScoreAggregator {
 
     private final List<ScoreReport> reports;
-
-    private int red20;
-    private int blue20;
-    private int red10;
-    private int blue10;
-    private int red5;
-    private int blue5;
-    private int redCones;
-    private int blueCones;
-    private int redStacks;
-    private int blueStacks;
-    private int auton;
-    private int redPark;
-    private int bluePark;
 
     private Boolean autonomous;
 
@@ -79,40 +66,16 @@ public class ScoreAggregator {
      * @see ScoreAggregator#calculate()
      */
     public int[] calculateMatch() {
-        AtomicInteger[] initial = calculate();
-        highStack(initial[0], initial[1]);
-        if (autonomous != null) {
-            if (autonomous) {
-                initial[0].addAndGet(10);
-            } else {
-                initial[1].addAndGet(10);
-            }
-        }
-        return new int[]{initial[0].get(), initial[1].get()};
+        int vals[] = updatedReport();
+        return new int[]{
+            vals[0] * 20 + vals[2] * 10 + vals[4] * 5 + vals[6] * 2 + vals[8] * 5 + (vals[10] > 0 ? 10 : 0) + vals[11] * 2,
+            vals[1] * 20 + vals[3] * 10 + vals[5] * 5 + vals[7] * 2 + vals[9] * 5 + (vals[10] < 0 ? 10 : 0) + vals[12] * 2
+        };
     }
 
-    private AtomicInteger[] calculate() {
-        AtomicInteger aiR = new AtomicInteger();
-        AtomicInteger aiB = new AtomicInteger();
-        reports.forEach(sr -> {
-            if (sr.getOwner().isRed()) {
-                aiR.addAndGet(sr.getOwner().score());
-                aiR.addAndGet(sr.getType().getScore());
-            } else {
-                aiB.addAndGet(sr.getOwner().score());
-                aiB.addAndGet(sr.getType().getScore());
-            }
-        });
-        return new AtomicInteger[]{aiR, aiB};
-    }
-
-    private AtomicInteger calculateSkillsScore() {
-        AtomicInteger score = new AtomicInteger();
-        reports.forEach(sr -> {
-            score.addAndGet(sr.getOwner().scoreSkills());
-            score.addAndGet(sr.getType().getScore());
-        });
-        return score;
+    private int calculateSkillsScore() {
+        int[] vals = updatedSkillsReport();
+        return vals[0] * 20 + vals[1] * 10 + vals[2] * 5 + vals[3] * 2 + vals[4] * 2;
     }
 
     /**
@@ -123,24 +86,11 @@ public class ScoreAggregator {
      *
      */
     public int[] calculateAuton() {
-        AtomicInteger aiR = new AtomicInteger();
-        AtomicInteger aiB = new AtomicInteger();
-        reports.forEach(sr -> {
-            if (sr.getOwner().isRed()) {
-                aiR.addAndGet(sr.getOwner().score());
-            } else {
-                aiB.addAndGet(sr.getOwner().score());
-            }
-            if (sr.getType() != ScoreType.PARKING) {
-                if (sr.getOwner().isRed()) {
-                    aiR.addAndGet(sr.getType().getScore());
-                } else {
-                    aiB.addAndGet(sr.getType().getScore());
-                }
-            }
-        });
-        highStack(aiR, aiB);
-        return new int[]{aiR.get(), aiB.get()};
+        int[] vals = updatedReport();
+        return new int[]{
+            vals[0] * 20 + vals[2] * 10 + vals[4] * 5 + vals[6] * 2 + vals[8] * 5,
+            vals[1] * 20 + vals[3] * 10 + vals[5] * 5 + vals[7] * 2 + vals[9] * 5
+        };
     }
 
     private Boolean[] highStack(AtomicInteger aiR, AtomicInteger aiB) {
@@ -221,39 +171,30 @@ public class ScoreAggregator {
      * @return the calculated skills score
      */
     public int calculateSkills() {
-        AtomicInteger score = calculateSkillsScore();
-        return score.get();
+        return calculateSkillsScore();
     }
 
-    private void updateReport() {
-        red20 = 0;
-        blue20 = 0;
-        red10 = 0;
-        blue10 = 0;
-        red5 = 0;
-        blue5 = 0;
-        redCones = 0;
-        blueCones = 0;
-        redStacks = 0;
-        blueStacks = 0;
-        auton = 0;
-        redPark = 0;
-        bluePark = 0;
+    private int[] updatedReport() {
+        // red20, blue20, red10, blue10, red5, blue5, redCones, blueCones, redStacks, blueStacks, redParks, blueParks, redAuton, blueAuton;
+        AtomicInteger[] scores = new AtomicInteger[14];
+        for (int i = 0; i < scores.length; i++) {
+            scores[i] = new AtomicInteger();
+        }
         reports.forEach(r -> {
             if (r.getOwner().isRed()) {
-                redCones += r.getOwner().score() / 2;
+                scores[6].addAndGet(r.getOwner().score() / 2);
                 switch (r.getType()) {
                     case ZONE_20:
-                        red20++;
+                        scores[0].set(1);
                         break;
                     case ZONE_10:
-                        red10++;
+                        scores[2].incrementAndGet();
                         break;
                     case ZONE_5:
-                        red5++;
+                        scores[4].incrementAndGet();
                         break;
                     case PARKING:
-                        redPark++;
+                        scores[10].incrementAndGet();
                         break;
                     case ZONE_NONE:
                     case STAT_GOAL:
@@ -261,19 +202,19 @@ public class ScoreAggregator {
                         break;
                 }
             } else {
-                blueCones += r.getOwner().score() / 2;
+                scores[7].addAndGet(r.getOwner().score() / 2);
                 switch (r.getType()) {
                     case ZONE_20:
-                        blue20++;
+                        scores[1].set(1);
                         break;
                     case ZONE_10:
-                        blue10++;
+                        scores[3].incrementAndGet();
                         break;
                     case ZONE_5:
-                        blue5++;
+                        scores[5].incrementAndGet();
                         break;
                     case PARKING:
-                        bluePark++;
+                        scores[11].incrementAndGet();
                         break;
                     case ZONE_NONE:
                     case STAT_GOAL:
@@ -286,15 +227,16 @@ public class ScoreAggregator {
         for (Boolean b : stacks) {
             if (b != null) {
                 if (b) {
-                    redStacks++;
+                    scores[8].incrementAndGet();
                 } else {
-                    blueStacks++;
+                    scores[9].incrementAndGet();
                 }
             }
         }
         if (autonomous != null) {
-            auton = autonomous ? 1 : -1;
+            scores[autonomous ? 12 : 13].set(1);
         }
+        return Arrays.stream(scores).mapToInt(AtomicInteger::intValue).toArray();
     }
 
     /**
@@ -304,14 +246,13 @@ public class ScoreAggregator {
      * @see ScoreSheetController
      */
     public void showReport() {
-        updateReport();
         FXMLLoader loader = new FXMLLoader(ScoreAggregator.class.getResource("/itzfx/fxml/ScoreSheet.fxml"));
         try {
             Pane load = (loader.load());
             StackPane report = new StackPane(load);
             report.setPadding(new Insets(10));
             ScoreSheetController ssc = loader.getController();
-            ssc.update(new int[]{red20, blue20, red10, blue10, red5, blue5, redCones, blueCones, redStacks, blueStacks, auton, redPark, bluePark});
+            ssc.update(updatedReport());
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
             show.setTitle("Match Score Report");
             show.setHeaderText("Match Report");
@@ -328,14 +269,67 @@ public class ScoreAggregator {
         }
     }
 
+    private int[] updatedSkillsReport() {
+        //red20, blue20, red10, blue10, red5, blue5, redCones, blueCones, redParks, blueParks;
+        AtomicInteger[] scores = new AtomicInteger[10];
+        for (int i = 0; i < scores.length; i++) {
+            scores[i] = new AtomicInteger();
+        }
+        reports.forEach(r -> {
+            if (r.getOwner().isRed()) {
+                scores[6].addAndGet(r.getOwner().scoreSkills() / 2);
+                switch (r.getType()) {
+                    case ZONE_20:
+                        scores[0].set(1);
+                        break;
+                    case ZONE_10:
+                        scores[2].incrementAndGet();
+                        break;
+                    case ZONE_5:
+                        scores[4].incrementAndGet();
+                        break;
+                    case PARKING:
+                        scores[8].incrementAndGet();
+                        break;
+                    case ZONE_NONE:
+                    case STAT_GOAL:
+                    default:
+                        break;
+                }
+            } else {
+                scores[7].addAndGet(r.getOwner().score() / 2);
+                switch (r.getType()) {
+                    case ZONE_20:
+                        scores[1].set(1);
+                        break;
+                    case ZONE_10:
+                        scores[3].incrementAndGet();
+                        break;
+                    case ZONE_5:
+                        scores[5].incrementAndGet();
+                        break;
+                    case PARKING:
+                        scores[9].incrementAndGet();
+                        break;
+                    case ZONE_NONE:
+                    case STAT_GOAL:
+                    default:
+                        break;
+                }
+            }
+        });
+        return new int[]{scores[0].intValue() + scores[1].intValue(), scores[2].intValue() + scores[3].intValue(),
+            scores[4].intValue() + scores[5].intValue(), scores[6].intValue() + scores[7].intValue(),
+            scores[8].intValue() + scores[9].intValue()};
+    }
+
     public void showSkillsReport() {
-        updateReport();
         FXMLLoader loader = new FXMLLoader(ScoreAggregator.class.getResource("/itzfx/fxml/SkillsScoreSheet.fxml"));
         try {
             Pane load = (loader.load());
             StackPane report = new StackPane(load);
             report.setPadding(new Insets(10));
-            loader.<SkillsScoreSheetController>getController().update(new int[]{red20 + blue20, red10 + blue10, red5 + blue5, redCones + blueCones, redPark + bluePark});
+            loader.<SkillsScoreSheetController>getController().update(updatedSkillsReport());
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
             show.setTitle("Skills Score Report");
             show.setHeaderText("Skills Report");

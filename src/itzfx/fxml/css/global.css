@@ -323,24 +323,24 @@ Images
 */
 
 .robot {
-    -fx-image:url(../../Images/topviewicon.png);
+    -fx-image:url(../../images/topviewicon.png);
     -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
 }
 
 .vex-logo {
-    -fx-image:url(../../Images/VEXEDR-stacked-red-transp-1000px.png);
+    -fx-image:url(../../images/VEXEDR-stacked-red-transp-1000px.png);
 }
 
 .dvhs-robotics-logo {
-    -fx-image:url(../../Images/dvhsroboticslogo2015.png);
+    -fx-image:url(../../images/dvhsroboticslogo2015.png);
 }
 
 .check {
-    -fx-image:url(../../Images/check.png);
+    -fx-image:url(../../images/check.png);
 }
 
 .logo {
-    -fx-image:url(../../Images/phoenixWlogo.png);
+    -fx-image:url(../../images/phoenixWlogo.png);
 }
 
 /*

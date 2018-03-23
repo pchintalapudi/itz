@@ -148,7 +148,7 @@ public class Start extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("In The Zone (ITZ)");
-        primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("Images/icon.png")));
+        primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("images/icon.png")));
         final float width = 1600, height = 900;
         AnchorPane.setLeftAnchor(p, 0d);
         AnchorPane.setTopAnchor(p, 0d);

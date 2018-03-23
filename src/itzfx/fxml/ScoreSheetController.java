@@ -78,15 +78,17 @@ public class ScoreSheetController {
      * </p><p>
      * Blue # of high stacks
      * </p><p>
-     * Autonomous bonus (1 if red, -1 if blue, 0 if none)
-     * </p><p>
      * Red # of robots parked
      * </p><p>
      * Blue # of robots parked
+     * </p><p>
+     * Red Autonomous bonus (1 if true)
+     * </p><p>
+     * Blue Autonomous bonus (1 if true)
      * </p>
      */
     public void update(int[] temp) {
-        int[] vals = new int[13];
+        int[] vals = new int[14];
         if (temp != null) {
             System.arraycopy(temp, 0, vals, 0, temp.length > vals.length ? temp.length : vals.length);
         }
@@ -104,7 +106,7 @@ public class ScoreSheetController {
         blueAuton.setVisible(vals[10] < 0);
         redPark.setText(String.valueOf(vals[11]));
         bluePark.setText(String.valueOf(vals[12]));
-        redTotal.setText(String.valueOf(vals[0] * 20 + vals[2] * 10 + vals[4] * 5 + vals[6] * 2 + vals[8] * 5 + (vals[10] > 0 ? 10 : 0) + vals[11] * 2));
-        blueTotal.setText(String.valueOf(vals[1] * 20 + vals[3] * 10 + vals[5] * 5 + vals[7] * 2 + vals[9] * 5 + (vals[10] < 0 ? 10 : 0) + vals[12] * 2));
+        redTotal.setText(String.valueOf(vals[0] * 20 + vals[2] * 10 + vals[4] * 5 + vals[6] * 2 + vals[8] * 5 + vals[10] * 2 + vals[12] * 10));
+        blueTotal.setText(String.valueOf(vals[1] * 20 + vals[3] * 10 + vals[5] * 5 + vals[7] * 2 + vals[9] * 5 + vals[11] * 2 + vals[13] * 10));
     }
 }
