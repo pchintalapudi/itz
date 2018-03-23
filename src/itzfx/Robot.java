@@ -461,18 +461,6 @@ public final class Robot extends Mobile implements Scoreable {
      */
     @Override
     protected void rightClickOptions(ContextMenu rightClick) {
-        MenuItem setAuton = new MenuItem("Set Autonomous");
-        setAuton.setOnAction(e -> {
-            e.consume();
-            FileUI.getRerun(this, node.getScene().getWindow());
-        });
-        rightClick.getItems().add(setAuton);
-        MenuItem runAuton = new MenuItem("Run Autonomous");
-        runAuton.setOnAction(e -> {
-            e.consume();
-            runProgram();
-        });
-        rightClick.getItems().add(runAuton);
         MenuItem dc = new MenuItem("Enable Driver Control");
         dc.setOnAction(e -> {
             e.consume();

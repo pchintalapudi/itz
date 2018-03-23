@@ -100,24 +100,4 @@ public class RobotMenu {
     private void loadKC() {
         FileUI.getKeyControl(r, r.getNode().getScene().getWindow());
     }
-
-    @FXML
-    private void record() {
-        if (!r.isRecording()) {
-            r.record();
-        } else {
-            r.stopRecording();
-            FileUI.saveRerun(r, r.getNode().getScene().getWindow());
-        }
-    }
-
-    @FXML
-    private void distance() {
-        Translate.userTranslateToDistance(r.getNode().getScene().getWindow(), r);
-    }
-
-    @FXML
-    private void time() {
-        Translate.userTranslateToTime(r.getNode().getScene().getWindow());
-    }
 }

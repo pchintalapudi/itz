@@ -67,12 +67,18 @@ and open the template in the editor.
     -off-white:derive(white, -5%);
 
     /*
-    Intense blue variants
+    Blue variants
     */
-    -blue-intense-quarter:rgba(0%, 50%, 100%, .25);
-    -blue-intense-half:rgba(0%, 50%, 100%, .5);
-    -blue-intense-triple-quarter:rgba(0%, 50%, 100%, .75);
-    -blue-intense:rgb(0%, 50%, 100%);
+    -blue-base-light:rgba(0%, 50%, 100%, 0.1);
+    -blue-base-quarter:rgba(0%, 50%, 100%, .25);
+    -blue-base-half:rgba(0%, 50%, 100%, .5);
+    -blue-base-triple-quarter:rgba(0%, 50%, 100%, .75);
+    -blue-base:rgb(0%, 50%, 100%);
+    
+    /*
+    Base green
+    */
+    -green-base:rgb(0%, 75%, 25%);
 }
 
 .white-background {
@@ -108,20 +114,24 @@ Button stuff
 }
 
 .button, .toggle-button {
-    -fx-border-color:-blue-intense;
+    -fx-border-color:-blue-base;
     -fx-background-color:white;
 }
 
 .button:focused, .toggle-button:focused {
-    -fx-background-color:-blue-intense-quarter;
+    -fx-background-color:-blue-base-light;
 }
 
 .button:hover, .toggle-button:hover {
-    -fx-background-color:-blue-intense-half;
+    -fx-background-color:-blue-base-quarter;
 }
 
 .button:pressed, .toggle-button:pressed {
-    -fx-background-color:-blue-intense-triple-quarter;
+    -fx-background-color:-blue-base-triple-quarter;
+}
+
+.toggle-button:selected {
+    -fx-background-color:-blue-base-half;
 }
 
 /*
@@ -266,7 +276,7 @@ Other things
 }
 
 .intense-color-progress-bar {
-    -fx-accent:-blue-intense;
+    -fx-accent:-blue-base;
 }
 
 /*
@@ -303,19 +313,19 @@ Field mode selector
 
 .field-mode-selector {
     -fx-background-color:white;
-    -fx-border-color:-blue-intense;
+    -fx-border-color:-blue-base;
 }
 
 .field-mode-selector:focused {
-    -fx-background-color:-blue-intense-quarter;
+    -fx-background-color:-blue-base-quarter;
 }
 
 .field-mode-selector:hover {
-    -fx-background-color:-blue-intense-half;
+    -fx-background-color:-blue-base-half;
 }
 
 .field-mode-selector:pressed {
-    -fx-background-color:-blue-intense-triple-quarter;
+    -fx-background-color:-blue-base-triple-quarter;
 }
 
 /*
@@ -353,18 +363,19 @@ Info screen things
 
 .blue-tab-pane > .tab-header-area > .tab-header-background {
     -fx-background-color:-off-white;
+    -fx-border-color:derive(-off-white, -10%);
 }
 
 .blue-tab-pane > .tab-header-area > .headers-region > .tab:hover {
-    -fx-background-color:-blue-intense-quarter;
+    -fx-background-color:-blue-base-quarter;
 }
 
 .blue-tab-pane > .tab-header-area > .headers-region > .tab:pressed {
-    -fx-background-color:-blue-intense-triple-quarter;
+    -fx-background-color:-blue-base-triple-quarter;
 }
 
 .blue-tab-pane > .tab-header-area > .headers-region > .tab:selected {
-    -fx-background-color:-blue-intense-half;
+    -fx-background-color:-blue-base-half;
 }
 
 .blue-table-view > .column-header-background > .nested-column-header > .table-column {
@@ -372,7 +383,7 @@ Info screen things
 }
 
 .blue-table-view > .column-header-background > .nested-column-header > .table-column:pressed {
-    -fx-background-color:-blue-intense-half;
+    -fx-background-color:-blue-base-half;
 }
 
 /*
@@ -386,12 +397,12 @@ Scrollbar styling
 
 .scroll-bar:horizontal:hover > .thumb,
 .scroll-bar:vertical:hover > .thumb {
-    -fx-background-color:-blue-intense-quarter;
+    -fx-background-color:-blue-base-quarter;
 }
 
 .scroll-bar:horizontal:pressed > .thumb,
 .scroll-bar:vertical:pressed > .thumb {
-    -fx-background-color:-blue-intense-half;
+    -fx-background-color:-blue-base-half;
 }
 
 /*
@@ -414,10 +425,57 @@ SplitPane styling
 
 .split-pane:horizontal > .split-pane-divider:hover,
 .split-pane:vertical > .split-pane-divider:hover {
-    -fx-background-color:-blue-intense-quarter;
+    -fx-background-color:-blue-base-quarter;
 }
 
 .split-pane:horizontal > .split-pane-divider:pressed,
 .split-pane:vertical > .split-pane-divider:pressed {
-    -fx-background-color:-blue-intense-half;
+    -fx-background-color:-blue-base-half;
+}
+
+/*
+Clickable cover
+*/
+
+.clickable-cover {
+    -fx-background-color:transparent;
+    -fx-fill:transparent;
+}
+
+.clickable-cover:hover {
+    -fx-background-color:-blue-base-quarter;
+    -fx-fill:-blue-base-quarter;
+}
+
+.clickable-cover:pressed {
+    -fx-background-color:-blue-base-half;
+    -fx-fill:-blue-base-half;
+}
+
+/*
+Error text
+*/
+
+.error-text {
+    -fx-fill:red;
+}
+
+.error-text:hover {
+    -fx-fill:derive(red, 10%);
+}
+
+/*
+Checkbox styling
+*/
+
+.flat-check-box > .box {
+    -fx-background-color:white;
+    -fx-border-color:-off-white;
+    -fx-border-radius:1.5;
+}
+
+.flat-check-box:selected > .box > .mark,
+.flat-check-box:selected > .text {
+    -fx-background-color:-green-base;
+    -fx-fill:-green-base;
 }
