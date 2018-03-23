@@ -5,6 +5,8 @@
  */
 package itzfx.fxml;
 
+import itzfx.fxml.tabs.RobotInfoController;
+import itzfx.fxml.tabs.RobotDataController;
 import itzfx.Start;
 import itzfx.ControlMode;
 import itzfx.Hitbox;

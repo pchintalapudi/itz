@@ -123,17 +123,17 @@
                             <tabs>
                                 <Tab closable="false" text="Robot Controllers">
                                     <content>
-                                        <fx:include fx:id="robotInfo" source="RobotInfo.fxml" />
+                                        <fx:include fx:id="robotInfo" source="tabs/RobotInfo.fxml" />
                                     </content>
                                 </Tab>
                                 <Tab closable="false" text="Robot Data">
                                     <content>
-                                        <fx:include fx:id="robotData" source="RobotData.fxml" />
+                                        <fx:include fx:id="robotData" source="tabs/RobotData.fxml" />
                                     </content>
                                 </Tab>
                                 <Tab closable="false" text="Program Data">
                                     <content>
-                                        <fx:include source="SystemStats.fxml" />
+                                        <fx:include source="tabs/SystemStats.fxml" />
                                     </content>
                                 </Tab>
                                 <Tab closable="false" text="Robot 4">
