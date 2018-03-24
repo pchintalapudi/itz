@@ -54,6 +54,11 @@ public class KeyBinder {
             int index = left.getSelectionModel().getSelectedIndex();
             if (index != -1) {
                 String replace = left.getItems().get(index).split("  ")[0];
+                for (int i = 0; i < keys.length; i++) {
+                    if (i != index && keys[i].equals(k.getCode())) {
+                        return;
+                    }
+                }
                 keyboard.remove(keys[index]);
                 keys[index] = k.getCode();
                 left.getItems().set(index, replace + "  " + k.getCode());
