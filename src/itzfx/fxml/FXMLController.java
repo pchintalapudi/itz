@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -85,7 +86,7 @@ public class FXMLController implements AutoCloseable {
         fieldController.inject(sbc);
         logo.rotateProperty().bind(fieldPane.rotateProperty().negate());
         List<Robot> robots = fieldController.getRobots();
-        tabManagerController.insertRobots(robots);
+        tabManagerController.insert(fieldController, robots);
         for (int i = 0; i < robots.size(); i++) {
             RobotMenu controller = new RobotMenu(robots.get(i), "Robot " + (i + 1));
             FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("RobotMenu.fxml"));
@@ -140,9 +141,15 @@ public class FXMLController implements AutoCloseable {
     private void restart() {
         Stage primaryStage = (Stage) root.getScene().getWindow();
         close();
-        new Prestart().start(new Stage());
-        ignition.init();
-        ignition.start(primaryStage);
+        Prestart p;
+        (p = new Prestart()).start(new Stage());
+        Start.PULSER.submit(() -> {
+            ignition.init();
+            Platform.runLater(() -> {
+                ignition.restart(primaryStage);
+                p.close();
+            });
+        });
     }
 
     @FXML
@@ -197,7 +204,7 @@ public class FXMLController implements AutoCloseable {
             Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void setRotate(double rotate) {
         fieldPane.setRotate(rotate);
     }

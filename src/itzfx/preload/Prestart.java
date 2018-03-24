@@ -125,4 +125,9 @@ public class Prestart extends Preloader {
     public void handleProgressNotification(ProgressNotification pn) {
         //Nothing really happens
     }
+    
+    public void close() {
+        suddenClose = false;
+        stage.close();
+    }
 }

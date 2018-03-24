@@ -20,6 +20,11 @@
                 <fx:include fx:id="robotData" source="RobotData.fxml" />
             </content>
         </Tab>
+        <Tab closable="false" text="Match" >
+            <content>
+                <fx:include source="Match.fxml" />
+            </content>
+        </Tab>
         <Tab closable="false" text="Program Data">
             <content>
                 <fx:include fx:id="programData" source="SystemStats.fxml" />

@@ -6,6 +6,7 @@
 package itzfx.fxml.tabs;
 
 import itzfx.Robot;
+import itzfx.fxml.Field;
 import java.util.Collection;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -34,7 +35,7 @@ public class TabManagerController {
     @FXML
     private SystemStatsController programDataController;
     
-    public void insertRobots(Collection<? extends Robot> c) {
+    public void insert(Field f, Collection<? extends Robot> c) {
         robotInfoController.injectRobots(c);
         robotDataController.injectRobots(c);
         autonController.insertRobots(c);
