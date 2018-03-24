@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="650.0" stylesheets="@../css/global.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1">
+   <children>
+      <SplitPane dividerPositions="0.702" prefHeight="250.0" prefWidth="650.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="249.0" prefWidth="330.0">
+               <children>
+                  <StackPane prefHeight="249.0" prefWidth="452.0">
+                     <children>
+                        <ImageView fitHeight="249.0" fitWidth="452.0" pickOnBounds="true" preserveRatio="true" styleClass="robot-cad" />
+                     </children>
+                  </StackPane>
+                  <VBox alignment="CENTER" layoutX="-1.0" layoutY="197.0">
+                     <children>
+                        <Label text="Drive Base Speed:" textFill="WHITE" />
+                        <Label text="Speed (in/sec)" textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="346.0" layoutY="183.0">
+                     <children>
+                        <Label text="Autostack Time:" textFill="WHITE" />
+                        <Label text="Time (sec)" textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="6.0" layoutY="116.0">
+                     <children>
+                        <Label text="Mobile Goal Time" textFill="WHITE" />
+                        <Label text="Time (sec)" textFill="WHITE" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

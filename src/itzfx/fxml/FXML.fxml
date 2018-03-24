@@ -162,7 +162,7 @@
                     <center>
                         <Pane prefHeight="750.0" prefWidth="730.0">
                             <children>
-                                <fx:include source="Field.fxml" />
+                                <fx:include source="Field.fxml" fx:id="field"/>
                             </children>
                         </Pane>
                     </center>

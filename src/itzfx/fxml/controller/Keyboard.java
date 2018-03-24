@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
@@ -18,7 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -46,8 +47,8 @@ public class Keyboard {
                 KeyCode.F11, KeyCode.F12, KeyCode.PRINTSCREEN, KeyCode.SCROLL_LOCK, KeyCode.PAUSE);
         List<KeyCode> row2 = Arrays.asList(KeyCode.BACK_QUOTE, KeyCode.DIGIT1, KeyCode.DIGIT2, KeyCode.DIGIT3,
                 KeyCode.DIGIT4, KeyCode.DIGIT5, KeyCode.DIGIT6, KeyCode.DIGIT7, KeyCode.DIGIT8,
-                KeyCode.DIGIT9, KeyCode.DIGIT0, KeyCode.MINUS, KeyCode.EQUALS, KeyCode.INSERT,
-                KeyCode.HOME, KeyCode.PAGE_UP, KeyCode.NUM_LOCK, KeyCode.BACK_SPACE,
+                KeyCode.DIGIT9, KeyCode.DIGIT0, KeyCode.MINUS, KeyCode.EQUALS, KeyCode.BACK_SPACE,
+                KeyCode.INSERT, KeyCode.HOME, KeyCode.PAGE_UP, KeyCode.NUM_LOCK,
                 KeyCode.DIVIDE, KeyCode.MULTIPLY, KeyCode.SUBTRACT);
         List<KeyCode> row3 = Arrays.asList(KeyCode.TAB, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.T,
                 KeyCode.Y, KeyCode.U, KeyCode.I, KeyCode.O, KeyCode.P, KeyCode.OPEN_BRACKET,
@@ -65,37 +66,48 @@ public class Keyboard {
                 KeyCode.JAPANESE_HIRAGANA, KeyCode.ALPHANUMERIC, KeyCode.ALL_CANDIDATES, KeyCode.LEFT,
                 KeyCode.DOWN, KeyCode.RIGHT, KeyCode.NUMPAD0, KeyCode.DECIMAL);
         Iterator<KeyCode> it = Arrays.asList(row1, row2, row3, row4, row5, row6).stream().flatMap(r -> r.stream()).iterator();
-        mappings = keyGroup.getChildren().stream().sequential().filter(n -> n instanceof Rectangle)
-                .map(n -> (Rectangle) n).collect(Collectors.toMap(r -> it.next(), Function.identity()));
-        mappings.entrySet().stream().forEach(e -> e.getValue().addEventFilter(MouseEvent.MOUSE_PRESSED, m -> {
-            System.out.println(m);
+        mappings = keyGroup.getChildren().stream().sequential().map(StackPane.class::cast).map(StackPane::getChildren)
+                .map(l -> l.get(0)).filter(Rectangle.class::isInstance).map(Rectangle.class::cast)
+                .collect(Collectors.toMap(r -> it.next(), Function.identity()));
+        mappings.entrySet().stream().forEach(e -> e.getValue().addEventHandler(MouseEvent.MOUSE_PRESSED, m -> {
+            m.consume();
             ((BorderPane) root.getParent()).getLeft().fireEvent(new KeyEvent(null, null, KeyEvent.KEY_PRESSED, null, null, e.getKey(), false, false, false, false));
         }));
     }
 
+    private static final PseudoClass SELECTED = PseudoClass.getPseudoClass("selected");
+    private static final PseudoClass SAVED = PseudoClass.getPseudoClass("saved");
+
     private Rectangle selected;
 
     /**
-     * Removes the fill indicating a key has been selected.
+     * Removes the indication that this key has been selected.
      *
      * @param k the KeyCode of the key to remove
      */
     public void remove(KeyCode k) {
-        mappings.get(k).setFill(null);
+        Rectangle r = mappings.get(k);
+        if (r != null) {
+            r.pseudoClassStateChanged(SELECTED, false);
+            r.pseudoClassStateChanged(SAVED, false);
+            r.setMouseTransparent(false);
+            if (r == selected) {
+                deselect();
+            }
+        }
     }
 
     /**
-     * Highlights a key in blue to indicate that this key has focus.
+     * Highlights a key to indicate that this key has focus.
      *
      * @param k the KeyCode of the key to highlight
      */
     public void selected(KeyCode k) {
-        if (selected != null) {
-            selected.setFill(null);
-        }
+        deselect();
         selected = mappings.get(k);
         if (selected != null) {
-            selected.setFill(new Color(.5, .7, 1, .25));
+            selected.pseudoClassStateChanged(SELECTED, true);
+            selected.setMouseTransparent(true);
         }
     }
 
@@ -105,8 +117,26 @@ public class Keyboard {
      */
     public void deselect() {
         if (selected != null) {
-            selected.setFill(null);
+            selected.pseudoClassStateChanged(SELECTED, false);
+            selected.setMouseTransparent(false);
             selected = null;
+        }
+    }
+    
+    public void disable(KeyCode k) {
+        Rectangle r = mappings.get(k);
+        if (r != null) {
+            if (r == selected) {
+                deselect();
+            }
+            r.setDisable(true);
+        }
+    }
+    
+    public void enable(KeyCode k) {
+        Rectangle r;
+        if ((r = mappings.get(k)) != null) {
+            r.setDisable(false);
         }
     }
 
@@ -116,8 +146,10 @@ public class Keyboard {
      */
     public void save() {
         if (selected != null) {
-            selected.setFill(new Color(1, 1, 1, .25));
-            selected = null;
+            selected.pseudoClassStateChanged(SAVED, true);
+            Rectangle r = selected;
+            deselect();
+            r.setMouseTransparent(true);
         }
     }
 }

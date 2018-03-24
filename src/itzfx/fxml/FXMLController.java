@@ -5,8 +5,6 @@
  */
 package itzfx.fxml;
 
-import itzfx.fxml.tabs.RobotInfoController;
-import itzfx.fxml.tabs.RobotDataController;
 import itzfx.Start;
 import itzfx.ControlMode;
 import itzfx.Hitbox;
@@ -58,7 +56,10 @@ public class FXMLController implements AutoCloseable {
     @FXML
     private Parent right;
 
-    private Field field;
+    @FXML
+    private Pane field;
+    @FXML
+    private Field fieldController;
 
     private ScoringBoxController sbc;
 
@@ -79,12 +80,11 @@ public class FXMLController implements AutoCloseable {
     @FXML
     private void initialize() {
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-        field = (Field) ((Pane) ((BorderPane) ((Pane) root.getCenter()).getChildren().get(0)).getCenter()).getChildren().get(0).getUserData();
         Hitbox.VISIBLE.bind(showHitboxes.selectedProperty());
         sbc = (ScoringBoxController) right.getChildrenUnmodifiable().get(0).getUserData();
-        field.inject(sbc);
+        fieldController.inject(sbc);
         logo.rotateProperty().bind(fieldPane.rotateProperty().negate());
-        List<Robot> robots = field.getRobots();
+        List<Robot> robots = fieldController.getRobots();
         tabManagerController.insertRobots(robots);
         for (int i = 0; i < robots.size(); i++) {
             RobotMenu controller = new RobotMenu(robots.get(i), "Robot " + (i + 1));
@@ -99,23 +99,23 @@ public class FXMLController implements AutoCloseable {
         }
     }
 
-    public Field getField() {
-        return field;
+    public Field getFieldController() {
+        return fieldController;
     }
 
     @FXML
     private void reset() {
-        field.reset();
+        fieldController.reset();
     }
 
     /**
      * Closes this FXMLController and associated window. Also calls the
-     * {@link Field#close()} method of the embedded field.
+     * {@link Field#close()} method of the embedded fieldController.
      */
     @FXML
     @Override
     public void close() {
-        field.close();
+        fieldController.close();
         if (root.getScene() != null && root.getScene().getWindow() != null) {
             root.getScene().getWindow().hide();
         }
@@ -147,37 +147,37 @@ public class FXMLController implements AutoCloseable {
 
     @FXML
     private void dc() {
-        field.setMode(ControlMode.DRIVER_CONTROL);
+        fieldController.setMode(ControlMode.DRIVER_CONTROL);
     }
 
     @FXML
     private void auton() {
-        field.setMode(ControlMode.AUTON);
+        fieldController.setMode(ControlMode.AUTON);
     }
 
     @FXML
     private void ds() {
-        field.setMode(ControlMode.DRIVER_SKILLS);
+        fieldController.setMode(ControlMode.DRIVER_SKILLS);
     }
 
     @FXML
     private void ps() {
-        field.setMode(ControlMode.PROGRAMMING_SKILLS);
+        fieldController.setMode(ControlMode.PROGRAMMING_SKILLS);
     }
 
     @FXML
     private void fp() {
-        field.setMode(ControlMode.FREE_PLAY);
+        fieldController.setMode(ControlMode.FREE_PLAY);
     }
 
     @FXML
     private void prematch() {
-        field.preMatch();
+        fieldController.preMatch();
     }
 
     @FXML
     private void match() {
-        field.startMatch();
+        fieldController.startMatch();
     }
 
     @FXML

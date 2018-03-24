@@ -77,27 +77,4 @@ public class RobotMenu {
     private void load() {
         FileUI.fillRobot(r, r.getNode().getScene().getWindow());
     }
-
-    @FXML
-    private void create() {
-        FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("/itzfx/fxml/controller/KeyBinder.fxml"));
-        KeyBinder kb = new KeyBinder(r.getController());
-        loader.setController(kb);
-        try {
-            AnchorPane load = loader.load();
-            Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY);
-            show.getDialogPane().setContent(load);
-            show.showAndWait().filter(bt -> bt.getButtonData().equals(ButtonBar.ButtonData.APPLY)).ifPresent(bt -> {
-                r.setController(kb.getKC());
-                FileUI.saveKeyControl(kb.getKC(), r.getNode().getScene().getWindow());
-            });
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @FXML
-    private void loadKC() {
-        FileUI.getKeyControl(r, r.getNode().getScene().getWindow());
-    }
 }

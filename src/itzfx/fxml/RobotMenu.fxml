@@ -11,12 +11,6 @@
         <items>
             <MenuItem mnemonicParsing="false" onAction="#load" text="Load" />
           <MenuItem mnemonicParsing="false" onAction="#build" text="Build" />
-            <Menu mnemonicParsing="false" text="Controller">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#create" text="Create" />
-                  <MenuItem mnemonicParsing="false" onAction="#loadKC" text="Load" />
-              </items>
-            </Menu>
         </items>
       </Menu>
    </menus>
