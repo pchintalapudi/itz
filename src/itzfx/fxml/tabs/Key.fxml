@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane id="AnchorPane" prefHeight="60.0" prefWidth="60.0" styleClass="key" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1" fx:controller="itzfx.fxml.tabs.KeyController">
+<AnchorPane id="AnchorPane" prefHeight="60.0" prefWidth="60.0" styleClass="key" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/" fx:controller="itzfx.fxml.tabs.KeyController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="60.0" strokeType="INSIDE" styleClass="base" width="60.0" />
       <Line endX="59.0" endY="59.0" startX="1.0" startY="1.0" styleClass="depth" />

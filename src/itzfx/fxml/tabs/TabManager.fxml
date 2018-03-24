@@ -3,7 +3,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="710.0" styleClass="blue-tab-pane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.tabs.TabManagerController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="710.0" styleClass="blue-tab-pane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.tabs.TabManagerController">
     <tabs>
         <Tab closable="false" text="Robot Controllers">
             <content>
@@ -18,6 +18,11 @@
         <Tab closable="false" text="Robot Data">
             <content>
                 <fx:include fx:id="robotData" source="RobotData.fxml" />
+            </content>
+        </Tab>
+        <Tab closable="false" text="Match" >
+            <content>
+                <fx:include source="Match.fxml" />
             </content>
         </Tab>
         <Tab closable="false" text="Program Data">

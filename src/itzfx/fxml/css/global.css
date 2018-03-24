@@ -84,9 +84,11 @@ and open the template in the editor.
     -green-base:rgb(0%, 75%, 25%);
     
     /*
-    Translucent red
+    Red variants
     */
     -red-base-light:rgba(100%, 10%, 0%, 0.1);
+    -red-base-quarter:rgba(100%, 10%, 0%, 0.25);
+    -red-base:rgb(100%, 10%, 0%);
 }
 
 .white-background {
@@ -136,6 +138,10 @@ Button stuff
 
 .button:pressed, .toggle-button:pressed {
     -fx-background-color:-blue-base-triple-quarter;
+}
+
+.button:disabled, .toggle-button:disabled {
+    -fx-background-color:-red-base-quarter;
 }
 
 .toggle-button:selected {

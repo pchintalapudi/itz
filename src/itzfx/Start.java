@@ -21,6 +21,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -155,6 +156,11 @@ public class Start extends Application {
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    public void restart(Stage primaryStage) {
+        start(primaryStage);
+        Start.PULSER.schedule(() -> Platform.runLater(fxml.getFieldController()::reset), 1250, TimeUnit.MILLISECONDS);
     }
 
     private void addRotateListeners(Scene scene) {
