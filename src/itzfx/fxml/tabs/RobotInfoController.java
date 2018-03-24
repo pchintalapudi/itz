@@ -17,29 +17,29 @@ import javafx.scene.layout.AnchorPane;
  * @author prem
  */
 public class RobotInfoController {
-    
+
     @FXML
-    private AnchorPane controller1;
+    private AnchorPane worker1;
     @FXML
-    private AnchorPane controller2;
+    private AnchorPane worker2;
     @FXML
-    private AnchorPane controller3;
+    private AnchorPane worker3;
     @FXML
-    private AnchorPane controller4;
+    private AnchorPane worker4;
     @FXML
-    private ControlLayoutController controller1Controller;
+    private RobotInfoWorkerController worker1Controller;
     @FXML
-    private ControlLayoutController controller2Controller;
+    private RobotInfoWorkerController worker2Controller;
     @FXML
-    private ControlLayoutController controller3Controller;
+    private RobotInfoWorkerController worker3Controller;
     @FXML
-    private ControlLayoutController controller4Controller;
-    
+    private RobotInfoWorkerController worker4Controller;
+
     public void injectRobots(Collection<? extends Robot> c) {
         Iterator<? extends Robot> i = c.iterator();
-        controller1Controller.insertRobot(i.next());
-        controller2Controller.insertRobot(i.next());
-        controller3Controller.insertRobot(i.next());
-        controller4Controller.insertRobot(i.next());
+        worker1Controller.insertRobot(i.next());
+        worker2Controller.insertRobot(i.next());
+        worker3Controller.insertRobot(i.next());
+        worker4Controller.insertRobot(i.next());
     }
 }

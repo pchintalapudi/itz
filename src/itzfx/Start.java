@@ -21,7 +21,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Preloader.ProgressNotification;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -203,6 +202,15 @@ public class Start extends Application {
      * Main thread pool for scheduling tasks.
      */
     public static final ScheduledExecutorService PULSER = Executors.newSingleThreadScheduledExecutor();
+
+    public static void debug() {
+        System.out.println("*************************************************");
+        StackTraceElement[] array = Thread.currentThread().getStackTrace();
+        System.out.println("Class called: " + array[2].getClassName());
+        System.out.println("Method called: " + array[2].getMethodName());
+        System.out.println("Calling class: " + array[3].getClassName());
+        System.out.println("Calling method: " + array[3].getMethodName());
+    }
 
     /**
      * {@inheritDoc}

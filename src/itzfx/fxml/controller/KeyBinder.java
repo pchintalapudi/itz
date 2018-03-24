@@ -54,6 +54,7 @@ public class KeyBinder {
             int index = left.getSelectionModel().getSelectedIndex();
             if (index != -1) {
                 String replace = left.getItems().get(index).split("  ")[0];
+                keyboard.remove(keys[index]);
                 keys[index] = k.getCode();
                 left.getItems().set(index, replace + "  " + k.getCode());
                 keyboard.selected(k.getCode());
@@ -62,6 +63,11 @@ public class KeyBinder {
         left.addEventFilter(MouseEvent.MOUSE_RELEASED, m -> {
             keyboard.save();
             keyboard.selected(keys[left.getSelectionModel().getSelectedIndex()]);
+        });
+        center.setOnMousePressed(m -> {
+            keyboard.save();
+            keyboard.deselect();
+            left.getSelectionModel().clearSelection();
         });
     }
 

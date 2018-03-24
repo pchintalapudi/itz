@@ -76,9 +76,17 @@ and open the template in the editor.
     -blue-base:rgb(0%, 50%, 100%);
     
     /*
-    Base green
+    Green variants
     */
+    -green-base-light:rgba(0%, 75%, 25%, 0.1);
+    -green-base-quarter:rgba(0%, 75%, 25%, 0.25);
+    -green-base-half:rgba(0%, 75%, 25%, 0.25);
     -green-base:rgb(0%, 75%, 25%);
+    
+    /*
+    Translucent red
+    */
+    -red-base-light:rgba(100%, 10%, 0%, 0.1);
 }
 
 .white-background {
@@ -353,6 +361,18 @@ Images
     -fx-image:url(../../images/phoenixWlogo.png);
 }
 
+.robot-cad {
+    -fx-image:url(../../images/pEc-3PREM1.png);
+}
+
+.mobile-goal-cad {
+    -fx-image:url(../../images/redMOGO.png);
+}
+
+.cone-cad {
+    -fx-image:url(../../images/cone.png);
+}
+
 /*
 Info screen things
 */
@@ -511,4 +531,32 @@ Key styling
 .indicator {
     -fx-fill:white;
     -fx-stroke:black;
+}
+
+/*
+Keyboard styling
+*/
+
+.keyboard-rect {
+    -fx-fill:transparent;
+}
+
+.keyboard-rect:hover {
+    -fx-fill:-blue-base-light;
+}
+
+.keyboard-rect:saved {
+    -fx-fill:-green-base-quarter;
+}
+
+.keyboard-rect:pressed {
+    -fx-fill:-blue-base-half;
+}
+
+.keyboard-rect:selected {
+    -fx-fill:-blue-base-quarter;
+}
+
+.keyboard-rect:disabled {
+    -fx-fill:-red-base-light;
 }
