@@ -8,14 +8,12 @@ package itzfx.data;
 import itzfx.KeyControl;
 import itzfx.Robot;
 import java.io.File;
-import java.util.Arrays;
 import java.util.function.Consumer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
-import javafx.util.Pair;
 
 /**
  * This class provides useful UI methods for saving and loading files. The
@@ -111,12 +109,13 @@ public class FileUI {
      *
      * @param r the robot to load the rerun into
      * @param owner the window to block
+     * @return the file that was loaded
      *
      * @see FileUI#load(java.lang.String, java.lang.String, javafx.stage.Window,
      * java.util.function.Consumer)
      */
-    public static void getRerun(Robot r, Window owner) {
-        load("Autonomous", "*.rrn", owner, f -> Retrieval.readRerun(r, f));
+    public static File getRerun(Robot r, Window owner) {
+        return load("Autonomous", "*.rrn", owner, f -> Retrieval.readRerun(r, f));
     }
 
     /**
@@ -155,8 +154,9 @@ public class FileUI {
      * @param extension the extension for the file type
      * @param owner the window to block
      * @param action the code that performs actions on the selected file
+     * @return the file that was loaded
      */
-    public static void load(String descriptor, String extension, Window owner, Consumer<File> action) {
+    public static File load(String descriptor, String extension, Window owner, Consumer<File> action) {
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(Retrieval.getDataDirectory());
         fc.getExtensionFilters().add(new ExtensionFilter(descriptor, extension));
@@ -164,9 +164,10 @@ public class FileUI {
         if (f != null) {
             action.accept(f);
         }
+        return f;
     }
-    
-    public static void load(Window owner, Consumer<File> action, String descriptor, String... extensions) {
+
+    public static File load(Window owner, Consumer<File> action, String descriptor, String... extensions) {
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(Retrieval.getDataDirectory());
         fc.getExtensionFilters().add(new ExtensionFilter(descriptor, extensions));
@@ -174,5 +175,6 @@ public class FileUI {
         if ((f = fc.showOpenDialog(owner)) != null) {
             action.accept(f);
         }
+        return f;
     }
 }

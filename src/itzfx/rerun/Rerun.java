@@ -46,7 +46,7 @@ public final class Rerun {
      */
     public void readBack() {
         if (commands != null && !commands.isEmpty()) {
-            readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(commands), 0, 10, TimeUnit.MILLISECONDS);
+            readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(commands), 0, 17, TimeUnit.MILLISECONDS);
         }
     }
 

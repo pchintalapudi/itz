@@ -18,28 +18,28 @@ import javafx.scene.text.Text;
 public class SkillsScoreSheetController {
 
     @FXML
-    private Text red20;
+    private Text skills20;
     @FXML
-    private Text red10;
+    private Text skills10;
     @FXML
-    private Text red5;
+    private Text skills5;
     @FXML
-    private Text redCones;
+    private Text skillsCones;
     @FXML
-    private Text redPark;
+    private Text skillsPark;
     @FXML
-    private Text redTotal;
+    private Text skillsTotal;
 
     public void update(int[] temp) {
         int[] vals = new int[5];
         if (temp != null) {
             System.arraycopy(temp, 0, vals, 0, temp.length > vals.length ? temp.length : vals.length);
         }
-        red20.setText(String.valueOf(vals[0]));
-        red10.setText(String.valueOf(vals[1]));
-        red5.setText(String.valueOf(vals[2]));
-        redCones.setText(String.valueOf(vals[3]));
-        redPark.setText(String.valueOf(vals[4]));
-        redTotal.setText(String.valueOf(vals[0] * 20 + vals[1] * 10 + vals[2] * 5 + vals[3] * 2 + vals[4] * 2));
+        skills20.setText(String.valueOf(vals[0]));
+        skills10.setText(String.valueOf(vals[1]));
+        skills5.setText(String.valueOf(vals[2]));
+        skillsCones.setText(String.valueOf(vals[3]));
+        skillsPark.setText(String.valueOf(vals[4]));
+        skillsTotal.setText(String.valueOf(vals[0] * 20 + vals[1] * 10 + vals[2] * 5 + vals[3] * 2 + vals[4] * 2));
     }
 }

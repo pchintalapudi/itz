@@ -5,10 +5,13 @@
  */
 package itzfx.fxml;
 
+import itzfx.fxml.tabs.RobotInfoController;
+import itzfx.fxml.tabs.RobotDataController;
 import itzfx.Start;
 import itzfx.ControlMode;
 import itzfx.Hitbox;
 import itzfx.Robot;
+import itzfx.fxml.tabs.TabManagerController;
 import itzfx.preload.Prestart;
 import java.io.IOException;
 import java.util.Arrays;
@@ -25,12 +28,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -65,9 +68,9 @@ public class FXMLController implements AutoCloseable {
     private Menu robotMenu;
 
     @FXML
-    private AnchorPane robotInfo;
+    private TabPane tabManager;
     @FXML
-    private AnchorPane robotData;
+    private TabManagerController tabManagerController;
     @FXML
     private ImageView logo;
     @FXML
@@ -82,8 +85,7 @@ public class FXMLController implements AutoCloseable {
         field.inject(sbc);
         logo.rotateProperty().bind(fieldPane.rotateProperty().negate());
         List<Robot> robots = field.getRobots();
-        ((RobotInfoController) robotInfo.getUserData()).injectRobots(robots);
-        ((RobotDataController) robotData.getUserData()).injectRobots(robots);
+        tabManagerController.insertRobots(robots);
         for (int i = 0; i < robots.size(); i++) {
             RobotMenu controller = new RobotMenu(robots.get(i), "Robot " + (i + 1));
             FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("RobotMenu.fxml"));

@@ -67,20 +67,16 @@ public class Start extends Application {
     @Override
     public void init() {
         try {
-            super.notifyPreloader(new ProgressNotification(0));
             FXMLLoader loader = new FXMLLoader(Start.class.getResource("fxml/FXML.fxml"));
             p = loader.load();
             p.setOnMousePressed(m -> p.requestFocus());
 //            addZoomListeners(p);
             fxml = loader.getController();
             fxml.inject(this);
-            Thread current = Thread.currentThread();
-            super.notifyPreloader(new ProgressNotification(.3));
-            PULSER.schedule(() -> LockSupport.unpark(current), 3, TimeUnit.SECONDS);
-            LockSupport.park(this);
-            super.notifyPreloader(new ProgressNotification(1));
-            PULSER.schedule(() -> LockSupport.unpark(current), 500, TimeUnit.MILLISECONDS);
-            LockSupport.park(this);
+            long start = System.currentTimeMillis();
+            do {
+                LockSupport.parkUntil(this, 3500 + start - System.currentTimeMillis());
+            } while (System.currentTimeMillis() < 3500 + start);
         } catch (IOException ex) {
             Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -148,7 +144,7 @@ public class Start extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("In The Zone (ITZ)");
-        primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("Images/icon.png")));
+        primaryStage.getIcons().add(new Image(Start.class.getResourceAsStream("images/icon.png")));
         final float width = 1600, height = 900;
         AnchorPane.setLeftAnchor(p, 0d);
         AnchorPane.setTopAnchor(p, 0d);

@@ -8,12 +8,12 @@ package itzfx.fxml;
 import itzfx.Start;
 import itzfx.scoring.ScoreAggregator;
 import itzfx.ControlMode;
-import itzfx.fxml.GameObjects.MobileGoal;
-import itzfx.fxml.GameObjects.RedMobileGoal;
-import itzfx.fxml.GameObjects.Loader;
-import itzfx.fxml.GameObjects.BlueMobileGoal;
-import itzfx.fxml.GameObjects.Cone;
-import itzfx.fxml.GameObjects.StationaryGoal;
+import itzfx.fxml.game.objects.MobileGoal;
+import itzfx.fxml.game.objects.RedMobileGoal;
+import itzfx.fxml.game.objects.Loader;
+import itzfx.fxml.game.objects.BlueMobileGoal;
+import itzfx.fxml.game.objects.Cone;
+import itzfx.fxml.game.objects.StationaryGoal;
 import itzfx.Hitbox;
 import itzfx.KeyBuffer;
 import itzfx.KeyControl;
@@ -159,6 +159,15 @@ public class Field implements AutoCloseable {
                 beginCollisionPulsing();
                 beginScorePulsing();
             }
+        }
+        
+        public void autonPulsing() {
+            ScheduledFuture<?> collisions = executor.scheduleAtFixedRate(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+            ScheduledFuture<?> scores = executor.scheduleAtFixedRate(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+            Start.PULSER.schedule(() -> {
+                collisions.cancel(false);
+                scores.cancel(false);
+            }, 17, TimeUnit.SECONDS);
         }
 
         private void beginScorePulsing() {
@@ -856,10 +865,12 @@ public class Field implements AutoCloseable {
             switch (cm) {
                 case AUTON:
                 case PROGRAMMING_SKILLS:
-                    getRobots().forEach(r -> {
+                    for (Robot r : getRobots()) {
                         r.eraseController();
                         r.prime();
-                    });
+                    }
+                    getRobots().forEach(Robot::runProgram);
+                    pulseManager.autonPulsing();
                     break;
                 default:
                     getRobots().forEach(Robot::driverControl);

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itzfx.fxml.GameObjects;
+package itzfx.fxml.game.objects;
 
 import itzfx.Hitbox;
 import itzfx.Mobile;
