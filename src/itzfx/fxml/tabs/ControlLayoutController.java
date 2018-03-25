@@ -6,8 +6,11 @@
 package itzfx.fxml.tabs;
 
 import itzfx.Robot;
+import javafx.css.PseudoClass;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -16,6 +19,8 @@ import javafx.scene.layout.AnchorPane;
  * @author prem
  */
 public class ControlLayoutController {
+
+    private static final PseudoClass ACTIVE = PseudoClass.getPseudoClass("active");
 
     @FXML
     private AnchorPane key0;
@@ -56,14 +61,14 @@ public class ControlLayoutController {
 
     public void insertRobot(Robot r) {
         r.forwardKeyProperty().addListener((o, b, s) -> key1Controller.setText(format(s)));
-        r.backKeyProperty().addListener((o, b, s) -> key4Controller.setText(format(s)));
-        r.leftKeyProperty().addListener((o, b, s) -> key3Controller.setText(format(s)));
-        r.rightKeyProperty().addListener((o, b, s) -> key5Controller.setText(format(s)));
-        r.mobileGoalKeyProperty().addListener((o, b, s) -> key0Controller.setText(format(s)));
-        r.coneKeyProperty().addListener((o, b, s) -> key6Controller.setText(format(s)));
         r.autostackKeyProperty().addListener((o, b, s) -> key2Controller.setText(format(s)));
-        r.statKeyProperty().addListener((o, b, s) -> key8Controller.setText(format(s)));
+        r.leftKeyProperty().addListener((o, b, s) -> key3Controller.setText(format(s)));
+        r.backKeyProperty().addListener((o, b, s) -> key4Controller.setText(format(s)));
+        r.rightKeyProperty().addListener((o, b, s) -> key5Controller.setText(format(s)));
+        r.coneKeyProperty().addListener((o, b, s) -> key6Controller.setText(format(s)));
         r.loadKeyProperty().addListener((o, b, s) -> key7Controller.setText(format(s)));
+        r.statKeyProperty().addListener((o, b, s) -> key8Controller.setText(format(s)));
+        r.mobileGoalKeyProperty().addListener((o, b, s) -> key0Controller.setText(format(s)));
         key1Controller.setText(format(r.forwardKeyProperty().get()));
         key2Controller.setText(format(r.autostackKeyProperty().get()));
         key3Controller.setText(format(r.leftKeyProperty().get()));
@@ -73,6 +78,43 @@ public class ControlLayoutController {
         key7Controller.setText(format(r.loadKeyProperty().get()));
         key8Controller.setText(format(r.statKeyProperty().get()));
         key0Controller.setText(format(r.mobileGoalKeyProperty().get()));
+        EventHandler<KeyEvent> lightUp = k -> {
+            if (k.getCode() == r.forwardKeyProperty().get()) {
+                handleKey(key1, k);
+            } else if (k.getCode() == r.autostackKeyProperty().get()) {
+                handleKey(key2, k);
+            } else if (k.getCode() == r.leftKeyProperty().get()) {
+                handleKey(key3, k);
+            } else if (k.getCode() == r.backKeyProperty().get()) {
+                handleKey(key4, k);
+            } else if (k.getCode() == r.rightKeyProperty().get()) {
+                handleKey(key5, k);
+            } else if (k.getCode() == r.coneKeyProperty().get()) {
+                handleKey(key6, k);
+            } else if (k.getCode() == r.loadKeyProperty().get()) {
+                handleKey(key7, k);
+            } else if (k.getCode() == r.statKeyProperty().get()) {
+                handleKey(key8, k);
+            } else if (k.getCode() == r.mobileGoalKeyProperty().get()) {
+                handleKey(key0, k);
+            }
+        };
+        r.getNode().sceneProperty().addListener((o, b, s) -> {
+            if (b != null) {
+                b.removeEventHandler(KeyEvent.KEY_PRESSED, lightUp);
+                b.removeEventHandler(KeyEvent.KEY_RELEASED, lightUp);
+            }
+            s.addEventHandler(KeyEvent.KEY_PRESSED, lightUp);
+            s.addEventHandler(KeyEvent.KEY_RELEASED, lightUp);
+        });
+    }
+
+    private void handleKey(AnchorPane key, KeyEvent k) {
+        if (k.getEventType() == KeyEvent.KEY_PRESSED) {
+            key.pseudoClassStateChanged(ACTIVE, true);
+        } else if (k.getEventType() == KeyEvent.KEY_RELEASED) {
+            key.pseudoClassStateChanged(ACTIVE, false);
+        }
     }
 
     private String format(KeyCode keyCode) {

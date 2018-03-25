@@ -8,6 +8,7 @@ package itzfx.utils;
 import java.util.Optional;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 
@@ -19,6 +20,10 @@ public class CssUtils {
     
     public static void addStyleSheet(Parent p) {
         p.getStylesheets().add("/itzfx/fxml/css/global.css");
+    }
+    
+    public static void addStyleSheet(Scene s) {
+        s.getStylesheets().add("/itzfx/fxml/css/global.css");
     }
     
     public static void styleDialog(Dialog d) {

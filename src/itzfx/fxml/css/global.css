@@ -80,7 +80,8 @@ and open the template in the editor.
     */
     -green-base-light:rgba(0%, 75%, 25%, 0.1);
     -green-base-quarter:rgba(0%, 75%, 25%, 0.25);
-    -green-base-half:rgba(0%, 75%, 25%, 0.25);
+    -green-base-half:rgba(0%, 75%, 25%, 0.5);
+    -green-base-triple-quarter:rgba(0%, 75%, 25%, 0.75);
     -green-base:rgb(0%, 75%, 25%);
     
     /*
@@ -89,6 +90,7 @@ and open the template in the editor.
     -red-base-light:rgba(100%, 10%, 0%, 0.1);
     -red-base-quarter:rgba(100%, 10%, 0%, 0.25);
     -red-base-half:rgba(100%, 10%, 0%, 0.5);
+    -red-base-triple-quarter:rgba(100%, 10%, 0%, 0.75);
     -red-base:rgb(100%, 10%, 0%);
 }
 
@@ -562,7 +564,7 @@ Key styling
 }
 
 .key:active > .face {
-    -fx-fill:-green-base-quarter;
+    -fx-fill:-green-base-triple-quarter;
 }
 
 .key > .depth {
