@@ -67,8 +67,8 @@ public class ScoreAggregator {
     public int[] calculateMatch() {
         int vals[] = updatedReport();
         return new int[]{
-            vals[0] * 20 + vals[2] * 10 + vals[4] * 5 + vals[6] * 2 + vals[8] * 5 + (vals[10] > 0 ? 10 : 0) + vals[11] * 2,
-            vals[1] * 20 + vals[3] * 10 + vals[5] * 5 + vals[7] * 2 + vals[9] * 5 + (vals[10] < 0 ? 10 : 0) + vals[12] * 2
+            vals[0] * 20 + vals[2] * 10 + vals[4] * 5 + vals[6] * 2 + vals[8] * 5 + vals[10] * 2 + vals[12] * 10,
+            vals[1] * 20 + vals[3] * 10 + vals[5] * 5 + vals[7] * 2 + vals[9] * 5 + vals[11] * 2 + vals[13] * 10
         };
     }
 
@@ -252,9 +252,9 @@ public class ScoreAggregator {
             ScoreSheetController ssc = loader.getController();
             ssc.update(updatedReport());
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
-            show.getDialogPane().lookupButton(ButtonType.CANCEL).getStyleClass().add("cancel-button");
             show.setTitle("Match Score Report");
             show.setHeaderText("Match Report");
+            show.getDialogPane().setContent(report);
             CssUtils.styleDialog(show);
             show.showAndWait().filter(bt -> bt.getButtonData() == ButtonData.OK_DONE)
                     .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(report)));

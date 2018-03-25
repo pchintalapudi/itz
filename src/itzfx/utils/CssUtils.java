@@ -28,6 +28,7 @@ public class CssUtils {
     
     public static void styleDialog(Dialog d) {
         addStyleSheet(d.getDialogPane());
+        d.getDialogPane().getStyleClass().add("white-background");
         Optional.ofNullable(d.getDialogPane().lookupButton(ButtonType.CANCEL)).map(Node::getStyleClass).ifPresent(c -> c.add("cancel-button"));
         Optional.ofNullable(d.getDialogPane().lookupButton(ButtonType.YES)).map(Node::getStyleClass).ifPresent(c -> c.add("yes-button"));
         Optional.ofNullable(d.getDialogPane().lookupButton(ButtonType.NO)).map(Node::getStyleClass).ifPresent(c -> c.add("no-button"));
