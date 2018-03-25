@@ -37,6 +37,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
@@ -240,7 +241,9 @@ public class Field implements AutoCloseable {
     private void addLoaders() {
         redLoader();
         blueLoader();
-        center.getChildren().addAll(rLoad.getNode(), bLoad.getNode());
+        Group blue = new Group(bLoad.getNode());
+        blue.setRotate(89.999);
+        center.getChildren().addAll(rLoad.getNode(), blue);
     }
 
     private void addStats() {
@@ -419,7 +422,7 @@ public class Field implements AutoCloseable {
 
     private void blueLoader() {
         bLoad = new Loader(300 - 13.75f, 0, false);
-        bLoad.getNode().setRotate(90);
+//        bLoad.getNode().setRotate(bLoad.getNode().getRotate() + 90);
     }
 
     private void redStat() {
