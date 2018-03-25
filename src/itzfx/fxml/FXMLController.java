@@ -65,10 +65,6 @@ public class FXMLController implements AutoCloseable {
     private ScoringBoxController sbc;
 
     private Start ignition;
-
-    @FXML
-    private Menu robotMenu;
-
     @FXML
     private TabPane tabManager;
     @FXML
@@ -87,17 +83,6 @@ public class FXMLController implements AutoCloseable {
         logo.rotateProperty().bind(fieldPane.rotateProperty().negate());
         List<Robot> robots = fieldController.getRobots();
         tabManagerController.insert(fieldController, robots);
-        for (int i = 0; i < robots.size(); i++) {
-            RobotMenu controller = new RobotMenu(robots.get(i), "Robot " + (i + 1));
-            FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("RobotMenu.fxml"));
-            loader.setController(controller);
-            try {
-                MenuBar mb = loader.load();
-                robotMenu.getItems().add(mb.getMenus().get(0));
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
 
     public Field getFieldController() {
@@ -175,16 +160,6 @@ public class FXMLController implements AutoCloseable {
     @FXML
     private void fp() {
         fieldController.setMode(ControlMode.FREE_PLAY);
-    }
-
-    @FXML
-    private void prematch() {
-        fieldController.preMatch();
-    }
-
-    @FXML
-    private void match() {
-        fieldController.startMatch();
     }
 
     @FXML

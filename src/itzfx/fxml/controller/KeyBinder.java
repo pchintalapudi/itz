@@ -45,6 +45,7 @@ public class KeyBinder {
     @FXML
     private void initialize() {
         this.keyboard = (Keyboard) center.getUserData();
+        disableHotkeys();
         left.getItems().addAll("Forward  " + keys[0], "Left Turn  " + keys[1], "Backward  " + keys[2], "Right Turn  " + keys[3]);
         left.getItems().addAll("Mobile Goal Intake/Outtake  " + keys[4], "Autostack on Mobile Goal  " + keys[5],
                 "Intake/Outtake a Cone  " + keys[6], "Stack on a Stationary Goal  " + keys[7], "Load a Driver Load  " + keys[8]);
@@ -74,6 +75,14 @@ public class KeyBinder {
             keyboard.deselect();
             left.getSelectionModel().clearSelection();
         });
+    }
+    
+    private void disableHotkeys() {
+        keyboard.disable(KeyCode.DIGIT0);
+        keyboard.disable(KeyCode.DIGIT1);
+        keyboard.disable(KeyCode.DIGIT2);
+        keyboard.disable(KeyCode.DIGIT3);
+        keyboard.disable(KeyCode.DIGIT4);
     }
 
     /**

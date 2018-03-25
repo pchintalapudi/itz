@@ -5,11 +5,8 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -17,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="white-background" stylesheets="@css/global.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="white-background" stylesheets="@css/global.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
     <top>
         <MenuBar styleClass="flat-menu-bar" BorderPane.alignment="CENTER">
             <menus>
@@ -83,21 +80,6 @@
                         </Menu>
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Match">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#prematch" text="Pre-Autonomous">
-                            <accelerator>
-                                <KeyCodeCombination alt="DOWN" code="K" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                            </accelerator>
-                        </MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#match" text="Begin">
-                            <accelerator>
-                                <KeyCodeCombination alt="UP" code="K" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
-                            </accelerator>
-                        </MenuItem>
-                    </items>
-                </Menu>
-                <Menu fx:id="robotMenu" mnemonicParsing="false" text="Robot" />
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
@@ -121,7 +103,7 @@
                         </HBox>
                         <StackPane prefHeight="300.0" prefWidth="700.0">
                             <children>
-                                <fx:include source="tabs/TabManager.fxml" fx:id="tabManager"/>
+                                <fx:include fx:id="tabManager" source="tabs/TabManager.fxml" />
                             </children>
                         </StackPane>
                     </children>
@@ -162,7 +144,7 @@
                     <center>
                         <Pane prefHeight="750.0" prefWidth="730.0">
                             <children>
-                                <fx:include source="Field.fxml" fx:id="field"/>
+                                <fx:include fx:id="field" source="Field.fxml" />
                             </children>
                         </Pane>
                     </center>

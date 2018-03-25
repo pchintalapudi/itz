@@ -41,6 +41,8 @@ public class RobotInfoWorkerController {
         try {
             AnchorPane load = loader.load();
             Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY);
+            show.setHeaderText("Create a new controller");
+            show.setTitle("Controller Creator");
             show.getDialogPane().setContent(load);
             show.showAndWait().filter(bt -> bt.getButtonData().equals(ButtonBar.ButtonData.APPLY)).ifPresent(bt -> {
                 r.setController(kb.getKC());

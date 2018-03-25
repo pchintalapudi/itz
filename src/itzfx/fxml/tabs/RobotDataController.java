@@ -7,10 +7,8 @@ package itzfx.fxml.tabs;
 
 import itzfx.Robot;
 import java.util.Collection;
-import javafx.beans.property.ReadOnlyStringWrapper;
+import java.util.Iterator;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -19,48 +17,29 @@ import javafx.scene.layout.AnchorPane;
  * @author prem
  */
 public class RobotDataController {
-
-    @FXML
-    private AnchorPane root;
-    @FXML
-    private TableView<Robot> table;
-    @FXML
-    private TableColumn<Robot, String> col0;
-    @FXML
-    private TableColumn<Robot, Number> col1;
-    @FXML
-    private TableColumn<Robot, Number> col2;
-    @FXML
-    private TableColumn<Robot, Number> col3;
-    @FXML
-    private TableColumn<Robot, Number> col4;
-    @FXML
-    private TableColumn<Robot, Number> col5;
-    @FXML
-    private TableColumn<Robot, Number> col6;
-    @FXML
-    private TableColumn<Robot, Boolean> col7;
     
     @FXML
-    private void initialize() {
-        root.setUserData(this);
-        setDataFactories();
-    }
-    
-    private int count = 0;
-    
-    private void setDataFactories() {
-        col0.setCellValueFactory(cdf -> new ReadOnlyStringWrapper("Robot " + count++));
-        col1.setCellValueFactory(cdf -> cdf.getValue().speedProperty());
-        col2.setCellValueFactory(cdf -> cdf.getValue().mogoIntakeTimeProperty());
-        col3.setCellValueFactory(cdf -> cdf.getValue().autostackTimeProperty());
-        col4.setCellValueFactory(cdf -> cdf.getValue().statStackTimeProperty());
-        col5.setCellValueFactory(cdf -> cdf.getValue().maxMogoStackProperty());
-        col6.setCellValueFactory(cdf -> cdf.getValue().maxStatStackProperty());
-        col7.setCellValueFactory(cdf -> cdf.getValue().mogoFrontProperty());
-    }
+    private AnchorPane worker1;
+    @FXML
+    private AnchorPane worker2;
+    @FXML
+    private AnchorPane worker3;
+    @FXML
+    private AnchorPane worker4;
+    @FXML
+    private RobotDataWorkerController worker1Controller;
+    @FXML
+    private RobotDataWorkerController worker2Controller;
+    @FXML
+    private RobotDataWorkerController worker3Controller;
+    @FXML
+    private RobotDataWorkerController worker4Controller;
     
     public void injectRobots(Collection<? extends Robot> c) {
-        table.getItems().addAll(c);
+        Iterator<? extends Robot> i = c.iterator();
+        worker1Controller.insertRobot(i.next());
+        worker2Controller.insertRobot(i.next());
+        worker3Controller.insertRobot(i.next());
+        worker4Controller.insertRobot(i.next());
     }
 }
