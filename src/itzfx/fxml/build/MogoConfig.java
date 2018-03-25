@@ -56,7 +56,7 @@ public class MogoConfig {
      * this is indeterminate
      */
     public int isFrontMogo() {
-        return front.isIndeterminate() ? 0 : front.isSelected() ? 1 : -1;
+        return front.isIndeterminate() ? Integer.MIN_VALUE : front.isSelected() ? 1 : -1;
     }
 
     private static class DecimalFormatter extends TextFormatter<Double> {

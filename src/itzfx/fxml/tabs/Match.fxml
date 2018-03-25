@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 
 
-<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1" fx:controller="itzfx.fxml.tabs.MatchController">
+<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/" fx:controller="itzfx.fxml.tabs.MatchController">
     <children>
         <GridPane alignment="CENTER" prefHeight="250.0" prefWidth="700.0">
             <columnConstraints>
