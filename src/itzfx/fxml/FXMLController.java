@@ -11,6 +11,7 @@ import itzfx.Hitbox;
 import itzfx.Robot;
 import itzfx.fxml.tabs.TabManagerController;
 import itzfx.preload.Prestart;
+import itzfx.utils.CssUtils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -171,6 +172,7 @@ public class FXMLController implements AutoCloseable {
         try {
             TextFlow tf = loader.load();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            CssUtils.styleDialog(alert);
             alert.setHeaderText("About this simulation");
             alert.setTitle("About");
             alert.getDialogPane().setContent(tf);

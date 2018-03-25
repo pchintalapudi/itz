@@ -7,6 +7,7 @@ package itzfx.data;
 
 import itzfx.KeyControl;
 import itzfx.Robot;
+import itzfx.utils.CssUtils;
 import java.io.File;
 import java.util.function.Consumer;
 import javafx.scene.control.Alert;
@@ -131,6 +132,7 @@ public class FileUI {
      */
     public static void save(String descriptor, String extension, Window owner, Consumer<File> action) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
+        CssUtils.styleDialog(alert);
         alert.setHeaderText("Save " + descriptor);
         alert.setContentText("Would you like to save this " + descriptor.toLowerCase() + "?");
         alert.showAndWait().filter(bt -> bt == ButtonType.YES).ifPresent(bt -> {

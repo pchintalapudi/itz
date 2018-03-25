@@ -88,6 +88,7 @@ and open the template in the editor.
     */
     -red-base-light:rgba(100%, 10%, 0%, 0.1);
     -red-base-quarter:rgba(100%, 10%, 0%, 0.25);
+    -red-base-half:rgba(100%, 10%, 0%, 0.5);
     -red-base:rgb(100%, 10%, 0%);
 }
 
@@ -119,7 +120,7 @@ and open the template in the editor.
 Button stuff
 */
 
-.button, .toggle-button, .cancel-button {
+.button, .toggle-button, .cancel-button, yes-button {
     -fx-border-radius:5;
 }
 
@@ -146,6 +147,40 @@ Button stuff
 
 .toggle-button:selected {
     -fx-background-color:-blue-base-half;
+}
+
+.cancel-button {
+    -fx-border-color:-red-base;
+    -fx-background-color:white;
+}
+
+.cancel-button:focused {
+    -fx-background-color:-red-base-light;
+}
+
+.cancel-button:hover {
+    -fx-background-color:-red-base-quarter;
+}
+
+.cancel-button:pressed {
+    -fx-background-color:-red-base-half;
+}
+
+.yes-button {
+    -fx-background-color:white;
+    -fx-border-color:-green-base;
+}
+
+.yes-button:focused {
+    -fx-background-color:-green-base-light;
+}
+
+.yes-button:hover {
+    -fx-background-color:-green-base-quarter;
+}
+
+.yes-button:pressed {
+    -fx-background-color:-green-base-half;
 }
 
 /*
@@ -385,6 +420,8 @@ Info screen things
 
 .blue-tab-pane > .tab-header-area > .headers-region > .tab {
     -fx-background-color:white;
+    -fx-focus-color:transparent;
+    -fx-faint-focus-color:transparent;
 }
 
 .blue-tab-pane > .tab-header-area > .tab-header-background {
@@ -403,15 +440,6 @@ Info screen things
 .blue-tab-pane > .tab-header-area > .headers-region > .tab:selected {
     -fx-background-color:-blue-base-half;
 }
-
-.blue-table-view > .column-header-background > .nested-column-header > .table-column {
-    -fx-background-color:white;
-}
-
-.blue-table-view > .column-header-background > .nested-column-header > .table-column:pressed {
-    -fx-background-color:-blue-base-half;
-}
-
 /*
 Scrollbar styling
 */
@@ -527,6 +555,14 @@ Key styling
     -fx-fill:white;
     -fx-stroke:black;
     -fx-stroke-width:0.5;
+}
+
+.key:active > .base {
+    -fx-fill:-green-base-half;
+}
+
+.key:active > .face {
+    -fx-fill:-green-base-quarter;
 }
 
 .key > .depth {

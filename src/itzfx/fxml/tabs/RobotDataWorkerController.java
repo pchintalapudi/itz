@@ -9,6 +9,7 @@ import itzfx.Robot;
 import itzfx.data.FileUI;
 import itzfx.fxml.FXMLController;
 import itzfx.fxml.build.RobotBuilder;
+import itzfx.utils.CssUtils;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,12 +69,13 @@ public class RobotDataWorkerController {
         try {
             TabPane p = loader.load();
             RobotBuilder rb = loader.getController();
-            Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY);
+            Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY, ButtonType.CANCEL);
+            CssUtils.styleDialog(show);
             show.setHeaderText("Build a Robot");
             show.setTitle("Robot Builder");
             show.getDialogPane().setContent(p);
             show.getDialogPane().setPrefHeight(500);
-            show.showAndWait().filter(bt -> bt.getButtonData().equals(ButtonBar.ButtonData.APPLY)).ifPresent(bt -> {
+            show.showAndWait().map(ButtonType::getButtonData).filter(ButtonBar.ButtonData.APPLY::equals).ifPresent(bt -> {
                 rb.submit();
                 rb.fillRobot(r);
                 FileUI.saveRobot(r, r.getNode().getScene().getWindow());

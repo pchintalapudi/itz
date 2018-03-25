@@ -9,6 +9,7 @@ import itzfx.Robot;
 import itzfx.data.FileUI;
 import itzfx.data.Retrieval;
 import itzfx.fxml.FXMLController;
+import itzfx.utils.CssUtils;
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -318,7 +319,7 @@ public final class Translate {
             ScrollPane s = new ScrollPane(new Label(text));
             s.setPrefViewportHeight(300);
             show.getDialogPane().setContent(s);
-            show.getDialogPane().getChildren().stream().forEach(n -> n.setStyle("-fx-background-color:#ffffff"));
+            CssUtils.styleDialog(show);
             show.getButtonTypes().get(0);
             show.showAndWait().filter(bt -> bt.getButtonData() == ButtonBar.ButtonData.OK_DONE)
                     .ifPresent(bt -> FXMLController.copy(text));
@@ -342,8 +343,7 @@ public final class Translate {
             ScrollPane s = new ScrollPane(new Label(text));
             s.setPrefViewportHeight(300);
             show.getDialogPane().setContent(s);
-            show.getDialogPane().getChildren().stream().forEach(n -> n.setStyle("-fx-background-color:#ffffff"));
-            show.getButtonTypes().get(0);
+            CssUtils.styleDialog(show);
             show.showAndWait().filter(bt -> bt.getButtonData() == ButtonBar.ButtonData.OK_DONE)
                     .ifPresent(bt -> FXMLController.copy(text));
         });

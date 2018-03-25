@@ -9,6 +9,7 @@ import itzfx.Robot;
 import itzfx.data.FileUI;
 import itzfx.fxml.FXMLController;
 import itzfx.fxml.controller.KeyBinder;
+import itzfx.utils.CssUtils;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,11 +41,12 @@ public class RobotInfoWorkerController {
         loader.setController(kb);
         try {
             AnchorPane load = loader.load();
-            Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY);
+            Alert show = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.APPLY, ButtonType.CANCEL);
             show.setHeaderText("Create a new controller");
             show.setTitle("Controller Creator");
             show.getDialogPane().setContent(load);
-            show.showAndWait().filter(bt -> bt.getButtonData().equals(ButtonBar.ButtonData.APPLY)).ifPresent(bt -> {
+            CssUtils.styleDialog(show);
+            show.showAndWait().map(ButtonType::getButtonData).filter(ButtonBar.ButtonData.APPLY::equals).ifPresent(bt -> {
                 r.setController(kb.getKC());
                 FileUI.saveKeyControl(kb.getKC(), r.getNode().getScene().getWindow());
             });

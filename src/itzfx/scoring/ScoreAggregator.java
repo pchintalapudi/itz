@@ -8,6 +8,7 @@ package itzfx.scoring;
 import itzfx.fxml.FXMLController;
 import itzfx.fxml.ScoreSheetController;
 import itzfx.fxml.SkillsScoreSheetController;
+import itzfx.utils.CssUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,8 +19,6 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -253,14 +252,10 @@ public class ScoreAggregator {
             ScoreSheetController ssc = loader.getController();
             ssc.update(updatedReport());
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
+            show.getDialogPane().lookupButton(ButtonType.CANCEL).getStyleClass().add("cancel-button");
             show.setTitle("Match Score Report");
             show.setHeaderText("Match Report");
-            show.getDialogPane().setContent(report);
-            show.getDialogPane().getChildren().stream().peek(n -> n.setStyle("-fx-background-color:#ffffff")).filter(n -> n instanceof ButtonBar).map(n -> (ButtonBar) n)
-                    .flatMap(bb -> bb.getButtons().stream())
-                    .filter(n -> n instanceof Button).map(n -> (Button) n).peek(b -> b.getStyleClass().clear())
-                    .peek(b -> b.getStyleClass().add("button")).filter(b -> b.getText().equals("Cancel"))
-                    .forEach(b -> b.getStyleClass().add("cancel-button"));
+            CssUtils.styleDialog(show);
             show.showAndWait().filter(bt -> bt.getButtonData() == ButtonData.OK_DONE)
                     .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(report)));
         } catch (IOException ex) {
@@ -333,12 +328,8 @@ public class ScoreAggregator {
             show.setTitle("Skills Score Report");
             show.setHeaderText("Skills Report");
             show.getDialogPane().setContent(report);
-            show.getDialogPane().getChildren().stream().peek(n -> n.setStyle("-fx-background-color:#ffffff")).filter(n -> n instanceof ButtonBar).map(n -> (ButtonBar) n)
-                    .flatMap(bb -> bb.getButtons().stream())
-                    .filter(n -> n instanceof Button).map(n -> (Button) n).peek(b -> b.getStyleClass().clear())
-                    .peek(b -> b.getStyleClass().add("button")).filter(b -> b.getText().equals("Cancel"))
-                    .forEach(b -> b.getStyleClass().add("cancel-button"));
-            show.showAndWait().filter(bt -> bt.getButtonData() == ButtonData.OK_DONE)
+            CssUtils.styleDialog(show);
+            show.showAndWait().map(ButtonType::getButtonData).filter(bd -> bd == ButtonData.OK_DONE)
                     .ifPresent(bt -> FXMLController.copy(FXMLController.takeScreenshot(report)));
         } catch (IOException ex) {
             Logger.getLogger(ScoreAggregator.class.getName()).log(Level.SEVERE, null, ex);
