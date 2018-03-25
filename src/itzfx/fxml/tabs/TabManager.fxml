@@ -22,7 +22,7 @@
         </Tab>
         <Tab closable="false" text="Match" >
             <content>
-                <fx:include source="Match.fxml" />
+                <fx:include source="Match.fxml" fx:id="match"/>
             </content>
         </Tab>
         <Tab closable="false" text="Program Data">

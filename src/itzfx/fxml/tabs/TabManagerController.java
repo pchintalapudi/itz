@@ -31,6 +31,10 @@ public class TabManagerController {
     @FXML
     private RobotDataController robotDataController;
     @FXML
+    private AnchorPane match;
+    @FXML
+    private MatchController matchController;
+    @FXML
     private AnchorPane programData;
     @FXML
     private SystemStatsController programDataController;
@@ -39,5 +43,6 @@ public class TabManagerController {
         robotInfoController.injectRobots(c);
         robotDataController.injectRobots(c);
         autonController.insertRobots(c);
+        matchController.insertField(f);
     }
 }
