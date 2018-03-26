@@ -72,7 +72,7 @@
                <children>
                   <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="249.0" prefWidth="152.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="white-background">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="default-background">
                            <children>
                               <StackPane layoutX="1.0" onMouseClicked="#create" prefHeight="122.0" prefWidth="149.0" styleClass="clickable-cover">
                                  <children>
@@ -85,7 +85,7 @@
                               </StackPane>
                            </children>
                         </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="white-background">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="default-background">
                            <children>
                               <StackPane onMouseClicked="#load" prefHeight="122.0" prefWidth="149.0" styleClass="clickable-cover">
                                  <children>

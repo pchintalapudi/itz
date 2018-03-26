@@ -10,7 +10,7 @@
     <children>
         <SplitPane dividerPositions="0.702" prefHeight="250.0" prefWidth="671.0">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="white-background">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="default-background">
                     <children>
                         <StackPane prefHeight="250.0" prefWidth="468.0">
                             <children>
@@ -19,11 +19,11 @@
                         </StackPane>
                     </children>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="white-background">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="default-background">
                     <children>
                         <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="250.0" prefWidth="196.0">
                             <items>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="white-background">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="default-background">
                                     <children>
                                         <StackPane onMouseClicked="#create" prefHeight="122.0" prefWidth="195.0" styleClass="clickable-cover">
                                             <children>
@@ -36,7 +36,7 @@
                                         </StackPane>
                                     </children>
                                 </AnchorPane>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="white-background">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" styleClass="default-background">
                                     <children>
                                         <StackPane onMouseClicked="#load" prefHeight="121.0" prefWidth="195.0" styleClass="clickable-cover">
                                             <children>

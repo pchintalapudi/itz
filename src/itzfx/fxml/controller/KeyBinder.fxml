@@ -8,7 +8,7 @@
     <children>
         <BorderPane prefHeight="360.0" prefWidth="1350.0">
             <left>
-                <ListView fx:id="left" fixedCellSize="36.0" prefHeight="200.0" prefWidth="400.0" styleClass="white-background" BorderPane.alignment="CENTER" />
+                <ListView fx:id="left" fixedCellSize="36.0" prefHeight="200.0" prefWidth="400.0" styleClass="default-background" BorderPane.alignment="CENTER" />
             </left>
             <center>
                 <fx:include fx:id="center" source="Keyboard.fxml" />

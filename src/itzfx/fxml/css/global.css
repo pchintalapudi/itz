@@ -94,7 +94,7 @@ and open the template in the editor.
     -red-base:rgb(100%, 10%, 0%);
 }
 
-.white-background {
+.default-background {
     -fx-background-color:white;
 }
 
@@ -106,7 +106,7 @@ and open the template in the editor.
     -fx-border-color:white;
 }
 
-.black-background {
+.invert-background {
     -fx-background-color:black;
 }
 
@@ -326,7 +326,7 @@ Other things
     -fx-border-width:5;
 }
 
-.intense-color-progress-bar {
+.flat-progress-bar {
     -fx-accent:-blue-base;
 }
 
@@ -420,26 +420,26 @@ Images
 Info screen things
 */
 
-.blue-tab-pane > .tab-header-area > .headers-region > .tab {
+.flat-tab-pane > .tab-header-area > .headers-region > .tab {
     -fx-background-color:white;
     -fx-focus-color:transparent;
     -fx-faint-focus-color:transparent;
 }
 
-.blue-tab-pane > .tab-header-area > .tab-header-background {
+.flat-tab-pane > .tab-header-area > .tab-header-background {
     -fx-background-color:-off-white;
     -fx-border-color:derive(-off-white, -10%);
 }
 
-.blue-tab-pane > .tab-header-area > .headers-region > .tab:hover {
+.flat-tab-pane > .tab-header-area > .headers-region > .tab:hover {
     -fx-background-color:-blue-base-quarter;
 }
 
-.blue-tab-pane > .tab-header-area > .headers-region > .tab:pressed {
+.flat-tab-pane > .tab-header-area > .headers-region > .tab:pressed {
     -fx-background-color:-blue-base-triple-quarter;
 }
 
-.blue-tab-pane > .tab-header-area > .headers-region > .tab:selected {
+.flat-tab-pane > .tab-header-area > .headers-region > .tab:selected {
     -fx-background-color:-blue-base-half;
 }
 /*

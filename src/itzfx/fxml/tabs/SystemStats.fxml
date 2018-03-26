@@ -9,7 +9,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.tabs.SystemStatsController">
     <children>
-        <TabPane prefHeight="250.0" prefWidth="700.0" styleClass="blue-tab-pane" tabClosingPolicy="UNAVAILABLE">
+        <TabPane prefHeight="250.0" prefWidth="700.0" styleClass="flat-tab-pane" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab text="Memory Usage">
                     <content>
