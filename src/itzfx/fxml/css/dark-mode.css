@@ -4,9 +4,10 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : Mar 16, 2018, 10:01:13 PM
+    Created on : Mar 25, 2018, 6:30:41 PM
     Author     : prem
 */
+
 
 * {
     /*
@@ -92,30 +93,36 @@ and open the template in the editor.
     -red-base-half:rgba(100%, 10%, 0%, 0.5);
     -red-base-triple-quarter:rgba(100%, 10%, 0%, 0.75);
     -red-base:rgb(100%, 10%, 0%);
+    
+    /*
+    Dark-mode specific colors
+    */
+    -black-base:derive(black, 20%);
+    -off-black-base:derive(-black-base, 5%)
 }
 
 .default-background {
-    -fx-background-color:white;
+    -fx-background-color:-black-base;
 }
 
 .default-fill {
-    -fx-fill:white;
+    -fx-fill:-black-base;
 }
 
 .default-border {
-    -fx-border-color:white;
+    -fx-border-color:-black-base;
 }
 
 .invert-background {
-    -fx-background-color:black;
+    -fx-background-color:white;
 }
 
 .invert-fill {
-    -fx-fill:black;
+    -fx-fill:white;
 }
 
 .invert-border {
-    -fx-border-color:black;
+    -fx-border-color:white;
 }
 
 /*
@@ -128,7 +135,7 @@ Button stuff
 
 .button, .toggle-button {
     -fx-border-color:-blue-base;
-    -fx-background-color:white;
+    -fx-background-color:-black-base;
 }
 
 .button:focused, .toggle-button:focused {
@@ -363,7 +370,7 @@ Field mode selector
 */
 
 .field-mode-selector {
-    -fx-background-color:white;
+    -fx-background-color:-black-base;
     -fx-border-color:-blue-base;
 }
 
@@ -401,7 +408,7 @@ Images
 }
 
 .logo {
-    -fx-image:url(../../images/phoenixWlogo.png);
+    -fx-image:url(../../images/icon.png);
 }
 
 .robot-cad {
@@ -421,14 +428,14 @@ Info screen things
 */
 
 .flat-tab-pane > .tab-header-area > .headers-region > .tab {
-    -fx-background-color:white;
+    -fx-background-color:-black-base;
     -fx-focus-color:transparent;
     -fx-faint-focus-color:transparent;
 }
 
 .flat-tab-pane > .tab-header-area > .tab-header-background {
-    -fx-background-color:-off-white;
-    -fx-border-color:derive(-off-white, -10%);
+    -fx-background-color:-off-black-base;
+    -fx-border-color:derive(-off-black-base, 10%);
 }
 
 .flat-tab-pane > .tab-header-area > .headers-region > .tab:hover {
@@ -448,7 +455,7 @@ Scrollbar styling
 
 .scroll-bar:horizontal > .thumb,
 .scroll-bar:vertical > .thumb{
-    -fx-background-color:white;
+    -fx-background-color:-black-base;
 }
 
 .scroll-bar:horizontal:hover > .thumb,
@@ -466,7 +473,7 @@ Menubar styling
 */
 
 .flat-menu-bar {
-    -fx-background-color:-off-white;
+    -fx-background-color:-black-base;
 }
 
 /*
@@ -476,7 +483,7 @@ SplitPane styling
 
 .split-pane:horizontal > .split-pane-divider,
 .split-pane:vertical > .split-pane-divider {
-    -fx-background-color:-off-white;
+    -fx-background-color:-off-black-base;
 }
 
 .split-pane:horizontal > .split-pane-divider:hover,
@@ -537,8 +544,8 @@ Checkbox styling
 */
 
 .flat-check-box > .box {
-    -fx-background-color:white;
-    -fx-border-color:-off-white;
+    -fx-background-color:-black-base;
+    -fx-border-color:-off-black-base;
     -fx-border-radius:1.5;
 }
 
@@ -554,8 +561,8 @@ Key styling
 
 .key > .base,
 .key > .face {
-    -fx-fill:white;
-    -fx-stroke:black;
+    -fx-fill:-black-base;
+    -fx-stroke:white;
     -fx-stroke-width:0.5;
 }
 
@@ -568,13 +575,13 @@ Key styling
 }
 
 .key > .depth {
-    -fx-stroke:black;
+    -fx-stroke:white;
     -fx-stroke-width:0.5;
 }
 
 .indicator {
-    -fx-fill:white;
-    -fx-stroke:black;
+    -fx-fill:-black-base;
+    -fx-stroke:white;
 }
 
 /*
@@ -603,4 +610,28 @@ Keyboard styling
 
 .keyboard-rect:disabled {
     -fx-fill:-red-base-light;
+}
+
+/*
+Quick fixes
+*/
+.label {
+    -fx-fill:white;
+    -fx-text-fill:white;
+}
+
+.button {
+    -fx-text-fill:white;
+}
+
+.tab-label {
+    -fx-text-fill:white;
+}
+
+.combo-box-label {
+    -fx-text-fill:white;
+}
+
+.text {
+    -fx-fill:white;
 }

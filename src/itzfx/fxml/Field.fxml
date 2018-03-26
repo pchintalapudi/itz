@@ -11,7 +11,7 @@
     <top>
         <StackPane fx:id="top" BorderPane.alignment="CENTER">
             <children>
-                <Rectangle height="5.0" strokeType="INSIDE" styleClass="black-fill" width="730.0">
+                <Rectangle height="5.0" strokeType="INSIDE" styleClass="invert-fill" width="730.0">
                     <effect>
                         <DropShadow />
                     </effect>
@@ -22,7 +22,7 @@
     <bottom>
         <StackPane fx:id="bottom" BorderPane.alignment="CENTER">
             <children>
-                <Rectangle height="5.0" strokeType="INSIDE" styleClass="black-fill" width="730.0">
+                <Rectangle height="5.0" strokeType="INSIDE" styleClass="invert-fill" width="730.0">
                     <effect>
                         <DropShadow />
                     </effect>
@@ -33,7 +33,7 @@
     <left>
         <StackPane fx:id="left" BorderPane.alignment="CENTER">
             <children>
-                <Rectangle height="730.0" strokeType="INSIDE" styleClass="black-fill" width="5.0">
+                <Rectangle height="730.0" strokeType="INSIDE" styleClass="invert-fill" width="5.0">
                     <effect>
                         <DropShadow />
                     </effect>
@@ -44,7 +44,7 @@
     <right>
         <StackPane fx:id="right" BorderPane.alignment="CENTER">
             <children>
-                <Rectangle height="730.0" strokeType="INSIDE" styleClass="black-fill" width="5.0">
+                <Rectangle height="730.0" strokeType="INSIDE" styleClass="invert-fill" width="5.0">
                     <effect>
                         <DropShadow />
                     </effect>

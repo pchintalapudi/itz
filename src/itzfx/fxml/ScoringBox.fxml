@@ -31,7 +31,7 @@
                                                                     <children>
                                                                         <StackPane prefHeight="133.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                             <children>
-                                                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="white-fill" text="RED">
+                                                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="default-fill" text="RED">
                                                                                     <font>
                                                                                         <Font name="System Bold" size="48.0" />
                                                                                     </font>
@@ -65,7 +65,7 @@
                                                                     <children>
                                                                         <StackPane prefHeight="133.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                             <children>
-                                                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="white-fill" text="BLUE">
+                                                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="default-fill" text="BLUE">
                                                                                     <font>
                                                                                         <Font name="System Bold" size="48.0" />
                                                                                     </font>
@@ -103,7 +103,7 @@
                                                     <children>
                                                         <StackPane prefHeight="133.0" prefWidth="225.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                             <children>
-                                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="white-fill" text="SKILLS">
+                                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="default-fill" text="SKILLS">
                                                                     <font>
                                                                         <Font name="System Bold" size="48.0" />
                                                                     </font>

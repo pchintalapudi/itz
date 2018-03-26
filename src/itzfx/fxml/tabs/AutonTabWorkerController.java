@@ -51,15 +51,17 @@ public class AutonTabWorkerController {
     }
 
     private Robot r;
-    
+
     public void setRobot(Robot r) {
         this.r = r;
     }
-    
+
     @FXML
     private void handleAutonChange() {
         File f = FileUI.getRerun(r, r.getNode().getScene().getWindow());
-        String text = f.getName();
-        autonName.setText(text.substring(0, text.indexOf('.')));
+        if (f != null) {
+            String text = f.getName();
+            autonName.setText(text.substring(0, text.indexOf('.')));
+        }
     }
 }
