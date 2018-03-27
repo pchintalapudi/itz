@@ -412,7 +412,7 @@ public final class Robot extends Mobile implements Scoreable {
             }
         }
         if (!saved.isEmpty()) {
-            while(saved.peekLast().get(0) == Command.NONE) {
+            while (saved.peekLast().get(0) == Command.NONE) {
                 saved.pollLast();
             }
         }
@@ -484,6 +484,7 @@ public final class Robot extends Mobile implements Scoreable {
                 super.shiftCenter(properties.getRobotSpeed() * 5 / 36 * (float) Math.cos(Math.toRadians(node.getRotate())),
                         properties.getRobotSpeed() * 5 / 36 * (float) Math.sin(Math.toRadians(node.getRotate())));
             });
+            handle10PointBar();
             if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
@@ -501,12 +502,39 @@ public final class Robot extends Mobile implements Scoreable {
                 super.shiftCenter(-properties.getRobotSpeed() * 5 / 36 * (float) Math.cos(Math.toRadians(node.getRotate())),
                         -properties.getRobotSpeed() * 5 / 36 * (float) Math.sin(Math.toRadians(node.getRotate())));
             });
+            handle10PointBar();
             if (isPrimed()) {
                 Field.getOwner(this).play();
                 deprime();
             }
             pulse.add(Command.BACKWARD);
         }
+    }
+
+    private void handle10PointBar() {
+        float dist = 1f;
+        switch (barZone()) {
+            case 1:
+                Platform.runLater(() -> {
+                    super.shiftCenter(-dist, dist);
+                });
+                break;
+            case -1:
+                Platform.runLater(() -> {
+                    super.shiftCenter(dist, -dist);
+                });
+        }
+    }
+
+    private int barZone() {
+        double yMx = super.getCenterY() - super.getCenterX();
+        final int range = 30;
+        if ((yMx > 480 - range && yMx < 480) || (-yMx > 480 && -yMx < 480 + range)) {
+            return -1;
+        } else if ((-yMx > 480 - range && -yMx < 480) || (yMx > 480 && yMx < 480 + range)) {
+            return 1;
+        }
+        return 0;
     }
 
     /**

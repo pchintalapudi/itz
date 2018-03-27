@@ -104,7 +104,6 @@ public class Field implements AutoCloseable {
         dropCones();
         dropMogos();
         addStats();
-        decorateScoringBars();
         (pulseManager = new PulseManager(Start.PULSER)).begin();
         Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
         pulseManager.beginCollisionPulsing();
@@ -161,7 +160,7 @@ public class Field implements AutoCloseable {
                 beginScorePulsing();
             }
         }
-        
+
         public void autonPulsing() {
             ScheduledFuture<?> collisions = executor.scheduleAtFixedRate(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
             ScheduledFuture<?> scores = executor.scheduleAtFixedRate(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
@@ -215,11 +214,6 @@ public class Field implements AutoCloseable {
         }
     }
 
-    private void decorateScoringBars() {
-        decorate10(red10, true);
-        decorate10(blue10, false);
-    }
-
     private void dropCones() {
         dropMiddleCones();
         dropLeftCones();
@@ -267,25 +261,6 @@ public class Field implements AutoCloseable {
     private StackPane blue10;
     @FXML
     private StackPane red10;
-
-    private void decorate10(Node check, boolean red) {
-        for (float i = 2.5f; i < 325; i += 10) {
-            float a = 482.5f + i / (float) Math.sqrt(2);
-            float b = 2.5f + i / (float) Math.sqrt(2);
-            Hitbox h = new Hitbox(2.5f, Hitbox.CollisionType.WEAK, check, Float.POSITIVE_INFINITY);
-            if (!red) {
-                h.setXSupplier(() -> a);
-                h.setYSupplier(() -> b);
-            } else {
-                h.setXSupplier(() -> b);
-                h.setYSupplier(() -> a);
-            }
-            h.getVisual().setCenterX(red ? b : a);
-            h.getVisual().setCenterY(red ? a : b);
-            center.getChildren().add(h.getVisual());
-            Hitbox.register(h);
-        }
-    }
 
     private void dropMiddleCones() {
         onField.addAll(Arrays.asList(

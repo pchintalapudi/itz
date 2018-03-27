@@ -66,23 +66,19 @@ public final class Hitbox {
         Point2D approach0 = approach.multiply(invMagnitude);
         Platform.runLater(() -> {
             try {
-                float collisionFactor = 1;
-                if (hb1.cType == CollisionType.WEAK || hb2.cType == CollisionType.WEAK) {
-                    collisionFactor = .02f;
-                }
                 if (hb1.mass == Float.POSITIVE_INFINITY) {
                     if (hb2.movableOwner != null) {
-                        hb2.movableOwner.shiftCenter((float) approach0.getX() * dist * collisionFactor, (float) approach0.getY() * dist * collisionFactor);
+                        hb2.movableOwner.shiftCenter((float) approach0.getX() * dist, (float) approach0.getY() * dist);
                     }
                 } else if (hb2.mass == Float.POSITIVE_INFINITY) {
                     if (hb1.movableOwner != null) {
-                        hb1.movableOwner.shiftCenter((float) -approach0.getX() * dist * collisionFactor, (float) -approach0.getY() * dist * collisionFactor);
+                        hb1.movableOwner.shiftCenter((float) -approach0.getX() * dist, (float) -approach0.getY() * dist);
                     }
                 } else {
                     float rr1 = hb2.mass / (hb1.mass + hb2.mass);
                     float rr2 = 1 - rr1;
-                    hb1.movableOwner.shiftCenter(-rr1 * (float) approach0.getX() * dist * collisionFactor, -rr1 * (float) approach0.getY() * dist * collisionFactor);
-                    hb2.movableOwner.shiftCenter(rr2 * (float) approach0.getX() * dist * collisionFactor, rr2 * (float) approach0.getY() * dist * collisionFactor);
+                    hb1.movableOwner.shiftCenter(-rr1 * (float) approach0.getX() * dist, -rr1 * (float) approach0.getY() * dist);
+                    hb2.movableOwner.shiftCenter(rr2 * (float) approach0.getX() * dist, rr2 * (float) approach0.getY() * dist);
                 }
             } catch (Exception ex) {
             }
@@ -278,11 +274,5 @@ public final class Hitbox {
          * all costs. This is meant to prevent phasing of objects.
          */
         STRONG,
-        /**
-         * Another STRONG hitbox must attempt to avoid intersecting this one,
-         * but may pass through given enough effort. This is meant to allow
-         * resistance to objects, but not total motion prevention.
-         */
-        WEAK;
     }
 }
