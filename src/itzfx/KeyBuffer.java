@@ -43,16 +43,20 @@ public final class KeyBuffer {
     private static Scene scene;
 
     private static final EventHandler<KeyEvent> PRESS = k -> {
-        if (!locked) {
+        if (!locked && !isModified(k)) {
             KEYBUFFER.put(k.getCode(), true);
         }
     };
 
     private static final EventHandler<KeyEvent> RELEASE = k -> {
-        if (!locked) {
+        if (!locked && !isModified(k)) {
             KEYBUFFER.put(k.getCode(), false);
         }
     };
+    
+    private static boolean isModified(KeyEvent k) {
+        return k.isAltDown() || k.isShiftDown() || k.isShortcutDown();
+    }
 
     /**
      * Registers the listeners for key events on the specified scene. Also

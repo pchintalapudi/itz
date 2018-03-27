@@ -512,7 +512,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     private void handle10PointBar() {
-        float dist = 1f;
+        float dist = 1.5f;
         switch (barZone()) {
             case 1:
                 Platform.runLater(() -> {

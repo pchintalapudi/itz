@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.tabs.RobotDataWorkerController">
+<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.tabs.RobotDataWorkerController">
    <children>
       <SplitPane dividerPositions="0.76" prefHeight="250.0" prefWidth="650.0">
         <items>

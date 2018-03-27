@@ -4,15 +4,21 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : Mar 25, 2018, 6:30:41 PM
+    Created on : Mar 27, 2018, 12:42:03 PM
+    Author     : prem
+*/
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Mar 16, 2018, 10:01:13 PM
     Author     : prem
 */
 
-
 * {
-    /*
-    Other colors
-    */
+    
     -off-white:derive(white, -5%);
 
     /*
@@ -23,7 +29,7 @@ and open the template in the editor.
     -blue-base-half:rgba(0%, 50%, 100%, .5);
     -blue-base-triple-quarter:rgba(0%, 50%, 100%, .75);
     -blue-base:rgb(0%, 50%, 100%);
-
+    
     /*
     Green variants
     */
@@ -32,7 +38,7 @@ and open the template in the editor.
     -green-base-half:rgba(0%, 75%, 25%, 0.5);
     -green-base-triple-quarter:rgba(0%, 75%, 25%, 0.75);
     -green-base:rgb(0%, 75%, 25%);
-
+    
     /*
     Red variants
     */
@@ -41,44 +47,38 @@ and open the template in the editor.
     -red-base-half:rgba(100%, 10%, 0%, 0.5);
     -red-base-triple-quarter:rgba(100%, 10%, 0%, 0.75);
     -red-base:rgb(100%, 10%, 0%);
-
-    /*
-    Dark-mode specific colors
-    */
-    -black-base:derive(black, 20%);
-    -off-black-base:derive(-black-base, 5%);
 }
 
 .default-background {
-    -fx-background-color:-black-base;
-}
-
-.default-fill {
-    -fx-fill:-black-base;
-}
-
-.default-border {
-    -fx-border-color:-black-base;
-}
-
-.default-stroke {
-    -fx-stroke:-black-base;
-}
-
-.invert-background {
     -fx-background-color:white;
 }
 
-.invert-fill {
+.default-fill {
     -fx-fill:white;
 }
 
-.invert-border {
+.default-border {
     -fx-border-color:white;
 }
 
-.invert-stroke {
+.default-stroke {
     -fx-stroke:white;
+}
+
+.invert-background {
+    -fx-background-color:black;
+}
+
+.invert-fill {
+    -fx-fill:black;
+}
+
+.invert-border {
+    -fx-border-color:black;
+}
+
+.invert-stroke {
+    -fx-stroke:black;
 }
 
 /*
@@ -91,7 +91,7 @@ Button stuff
 
 .button, .toggle-button {
     -fx-border-color:-blue-base;
-    -fx-background-color:-black-base;
+    -fx-background-color:white;
 }
 
 .button:focused, .toggle-button:focused {
@@ -116,7 +116,7 @@ Button stuff
 
 .cancel-button {
     -fx-border-color:-red-base;
-    -fx-background-color:-black-base;
+    -fx-background-color:white;
 }
 
 .cancel-button:focused {
@@ -166,7 +166,7 @@ Field mode selector
 */
 
 .field-mode-selector {
-    -fx-background-color:-black-base;
+    -fx-background-color:white;
     -fx-border-color:-blue-base;
 }
 
@@ -187,14 +187,14 @@ Info screen things
 */
 
 .flat-tab-pane > .tab-header-area > .headers-region > .tab {
-    -fx-background-color:-black-base;
+    -fx-background-color:white;
     -fx-focus-color:transparent;
     -fx-faint-focus-color:transparent;
 }
 
 .flat-tab-pane > .tab-header-area > .tab-header-background {
-    -fx-background-color:-off-black-base;
-    -fx-border-color:derive(-off-black-base, 10%);
+    -fx-background-color:-off-white;
+    -fx-border-color:derive(-off-white, -10%);
 }
 
 .flat-tab-pane > .tab-header-area > .headers-region > .tab:hover {
@@ -214,7 +214,7 @@ Scrollbar styling
 
 .scroll-bar:horizontal > .thumb,
 .scroll-bar:vertical > .thumb{
-    -fx-background-color:-black-base;
+    -fx-background-color:white;
 }
 
 .scroll-bar:horizontal:hover > .thumb,
@@ -232,7 +232,7 @@ Menubar styling
 */
 
 .flat-menu-bar {
-    -fx-background-color:-black-base;
+    -fx-background-color:-off-white;
 }
 
 /*
@@ -242,7 +242,7 @@ SplitPane styling
 
 .split-pane:horizontal > .split-pane-divider,
 .split-pane:vertical > .split-pane-divider {
-    -fx-background-color:-off-black-base;
+    -fx-background-color:-off-white;
 }
 
 .split-pane:horizontal > .split-pane-divider:hover,
@@ -275,36 +275,12 @@ Clickable cover
 }
 
 /*
-Error text
-*/
-
-.error-text {
-    -fx-fill:red;
-}
-
-.error-text:hover {
-    -fx-fill:derive(red, 10%);
-}
-
-/*
-Success text
-*/
-
-.success-text {
-    -fx-fill:green;
-}
-
-.success-text:hover {
-    -fx-fill:derive(green, 10%);
-}
-
-/*
 Checkbox styling
 */
 
 .flat-check-box > .box {
-    -fx-background-color:-black-base;
-    -fx-border-color:-off-black-base;
+    -fx-background-color:white;
+    -fx-border-color:-off-white;
     -fx-border-radius:1.5;
 }
 
@@ -320,8 +296,8 @@ Key styling
 
 .key > .base,
 .key > .face {
-    -fx-fill:-black-base;
-    -fx-stroke:white;
+    -fx-fill:white;
+    -fx-stroke:black;
     -fx-stroke-width:0.5;
 }
 
@@ -334,13 +310,13 @@ Key styling
 }
 
 .key > .depth {
-    -fx-stroke:white;
+    -fx-stroke:black;
     -fx-stroke-width:0.5;
 }
 
 .indicator {
-    -fx-fill:-black-base;
-    -fx-stroke:white;
+    -fx-fill:white;
+    -fx-stroke:black;
 }
 
 /*
@@ -376,41 +352,9 @@ Timing
 */
 
 .led {
-    -fx-fill:white;
+    -fx-fill:black;
 }
 
 .led:disabled {
     -fx-fill:transparent;
-}
-
-/*
-Quick fixes
-*/
-.label {
-    -fx-fill:white;
-    -fx-text-fill:white;
-}
-
-.button {
-    -fx-text-fill:white;
-}
-
-.tab-label {
-    -fx-text-fill:white;
-}
-
-.combo-box-label {
-    -fx-text-fill:white;
-}
-
-.text {
-    -fx-fill:white;
-}
-
-.chart-plot-background {
-    -fx-background-color:-black-base;
-}
-
-.context-menu {
-    -fx-background-color:-black-base;
 }

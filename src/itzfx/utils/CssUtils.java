@@ -10,7 +10,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.locks.LockSupport;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
@@ -25,11 +24,12 @@ import javafx.scene.control.Dialog;
  */
 public class CssUtils {
 
-    private static final ObjectProperty<String> STYLESHEET = new SimpleObjectProperty<>("/itzfx/fxml/css/global.css");
+    private static final ObjectProperty<String> STYLESHEET = new SimpleObjectProperty<>("/itzfx/fxml/css/default-mode.css");
     private static final Map<String, String> STYLESHEETS = new HashMap<>();
+    private static final String FIELD_COLORS = "/itzfx/fxml/css/global.css";
 
     static {
-        STYLESHEETS.put("default", "/itzfx/fxml/css/global.css");
+        STYLESHEETS.put("default", "/itzfx/fxml/css/default-mode.css");
         STYLESHEETS.put("dark", "/itzfx/fxml/css/dark-mode.css");
     }
 
@@ -70,7 +70,7 @@ public class CssUtils {
     }
 
     public static void addStyleSheet(Parent p) {
-        p.getStylesheets().add(STYLESHEET.get());
+        p.getStylesheets().addAll(FIELD_COLORS, STYLESHEET.get());
         STYLESHEET.addListener((o, b, s) -> {
             p.getStylesheets().remove(b);
             p.getStylesheets().add(s);
@@ -78,7 +78,7 @@ public class CssUtils {
     }
 
     public static void addStyleSheet(Scene scene) {
-        scene.getStylesheets().add(STYLESHEET.get());
+        scene.getStylesheets().addAll(FIELD_COLORS, STYLESHEET.get());
         STYLESHEET.addListener((o, b, s) -> {
             scene.getStylesheets().remove(b);
             scene.getStylesheets().add(s);
