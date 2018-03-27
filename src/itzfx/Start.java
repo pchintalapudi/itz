@@ -207,10 +207,6 @@ public class Start extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        LocalDateTime time = LocalDateTime.now();
-        if (time.getHour() > 10 || time.getHour() < 6) {
-            CssUtils.switchStyleSheet("dark");
-        }
         LauncherImpl.launchApplication(Start.class, Prestart.class, args);
     }
 

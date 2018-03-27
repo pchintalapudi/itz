@@ -5,9 +5,12 @@
  */
 package itzfx.utils;
 
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.locks.LockSupport;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
@@ -29,7 +32,39 @@ public class CssUtils {
         STYLESHEETS.put("default", "/itzfx/fxml/css/global.css");
         STYLESHEETS.put("dark", "/itzfx/fxml/css/dark-mode.css");
     }
-    
+
+    private static final Thread THEME_AUTO_SWITCHER = new Thread(() -> {
+        while (true) {
+            if (LocalTime.now().getHour() < 22 && LocalTime.now().getHour() > 5) {
+                switchStyleSheet("default");
+                long a = Math.abs(LocalTime.now().until(LocalTime.of(22, 0), ChronoUnit.MILLIS));
+                System.out.println(a);
+                synchronized (STYLESHEET) {
+                    try {
+                        STYLESHEET.wait(a);
+                    } catch (InterruptedException ex) {
+                    }
+                }
+            } else {
+                switchStyleSheet("dark");
+                long a = Math.abs(LocalTime.now().until(LocalTime.of(6, 0), ChronoUnit.MILLIS));
+                System.out.println(a);
+                synchronized(STYLESHEET) {
+                    try {
+                        STYLESHEET.wait(a);
+                    } catch (InterruptedException ex) {
+                    }
+                }
+            }
+
+        }
+    });
+
+    static {
+        THEME_AUTO_SWITCHER.setDaemon(true);
+        THEME_AUTO_SWITCHER.start();
+    }
+
     public static void switchStyleSheet(String key) {
         STYLESHEET.set(STYLESHEETS.getOrDefault(key, "/itzfx/fxml/css/global.css"));
     }

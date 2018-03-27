@@ -98,6 +98,10 @@ and open the template in the editor.
     -fx-border-color:white;
 }
 
+.default-stroke {
+    -fx-stroke:white;
+}
+
 .invert-background {
     -fx-background-color:black;
 }
@@ -108,6 +112,10 @@ and open the template in the editor.
 
 .invert-border {
     -fx-border-color:black;
+}
+
+.invert-stroke {
+    -fx-stroke:black;
 }
 
 /*
@@ -220,7 +228,7 @@ Mobile Goal Stuff
 .blue-mobile-goal > .sep, .red-mobile-goal > .sep,
 .blue-mobile-goal > .mid, .red-mobile-goal > .mid,
 .blue-mobile-goal > .tip, .red-mobile-goal > .tip {
-    -fx-effect:dropshadow(three-pass-box, black, 10, 0, 0, 0);
+    -fx-effect:dropshadow(three-pass-box, black, 20, 0, 0, 0);
 }
 
 .blue-mobile-goal > .base, .red-mobile-goal > .base, .blue-mobile-goal > .mid, .red-mobile-goal > .mid,

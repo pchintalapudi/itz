@@ -6,6 +6,7 @@
 package itzfx.preload;
 
 import itzfx.Start;
+import itzfx.utils.CssUtils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -60,7 +61,9 @@ public class Prestart extends Preloader {
             FXMLLoader loader = new FXMLLoader(Prestart.class.getResource("Prestart.fxml"));
             loader.setController(this);
             Parent p = loader.load();
-            stage.setScene(new Scene(p));
+            Scene s = new Scene(p);
+            CssUtils.addStyleSheet(s);
+            stage.setScene(s);
         } catch (IOException ex) {
             Logger.getLogger(Prestart.class.getName()).log(Level.SEVERE, null, ex);
         }
