@@ -5,7 +5,11 @@
  */
 package itzfx.utils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,15 +21,35 @@ import javafx.scene.control.Dialog;
  * @author prem
  */
 public class CssUtils {
+
+    private static final ObjectProperty<String> STYLESHEET = new SimpleObjectProperty<>("/itzfx/fxml/css/global.css");
+    private static final Map<String, String> STYLESHEETS = new HashMap<>();
+
+    static {
+        STYLESHEETS.put("default", "/itzfx/fxml/css/global.css");
+        STYLESHEETS.put("dark", "/itzfx/fxml/css/dark-mode.css");
+    }
     
+    public static void switchStyleSheet(String key) {
+        STYLESHEET.set(STYLESHEETS.getOrDefault(key, "/itzfx/fxml/css/global.css"));
+    }
+
     public static void addStyleSheet(Parent p) {
-        p.getStylesheets().add("/itzfx/fxml/css/global.css");
+        p.getStylesheets().add(STYLESHEET.get());
+        STYLESHEET.addListener((o, b, s) -> {
+            p.getStylesheets().remove(b);
+            p.getStylesheets().add(s);
+        });
     }
-    
-    public static void addStyleSheet(Scene s) {
-        s.getStylesheets().add("/itzfx/fxml/css/global.css");
+
+    public static void addStyleSheet(Scene scene) {
+        scene.getStylesheets().add(STYLESHEET.get());
+        STYLESHEET.addListener((o, b, s) -> {
+            scene.getStylesheets().remove(b);
+            scene.getStylesheets().add(s);
+        });
     }
-    
+
     public static void styleDialog(Dialog d) {
         addStyleSheet(d.getDialogPane());
         d.getDialogPane().getStyleClass().add("default-background");

@@ -7,14 +7,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane fx:id="field" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#reset" prefHeight="730.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.Field">
+<BorderPane fx:id="field" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#reset" prefHeight="730.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.Field">
     <top>
         <StackPane fx:id="top" BorderPane.alignment="CENTER">
             <children>
-                <Rectangle height="5.0" strokeType="INSIDE" styleClass="invert-fill" width="730.0">
-                    <effect>
-                        <DropShadow />
-                    </effect>
+                <Rectangle height="5.0" strokeType="INSIDE" styleClass="perimeter" width="730.0">
                 </Rectangle>
             </children>
         </StackPane>
@@ -22,10 +19,7 @@
     <bottom>
         <StackPane fx:id="bottom" BorderPane.alignment="CENTER">
             <children>
-                <Rectangle height="5.0" strokeType="INSIDE" styleClass="invert-fill" width="730.0">
-                    <effect>
-                        <DropShadow />
-                    </effect>
+                <Rectangle height="5.0" strokeType="INSIDE" styleClass="perimeter" width="730.0">
                 </Rectangle>
             </children>
         </StackPane>
@@ -33,10 +27,7 @@
     <left>
         <StackPane fx:id="left" BorderPane.alignment="CENTER">
             <children>
-                <Rectangle height="730.0" strokeType="INSIDE" styleClass="invert-fill" width="5.0">
-                    <effect>
-                        <DropShadow />
-                    </effect>
+                <Rectangle height="730.0" strokeType="INSIDE" styleClass="perimeter" width="5.0">
                 </Rectangle>
             </children>
         </StackPane>
@@ -44,10 +35,7 @@
     <right>
         <StackPane fx:id="right" BorderPane.alignment="CENTER">
             <children>
-                <Rectangle height="730.0" strokeType="INSIDE" styleClass="invert-fill" width="5.0">
-                    <effect>
-                        <DropShadow />
-                    </effect>
+                <Rectangle height="730.0" strokeType="INSIDE" styleClass="perimeter" width="5.0">
                 </Rectangle>
             </children>
         </StackPane>
@@ -71,33 +59,21 @@
                 <children>
                     <Rectangle arcHeight="5.0" arcWidth="5.0" height="153.0" strokeType="INSIDE" styleClass="blue-bar" width="15.0" />
                 </children>
-                <effect>
-                    <DropShadow />
-                </effect>
             </StackPane>
             <StackPane fx:id="red20" layoutX="52.0" layoutY="584.0" rotate="-45.0">
                 <children>
                     <Rectangle arcHeight="5.0" arcWidth="5.0" height="153.0" strokeType="INSIDE" styleClass="red-bar" width="15.0" />
                 </children>
-                <effect>
-                    <DropShadow />
-                </effect>
             </StackPane>
             <StackPane fx:id="red10" layoutX="116.0" layoutY="438.0" rotate="-45.0">
                 <children>
                     <Rectangle arcHeight="5.0" arcWidth="5.0" height="325.0" strokeType="INSIDE" styleClass="red-bar" width="5.0" />
                 </children>
-                <effect>
-                    <DropShadow />
-                </effect>
             </StackPane>
             <StackPane fx:id="blue10" layoutX="598.0" layoutY="-43.0" rotate="-45.0">
                 <children>
                     <Rectangle arcHeight="5.0" arcWidth="5.0" height="325.0" strokeType="INSIDE" styleClass="blue-bar" width="5.0" />
                 </children>
-                <effect>
-                    <DropShadow />
-                </effect>
             </StackPane>
             <Group>
                 <Rectangle height="160.0" layoutX="299.0" layoutY="221.0" rotate="45.0" strokeType="INSIDE" styleClass="tape" width="5.0" />

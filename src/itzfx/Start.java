@@ -8,7 +8,9 @@ package itzfx;
 import com.sun.javafx.application.LauncherImpl;
 import itzfx.fxml.FXMLController;
 import itzfx.preload.Prestart;
+import itzfx.utils.CssUtils;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -138,6 +141,8 @@ public class Start extends Application {
         });
     }
 
+    private boolean dark = true;
+    
     /**
      * {@inheritDoc}
      */
@@ -152,12 +157,18 @@ public class Start extends Application {
         AnchorPane.setBottomAnchor(p, 0d);
         AnchorPane windowScale = new AnchorPane(p);
         Scene scene = new Scene(windowScale, width, height);
+        CssUtils.addStyleSheet(scene);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, k -> {
+            if (k.isControlDown() && k.isShiftDown() && k.getCode() == KeyCode.I) {
+                CssUtils.switchStyleSheet((dark = !dark) ? "default" : "dark");
+            }
+        });
         addRotateListeners(scene);
         KeyBuffer.initialize(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    
+
     public void restart(Stage primaryStage) {
         start(primaryStage);
         Start.PULSER.schedule(() -> Platform.runLater(fxml.getFieldController()::reset), 1250, TimeUnit.MILLISECONDS);
@@ -196,6 +207,10 @@ public class Start extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        LocalDateTime time = LocalDateTime.now();
+        if (time.getHour() > 10 || time.getHour() < 6) {
+            CssUtils.switchStyleSheet("dark");
+        }
         LauncherImpl.launchApplication(Start.class, Prestart.class, args);
     }
 

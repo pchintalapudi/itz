@@ -19,7 +19,7 @@ import javafx.scene.shape.Polygon;
  * @author Prem Chintalapudi 5776E
  */
 public class Digit {
-
+    
     @FXML
     private AnchorPane root;
 
@@ -45,13 +45,13 @@ public class Digit {
 
     private void manipulate(boolean top, boolean leftUp, boolean middle, boolean rightDown, boolean bottom, boolean leftDown, boolean rightUp) {
         Platform.runLater(() -> {
-            this.top.setFill(top ? Color.BLACK : null);
-            this.leftUp.setFill(leftUp ? Color.BLACK : null);
-            this.middle.setFill(middle ? Color.BLACK : null);
-            this.rightDown.setFill(rightDown ? Color.BLACK : null);
-            this.bottom.setFill(bottom ? Color.BLACK : null);
-            this.leftDown.setFill(leftDown ? Color.BLACK : null);
-            this.rightUp.setFill(rightUp ? Color.BLACK : null);
+            this.top.setDisable(!top);
+            this.leftUp.setDisable(!leftUp);
+            this.middle.setDisable(!middle);
+            this.rightDown.setDisable(!rightDown);
+            this.bottom.setDisable(!bottom);
+            this.leftDown.setDisable(!leftDown);
+            this.rightUp.setDisable(!rightUp);
         });
     }
 

@@ -38,11 +38,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
@@ -256,11 +254,6 @@ public class Field implements AutoCloseable {
         robot4();
         getRobots().stream().peek(Robot::registerMogos).map(Robot::getNode).forEach(center.getChildren()::add);
     }
-
-    @FXML
-    private StackPane blue10;
-    @FXML
-    private StackPane red10;
 
     private void dropMiddleCones() {
         onField.addAll(Arrays.asList(
