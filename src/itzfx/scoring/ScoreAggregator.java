@@ -18,6 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -252,6 +254,7 @@ public class ScoreAggregator {
             ScoreSheetController ssc = loader.getController();
             ssc.update(updatedReport());
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
+            show.setGraphic(getGraphic());
             show.setTitle("Match Score Report");
             show.setHeaderText("Match Report");
             show.getDialogPane().setContent(report);
@@ -262,6 +265,14 @@ public class ScoreAggregator {
             Logger.getLogger(ScoreAggregator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private Node getGraphic() throws IOException {
+        Node n = FXMLLoader.load(ScoreAggregator.class.getResource("/itzfx/fxml/ScoreSheet.fxml"));
+        n.setScaleX(0.1);
+        n.setScaleY(0.1);
+        return new Group(n);
+    }
+
 
     private int[] updatedSkillsReport() {
         //red20, blue20, red10, blue10, red5, blue5, redCones, blueCones, redParks, blueParks;
@@ -325,6 +336,7 @@ public class ScoreAggregator {
             report.setPadding(new Insets(10));
             loader.<SkillsScoreSheetController>getController().update(updatedSkillsReport());
             Alert show = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("Copy", ButtonData.OK_DONE), ButtonType.CANCEL);
+            show.setGraphic(getSkillsGraphic());
             show.setTitle("Skills Score Report");
             show.setHeaderText("Skills Report");
             show.getDialogPane().setContent(report);
@@ -334,6 +346,13 @@ public class ScoreAggregator {
         } catch (IOException ex) {
             Logger.getLogger(ScoreAggregator.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private Node getSkillsGraphic() throws IOException {
+        Node n = FXMLLoader.load(ScoreAggregator.class.getResource("/itzfx/fxml/SkillsScoreSheet.fxml"));
+        n.setScaleX(0.1);
+        n.setScaleY(0.1);
+        return new Group(n);
     }
 
     private static class MaxableInt {

@@ -17,7 +17,7 @@
             <children>
                 <StackPane prefHeight="50.0" prefWidth="200.0" styleClass="invert-border">
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mobile Goals Scored In">
+                        <Text styleClass="text" strokeType="OUTSIDE" strokeWidth="0.0" text="Mobile Goals Scored In">
                             <font>
                                 <Font size="24.0" />
                             </font>
@@ -28,14 +28,14 @@
                     <children>
                         <HBox alignment="CENTER" spacing="5.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5 point&#10;Zone">
+                                <Text styleClass="text" strokeType="OUTSIDE" strokeWidth="0.0" text="5 point&#10;Zone">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
                                 </Text>
                                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="50.0" styleClass="bordered">
                                     <children>
-                                        <Text fx:id="skills5" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                        <Text styleClass="text" fx:id="skills5" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
@@ -46,14 +46,14 @@
                         </HBox>
                         <HBox alignment="CENTER" spacing="5.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="10 point&#10;Zone">
+                                <Text styleClass="text" strokeType="OUTSIDE" strokeWidth="0.0" text="10 point&#10;Zone">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
                                 </Text>
                                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="50.0" styleClass="bordered">
                                     <children>
-                                        <Text fx:id="skills10" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                        <Text styleClass="text" fx:id="skills10" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
@@ -64,14 +64,14 @@
                         </HBox>
                         <HBox alignment="CENTER" spacing="5.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="20 point&#10;Zone">
+                                <Text styleClass="text" strokeType="OUTSIDE" strokeWidth="0.0" text="20 point&#10;Zone">
                                     <font>
                                         <Font size="18.0" />
                                     </font>
                                 </Text>
                                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="50.0" styleClass="bordered">
                                     <children>
-                                        <Text fx:id="skills20" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                        <Text styleClass="text" fx:id="skills20" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
@@ -86,14 +86,14 @@
                     <children>
                         <HBox alignment="CENTER" spacing="10.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="# Cones&#10;on Goals">
+                                <Text styleClass="text" strokeType="OUTSIDE" strokeWidth="0.0" text="# Cones&#10;on Goals">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </Text>
                                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="60.0" styleClass="bordered">
                                     <children>
-                                        <Text fx:id="skillsCones" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                        <Text styleClass="text" fx:id="skillsCones" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                             <font>
                                                 <Font size="28.0" />
                                             </font>
@@ -104,14 +104,14 @@
                         </HBox>
                         <HBox alignment="CENTER" spacing="10.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="# Highest&#10;Stacks">
+                                <Text styleClass="text" strokeType="OUTSIDE" strokeWidth="0.0" text="# Highest&#10;Stacks">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </Text>
                                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="60.0" styleClass="bordered">
                                     <children>
-                                        <Text fx:id="skillsStacks" strokeType="OUTSIDE" strokeWidth="0.0" text="---">
+                                        <Text styleClass="text" fx:id="skillsStacks" strokeType="OUTSIDE" strokeWidth="0.0" text="---">
                                             <font>
                                                 <Font size="28.0" />
                                             </font>
@@ -126,14 +126,14 @@
                     <children>
                         <HBox alignment="CENTER" spacing="10.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Auton&#10;Winner">
+                                <Text styleClass="text" strokeType="OUTSIDE" strokeWidth="0.0" text="Auton&#10;Winner">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </Text>
                                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="60.0" styleClass="bordered">
                                     <children>
-                                        <Text fx:id="skillsStacks1" strokeType="OUTSIDE" strokeWidth="0.0" text="---">
+                                        <Text styleClass="text" fx:id="skillsStacks1" strokeType="OUTSIDE" strokeWidth="0.0" text="---">
                                             <font>
                                                 <Font size="28.0" />
                                             </font>
@@ -144,14 +144,14 @@
                         </HBox>
                         <HBox alignment="CENTER" spacing="10.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="# Parked&#10;Robots">
+                                <Text styleClass="text" strokeType="OUTSIDE" strokeWidth="0.0" text="# Parked&#10;Robots">
                                     <font>
                                         <Font size="24.0" />
                                     </font>
                                 </Text>
                                 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="60.0" styleClass="bordered">
                                     <children>
-                                        <Text fx:id="skillsPark" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                        <Text styleClass="text" fx:id="skillsPark" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                             <font>
                                                 <Font size="28.0" />
                                             </font>
@@ -164,14 +164,14 @@
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="50.0" prefWidth="376.0" spacing="10.0" styleClass="invert-border">
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Score">
+                        <Text styleClass="text" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Score">
                             <font>
                                 <Font size="24.0" />
                             </font>
                         </Text>
                         <StackPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="50.0" styleClass="bordered">
                             <children>
-                                <Text fx:id="skillsTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                <Text styleClass="text" fx:id="skillsTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                                     <font>
                                         <Font size="20.0" />
                                     </font>

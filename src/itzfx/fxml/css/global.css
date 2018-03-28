@@ -258,6 +258,10 @@ Images
     -fx-image:url(../../images/cone.png);
 }
 
+.report {
+    -fx-image:url(../../images/report.jpg);
+}
+
 /*
 Error text
 */

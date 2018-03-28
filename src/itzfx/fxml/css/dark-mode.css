@@ -8,7 +8,6 @@ and open the template in the editor.
     Author     : prem
 */
 
-
 * {
     /*
     Other colors
@@ -149,8 +148,8 @@ Button stuff
 }
 
 .bordered {
-    -fx-border-color:black;
-    -fx-border-width:5;
+    -fx-border-color:white;
+    -fx-border-width:2;
 }
 
 .flat-progress-bar {
@@ -413,4 +412,8 @@ Quick fixes
 
 .context-menu {
     -fx-background-color:-black-base;
+}
+
+.dialog-pane:header .header-panel {
+    -fx-background-color: -black-base;
 }

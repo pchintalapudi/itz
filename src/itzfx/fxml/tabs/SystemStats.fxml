@@ -19,10 +19,10 @@
                                     <children>
                                         <AreaChart fx:id="memoryChart" createSymbols="false" legendVisible="false">
                                             <xAxis>
-                                                <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                                                <NumberAxis animated="false" forceZeroInRange="false" side="BOTTOM" />
                                             </xAxis>
                                             <yAxis>
-                                                <NumberAxis label="Memory Usage (MB)" side="LEFT" />
+                                                <NumberAxis animated="false" label="Memory Usage (MB)" side="LEFT" />
                                             </yAxis>
                                         </AreaChart>
                                     </children>
@@ -39,10 +39,10 @@
                                     <children>
                                         <AreaChart fx:id="processCPUChart" createSymbols="false" legendVisible="false">
                                             <xAxis>
-                                                <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                                                <NumberAxis animated="false" forceZeroInRange="false" side="BOTTOM" />
                                             </xAxis>
                                             <yAxis>
-                                                <NumberAxis autoRanging="false" side="LEFT" tickUnit="20.0" />
+                                                <NumberAxis animated="false" autoRanging="false" side="LEFT" tickUnit="20.0" />
                                             </yAxis>
                                         </AreaChart>
                                     </children>
@@ -59,10 +59,10 @@
                                     <children>
                                         <AreaChart fx:id="systemCPUChart" createSymbols="false" legendVisible="false">
                                             <xAxis>
-                                                <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                                                <NumberAxis animated="false" forceZeroInRange="false" side="BOTTOM" />
                                             </xAxis>
                                             <yAxis>
-                                                <NumberAxis autoRanging="false" side="LEFT" tickUnit="20.0" />
+                                                <NumberAxis animated="false" autoRanging="false" side="LEFT" tickUnit="20.0" />
                                             </yAxis>
                                         </AreaChart>
                                     </children>

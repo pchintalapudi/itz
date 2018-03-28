@@ -402,26 +402,26 @@ public class Field implements AutoCloseable {
     }
 
     private void robot1() {
-        Robot r = new Robot(50, 485, 90);
+        Robot r = new Robot(67.5f, 480, 90);
         r.setController(KeyControl.Defaults.DUAL_1.getKC());
         getRobots().add(r);
     }
 
     private void robot2() {
-        Robot r = new Robot(675, 225, -90);
+        Robot r = new Robot(652.5f, 240, -90);
         r.setController(KeyControl.Defaults.DUAL_2.getKC());
         r.setRed(false);
         getRobots().add(r);
     }
 
     private void robot3() {
-        Robot r = new Robot(225, 675, 180);
+        Robot r = new Robot(240, 652.5f, 180);
         r.setController(KeyControl.Defaults.QUAD_3.getKC());
         getRobots().add(r);
     }
 
     private void robot4() {
-        Robot r = new Robot(485, 40, 0);
+        Robot r = new Robot(480, 67.5f, 0);
         r.setController(KeyControl.Defaults.QUAD_4.getKC());
         r.setRed(false);
         getRobots().add(r);

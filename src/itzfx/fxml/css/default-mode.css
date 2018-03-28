@@ -18,7 +18,7 @@ and open the template in the editor.
 */
 
 * {
-    
+
     -off-white:derive(white, -5%);
 
     /*
@@ -29,7 +29,7 @@ and open the template in the editor.
     -blue-base-half:rgba(0%, 50%, 100%, .5);
     -blue-base-triple-quarter:rgba(0%, 50%, 100%, .75);
     -blue-base:rgb(0%, 50%, 100%);
-    
+
     /*
     Green variants
     */
@@ -38,7 +38,7 @@ and open the template in the editor.
     -green-base-half:rgba(0%, 75%, 25%, 0.5);
     -green-base-triple-quarter:rgba(0%, 75%, 25%, 0.75);
     -green-base:rgb(0%, 75%, 25%);
-    
+
     /*
     Red variants
     */
@@ -357,4 +357,16 @@ Timing
 
 .led:disabled {
     -fx-fill:transparent;
+}
+
+/*
+Other
+*/
+
+.text {
+    -fx-fill:black;
+}
+
+.dialog-pane:header .header-panel {
+    -fx-background-color:white;
 }

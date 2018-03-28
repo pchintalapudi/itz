@@ -56,6 +56,9 @@ public class SystemStatsController {
             java.lang.management.MemoryUsage usage = memoryConnection.getHeapMemoryUsage();
             long committedMemory = usage.getCommitted();
             long usedMemory = usage.getUsed();
+            if (usedMemory > 500 * 1000) {
+                memoryConnection.gc();
+            }
             double processLoad = osConnection.getProcessCpuLoad();
             double systemLoad = osConnection.getSystemCpuLoad();
             Platform.runLater(() -> {
