@@ -37,6 +37,8 @@ public class SystemStatsController {
     @FXML
     private AreaChart<Number, Number> systemCPUChart;
 
+    private static final int MILLION = 1000000;
+    
     @FXML
     private void initialize() {
         final ObservableList<XYChart.Data<Number, Number>> memorySeries = FXCollections.observableArrayList();
@@ -56,14 +58,14 @@ public class SystemStatsController {
             java.lang.management.MemoryUsage usage = memoryConnection.getHeapMemoryUsage();
             long committedMemory = usage.getCommitted();
             long usedMemory = usage.getUsed();
-            if (usedMemory > 500 * 1000000) {
+            if (usedMemory > 500 * MILLION) {
                 memoryConnection.gc();
             }
             double processLoad = osConnection.getProcessCpuLoad();
             double systemLoad = osConnection.getSystemCpuLoad();
             Platform.runLater(() -> {
-                memorySeries.add(new XYChart.Data<>(time, committedMemory / 1000000));
-                usedMemorySeries.add(new XYChart.Data<>(time, usedMemory / 1000000));
+                memorySeries.add(new XYChart.Data<>(time, committedMemory / MILLION));
+                usedMemorySeries.add(new XYChart.Data<>(time, usedMemory / MILLION));
                 processCPUSeries.add(new XYChart.Data<>(time, processLoad * 100));
                 systemCPUSeries.add(new XYChart.Data<>(time, systemLoad * 100));
             });
