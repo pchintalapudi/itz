@@ -88,7 +88,7 @@ Cone stuff
 
 .cone > .stack-top {
     -fx-fill:-cone-stacked-darkened;
-    -fx-effect:dropshadow(three-pass-box, black, 15, 0, 0, 0);
+    -fx-effect:dropshadow(three-pass-box, black, 10, 0, 0, 0);
 }
 
 /*
@@ -99,7 +99,7 @@ Mobile Goal Stuff
 .blue-mobile-goal > .sep, .red-mobile-goal > .sep,
 .blue-mobile-goal > .mid, .red-mobile-goal > .mid,
 .blue-mobile-goal > .tip, .red-mobile-goal > .tip {
-    -fx-effect:dropshadow(three-pass-box, black, 20, 0, 0, 0);
+    -fx-effect:dropshadow(three-pass-box, black, 15, 0, 0, 0);
 }
 
 .blue-mobile-goal > .base, .red-mobile-goal > .base, .blue-mobile-goal > .mid, .red-mobile-goal > .mid,
@@ -227,7 +227,7 @@ Images
 
 .robot {
     -fx-image:url(../../images/topviewicon.png);
-    -fx-effect:dropshadow(two-pass-box, black, 10, 0, 0, 0);
+    -fx-effect:dropshadow(three-pass-box, black, 20, 0, 0, 0);
 }
 
 .vex-logo {

@@ -87,7 +87,12 @@ public final class Robot extends Mobile implements Scoreable {
 
     private final ScoreReport sr;
 
-    private final ImageView iv = new ImageView(new Image(Robot.class.getResourceAsStream("/itzfx/images/topviewicon.png"), 90, 90, false, true));
+    private final ImageView iv = new ImageView();
+    {
+        iv.setFitWidth(90);
+        iv.setFitHeight(90);
+        iv.getStyleClass().add("robot");
+    }
 
     /**
      * Creates a robot at the specified coordinates with the specified initial
@@ -102,8 +107,7 @@ public final class Robot extends Mobile implements Scoreable {
         super(layoutX, layoutY, initRotate);
         Rectangle cover = new Rectangle(90, 90);
         filter = cover.fillProperty();
-        realRobot = new StackPane(new Pane(iv), cover);
-        realRobot.setEffect(new DropShadow());
+        realRobot = new StackPane(iv, cover);
         node = new StackPane(realRobot);
         node.setOnMouseDragged((MouseEvent m) -> super.setCenter((float) m.getSceneX() - 120, (float) m.getSceneY() - 120 - 45));
         iv.setRotate(90);

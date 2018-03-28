@@ -62,7 +62,7 @@ public class Prestart extends Preloader {
             loader.setController(this);
             Parent p = loader.load();
             Scene s = new Scene(p);
-            CssUtils.addStyleSheet(s);
+//            CssUtils.addStyleSheet(s);
             stage.setScene(s);
         } catch (IOException ex) {
             Logger.getLogger(Prestart.class.getName()).log(Level.SEVERE, null, ex);
