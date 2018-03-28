@@ -2,41 +2,19 @@
 
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.paint.RadialGradient?>
-<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Arc?>
 <?import javafx.scene.shape.Circle?>
 
-<Pane cache="true" cacheHint="SPEED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+<Pane cache="true" cacheHint="SPEED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" styleClass="stationary-goal" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Circle layoutX="12.5" layoutY="12.5" radius="12.5" strokeType="INSIDE">
-            <fill>
-                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-                    <stops>
-                        <Stop color="#666666" />
-                        <Stop color="#666666" offset="0.5" />
-                        <Stop color="BLACK" offset="1.0" />
-                    </stops>
-                </RadialGradient>
-            </fill>
+        <Circle layoutX="12.5" layoutY="12.5" radius="12.5" strokeType="INSIDE" styleClass="base">
             <effect>
                 <DropShadow />
             </effect>
         </Circle>
-        <Circle layoutX="12.5" layoutY="12.5" radius="10.0" strokeType="INSIDE">
-            <fill>
-                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-                    <stops>
-                        <Stop color="#444444" />
-                        <Stop color="BLACK" offset="0.5389312977099237" />
-                        <Stop color="#4b4b4b" offset="1.0" />
-                    </stops>
-                </RadialGradient>
-            </fill>
-        </Circle>
-        <Arc fill="TRANSPARENT" layoutX="12.5" layoutY="12.5" length="70.0" radiusX="8.0" radiusY="8.0" startAngle="55.0" stroke="BLACK" strokeWidth="0.5" type="ROUND" />
-        <Arc fill="TRANSPARENT" layoutX="12.5" layoutY="12.5" length="70.0" radiusX="8.0" radiusY="8.0" startAngle="145.0" stroke="BLACK" strokeWidth="0.5" type="ROUND" />
-        <Arc fill="TRANSPARENT" layoutX="12.5" layoutY="12.5" length="70.0" radiusX="8.0" radiusY="8.0" startAngle="235.0" stroke="BLACK" strokeWidth="0.5" type="ROUND" />
-        <Arc fill="TRANSPARENT" layoutX="12.5" layoutY="12.5" length="70.0" radiusX="8.0" radiusY="8.0" startAngle="325.0" stroke="BLACK" strokeWidth="0.5" type="ROUND" />
+        <Arc layoutX="12.5" layoutY="12.5" length="70.0" radiusX="8.0" radiusY="8.0" startAngle="55.0" strokeWidth="0.5" styleClass="wedge" type="ROUND" />
+        <Arc layoutX="12.5" layoutY="12.5" length="70.0" radiusX="8.0" radiusY="8.0" startAngle="145.0" strokeWidth="0.5" styleClass="wedge" type="ROUND" />
+        <Arc layoutX="12.5" layoutY="12.5" length="70.0" radiusX="8.0" radiusY="8.0" startAngle="235.0" strokeWidth="0.5" styleClass="wedge" type="ROUND" />
+        <Arc layoutX="12.5" layoutY="12.5" length="70.0" radiusX="8.0" radiusY="8.0" startAngle="325.0" strokeWidth="0.5" styleClass="wedge" type="ROUND" />
     </children>
 </Pane>

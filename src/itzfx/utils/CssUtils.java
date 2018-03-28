@@ -10,7 +10,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
@@ -67,23 +66,23 @@ public class CssUtils {
     }
 
     public static void switchStyleSheet(String key) {
-        STYLESHEET.set(STYLESHEETS.getOrDefault(key, "/itzfx/fxml/css/global.css"));
+//        STYLESHEET.set(STYLESHEETS.getOrDefault(key, "/itzfx/fxml/css/global.css"));
     }
 
     public static void addStyleSheet(Parent p) {
-        p.getStylesheets().addAll(FIELD_COLORS, STYLESHEET.get());
-        STYLESHEET.addListener((o, b, s) -> {
-            p.getStylesheets().remove(b);
-            p.getStylesheets().add(s);
-        });
+//        p.getStylesheets().addAll(FIELD_COLORS, STYLESHEET.get());
+//        STYLESHEET.addListener((o, b, s) -> {
+//            p.getStylesheets().remove(b);
+//            p.getStylesheets().add(s);
+//        });
     }
 
     public static void addStyleSheet(Scene scene) {
-        scene.getStylesheets().addAll(FIELD_COLORS, STYLESHEET.get());
-        STYLESHEET.addListener((o, b, s) -> {
-            scene.getStylesheets().remove(b);
-            scene.getStylesheets().add(s);
-        });
+//        scene.getStylesheets().addAll(FIELD_COLORS, STYLESHEET.get());
+//        STYLESHEET.addListener((o, b, s) -> {
+//            scene.getStylesheets().remove(b);
+//            scene.getStylesheets().add(s);
+//        });
     }
 
     public static void styleDialog(Dialog d) {

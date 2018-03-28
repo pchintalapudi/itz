@@ -13,6 +13,7 @@
     -blue-alliance:#4444ff;
     -tile-color:#787878;
     -perimeter-color:#000000;
+    -stationary-goal-base:#4b4b4b;
 
     /*
     Cone level colors
@@ -35,7 +36,7 @@
     /*
     Stationary Goal gradient
     */
-    -stationary-goal:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, derive(white, -80%) 0%, black 50%);
+    -stationary-goal:radial-gradient(focus-angle 0deg, focus-distance 0%, center 50% 50%, radius 100%, -stationary-goal-base 0%, black 40%, -stationary-goal-base 80%, black 100%);
 
     /*
     Transparent colors
@@ -146,6 +147,20 @@ Mobile Goal Stuff
 
 .red-mobile-goal > .tip {
     -fx-fill:-red-mobile-goal;
+}
+
+/*
+Stationary goal
+*/
+
+.stationary-goal > .base {
+    -fx-fill:-stationary-goal;
+}
+
+.stationary-goal > .wedge {
+    -fx-fill:transparent;
+    -fx-stroke:black;
+    -fx-stroke-width:.5;
 }
 
 /*
