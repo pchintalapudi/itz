@@ -147,7 +147,7 @@ public class Field implements AutoCloseable {
 
         public void begin() {
             if (disuseMonitor == null) {
-                inputPulser = executor.scheduleWithFixedDelay(inputTask, 0, 17, TimeUnit.MILLISECONDS);
+                inputPulser = executor.scheduleWithFixedDelay(inputTask, 0, 18, TimeUnit.MILLISECONDS);
                 disuseMonitor = executor.scheduleWithFixedDelay(() -> {
                     if (lastTimeChecked + 1000 < System.currentTimeMillis()) {
                         stopScorePulsing();

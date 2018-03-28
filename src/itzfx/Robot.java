@@ -92,6 +92,7 @@ public final class Robot extends Mobile implements Scoreable {
         iv.setFitWidth(90);
         iv.setFitHeight(90);
         iv.getStyleClass().add("robot");
+        iv.setCache(true);
     }
 
     /**
