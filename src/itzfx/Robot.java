@@ -41,20 +41,17 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -67,7 +64,10 @@ import javafx.util.Duration;
  * @author Prem Chintalapudi 5776E
  */
 public final class Robot extends Mobile implements Scoreable {
-
+    
+    private static final PseudoClass RED = PseudoClass.getPseudoClass("red");
+    private static final PseudoClass BLUE = PseudoClass.getPseudoClass("blue");
+    
     private final StackPane node;
     private final StackPane realRobot;
 
@@ -75,23 +75,22 @@ public final class Robot extends Mobile implements Scoreable {
 
     private final Hitbox hb;
 
-    private final ObjectProperty<Paint> filter;
-
-    private final BooleanProperty active, driveBaseMovable, red;
+    private final BooleanProperty active, driveBaseMovable;
+    private boolean red;
 
     {
         active = new SimpleBooleanProperty(true);
         driveBaseMovable = new SimpleBooleanProperty(true);
-        red = new SimpleBooleanProperty(true);
     }
 
     private final ScoreReport sr;
 
     private final ImageView iv = new ImageView();
+
     {
         iv.setFitWidth(90);
         iv.setFitHeight(90);
-        iv.getStyleClass().add("robot");
+        iv.getStyleClass().add("image");
         iv.setCache(true);
     }
 
@@ -107,15 +106,16 @@ public final class Robot extends Mobile implements Scoreable {
     public Robot(float layoutX, float layoutY, float initRotate) {
         super(layoutX, layoutY, initRotate);
         Rectangle cover = new Rectangle(90, 90);
-        filter = cover.fillProperty();
+        cover.getStyleClass().add("filter");
         realRobot = new StackPane(iv, cover);
+        realRobot.getStyleClass().add("robot");
+        red = true;
+        realRobot.pseudoClassStateChanged(RED, true);
         node = new StackPane(realRobot);
         node.setOnMouseDragged((MouseEvent m) -> super.setCenter((float) m.getSceneX() - 120, (float) m.getSceneY() - 120 - 45));
         iv.setRotate(90);
         hb = new Hitbox(45, Hitbox.CollisionType.STRONG, this, 18);
         hitboxing();
-        filter.set(new Color(1, 0, 0, .03));
-        filter.bind(Bindings.createObjectBinding(() -> red.get() ? new Color(1, 0, 0, .05) : new Color(0, 0, 1, .05), red));
         sr = new ScoreReport(this);
         sr.setScoreType(ScoreType.ZONE_NONE);
         redMogo = new RedMobileGoal(25, 45);
@@ -333,7 +333,9 @@ public final class Robot extends Mobile implements Scoreable {
      * to be blue
      */
     public void setRed(boolean red) {
-        this.red.set(red);
+        this.red = red;
+        realRobot.pseudoClassStateChanged(RED, red);
+        realRobot.pseudoClassStateChanged(BLUE, !red);
     }
 
     /**
@@ -343,15 +345,6 @@ public final class Robot extends Mobile implements Scoreable {
      */
     @Override
     public boolean isRed() {
-        return red.get();
-    }
-
-    /**
-     * Returns the {@link BooleanProperty} monitoring the color of this robot.
-     *
-     * @return the property determining the color of this robot
-     */
-    public BooleanProperty redProperty() {
         return red;
     }
 

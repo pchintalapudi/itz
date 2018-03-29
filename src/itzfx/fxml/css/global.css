@@ -236,11 +236,19 @@ Alliance marking
     -fx-border-color:-red-alliance;
 }
 
+.robot:red > .filter {
+    -fx-fill:-red-alliance-transp;
+}
+
+.robot:blue > .filter {
+    -fx-fill:-blue-alliance-transp;
+}
+
 /*
 Images
 */
 
-.robot {
+.robot > .image {
     -fx-image:url(../../images/topviewicon.png);
     -fx-effect:dropshadow(three-pass-box, black, 20, 0, 0, 0);
 }

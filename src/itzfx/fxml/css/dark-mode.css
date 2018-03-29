@@ -57,7 +57,8 @@ and open the template in the editor.
 }
 
 .default-border {
-    -fx-border-color:-black-base;
+    -fx-border-color:-off-black-base;
+    -fx-border-width:1.5;
 }
 
 .default-stroke {
@@ -73,7 +74,7 @@ and open the template in the editor.
 }
 
 .invert-border {
-    -fx-border-color:white;
+    -fx-border-color:-off-white;
 }
 
 .invert-stroke {
@@ -206,6 +207,23 @@ Info screen things
 
 .flat-tab-pane > .tab-header-area > .headers-region > .tab:selected {
     -fx-background-color:-blue-base-half;
+}
+
+.flat-tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button:hover {
+    -fx-color: -blue-base-quarter;
+}
+
+.flat-tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button:focused {
+    -fx-color: -blue-base-light;
+}
+
+.flat-tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button:pressed {
+    -fx-color: -blue-base-half;
+}
+
+.flat-tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button {
+    -fx-color: transparent;
+    -fx-background-radius: 0, 0, 0;
 }
 /*
 Scrollbar styling
@@ -402,6 +420,22 @@ Quick fixes
     -fx-text-fill:white;
 }
 
+.combo-box .list-view {
+    -fx-background-color:-black-base;
+}
+
+.combo-box .list-cell:filled {
+    -fx-background-color:-black-base;
+}
+
+.combo-box .list-cell:filled:hover {
+    -fx-background-color:-blue-base-quarter;
+}
+
+.combo-box .list-cell:filled:pressed {
+    -fx-background-color:-blue-base-half;
+}
+
 .text {
     -fx-fill:white;
 }
@@ -416,4 +450,22 @@ Quick fixes
 
 .dialog-pane:header .header-panel {
     -fx-background-color: -black-base;
+}
+
+.list-view {
+    -fx-background-color:-black-base;
+}
+
+/*
+Other
+*/
+
+.redden .text {
+    -fx-text-fill:red;
+    -fx-fill:red;
+}
+
+.highlight-menu-item .text {
+    -fx-text-fill:-green-base;
+    -fx-fill:-green-base;
 }

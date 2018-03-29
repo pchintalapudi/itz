@@ -75,6 +75,7 @@ public abstract class Mobile {
         getNode().setUserData(this);
         ContextMenu rightClick = new ContextMenu();
         MenuItem delete = new MenuItem("Delete");
+        delete.getStyleClass().add("redden");
         delete.setOnAction(e -> vanish());
         rightClick.getItems().add(delete);
         rightClickOptions(rightClick);
