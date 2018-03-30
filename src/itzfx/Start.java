@@ -219,14 +219,14 @@ public class Start extends Application {
      */
     public static final ScheduledExecutorService PULSER = Executors.newSingleThreadScheduledExecutor();
 
-    public static void debug() {
-        System.out.println("*************************************************");
-        StackTraceElement[] array = Thread.currentThread().getStackTrace();
-        System.out.println("Class called: " + array[2].getClassName());
-        System.out.println("Method called: " + array[2].getMethodName());
-        System.out.println("Calling class: " + array[3].getClassName());
-        System.out.println("Calling method: " + array[3].getMethodName());
-    }
+//    public static void debug() {
+//        System.out.println("*************************************************");
+//        StackTraceElement[] array = Thread.currentThread().getStackTrace();
+//        System.out.println("Class called: " + array[2].getClassName());
+//        System.out.println("Method called: " + array[2].getMethodName());
+//        System.out.println("Calling class: " + array[3].getClassName());
+//        System.out.println("Calling method: " + array[3].getMethodName());
+//    }
 
     /**
      * {@inheritDoc}

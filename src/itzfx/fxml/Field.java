@@ -17,28 +17,33 @@ import itzfx.fxml.game.objects.StationaryGoal;
 import itzfx.Hitbox;
 import itzfx.KeyBuffer;
 import itzfx.KeyControl;
+import itzfx.MatchState;
 import itzfx.Mobile;
 import itzfx.Robot;
+import itzfx.media.SoundHandler;
+import itzfx.media.Sounds;
 import itzfx.scoring.ScoreReport;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -54,6 +59,13 @@ import javafx.util.Duration;
  */
 public class Field implements AutoCloseable {
 
+    /*
+    ============================================================================
+    
+    Construction stuff
+    
+    ============================================================================
+     */
     private static final List<Field> FIELDS;
 
     static {
@@ -91,8 +103,6 @@ public class Field implements AutoCloseable {
         added = new ArrayList<>();
     }
 
-    private PulseManager pulseManager;
-
     @FXML
     private void initialize() {
         FIELDS.add(this);
@@ -106,110 +116,6 @@ public class Field implements AutoCloseable {
         Start.PULSER.schedule(this::reset, 3, TimeUnit.SECONDS);
         pulseManager.beginCollisionPulsing();
         pulseManager.beginScorePulsing();
-    }
-
-    private class PulseManager {
-
-        private final ScheduledExecutorService executor;
-        private long lastTimeChecked;
-        private final Runnable inputTask = () -> {
-            if (KeyBuffer.pulse()) {
-                lastTimeChecked = System.currentTimeMillis();
-                if (this.scorePulser == null || this.collisionPulser == null) {
-                    beginScorePulsing();
-                    beginCollisionPulsing();
-                }
-            }
-        };
-        private final Runnable scoreTask = () -> {
-            if (sbc != null && mode != null) {
-                Platform.runLater(() -> {
-                    switch (mode) {
-                        case AUTON:
-                            sbc.pulseAuton();
-                            break;
-                        default:
-                            sbc.pulse();
-                            break;
-                    }
-                });
-            }
-        };
-        private final Runnable collisionTask = Hitbox::pulse;
-        private ScheduledFuture<?> inputPulser;
-        private ScheduledFuture<?> scorePulser;
-        private ScheduledFuture<?> collisionPulser;
-        private ScheduledFuture<?> disuseMonitor;
-
-        public PulseManager(ScheduledExecutorService executor) {
-            this.executor = executor;
-        }
-
-        public void begin() {
-            if (disuseMonitor == null) {
-                inputPulser = executor.scheduleWithFixedDelay(inputTask, 0, 18, TimeUnit.MILLISECONDS);
-                disuseMonitor = executor.scheduleWithFixedDelay(() -> {
-                    if (lastTimeChecked + 1000 < System.currentTimeMillis()) {
-                        stopScorePulsing();
-                        stopCollisionPulsing();
-                    }
-                }, 10, 5, TimeUnit.SECONDS);
-                beginCollisionPulsing();
-                beginScorePulsing();
-            }
-        }
-
-        public void autonPulsing() {
-            ScheduledFuture<?> collisions = executor.scheduleAtFixedRate(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
-            ScheduledFuture<?> scores = executor.scheduleAtFixedRate(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
-            Start.PULSER.schedule(() -> {
-                collisions.cancel(false);
-                scores.cancel(false);
-            }, 17, TimeUnit.SECONDS);
-        }
-
-        private void beginScorePulsing() {
-            if (scorePulser == null) {
-                scorePulser = executor.scheduleWithFixedDelay(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
-            }
-        }
-
-        private void beginCollisionPulsing() {
-            if (collisionPulser == null) {
-                collisionPulser = executor.scheduleWithFixedDelay(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
-            }
-        }
-
-        private void stopCollisionPulsing() {
-            if (collisionPulser != null) {
-                collisionPulser.cancel(false);
-                collisionPulser = null;
-            }
-        }
-
-        private void stopScorePulsing() {
-            if (scorePulser != null) {
-                scorePulser.cancel(false);
-                scorePulser = null;
-            }
-        }
-
-        private void stopInputPulsing() {
-            if (inputPulser != null) {
-                inputPulser.cancel(false);
-                inputPulser = null;
-            }
-        }
-
-        public void stop() {
-            stopInputPulsing();
-            stopScorePulsing();
-            stopCollisionPulsing();
-            if (disuseMonitor != null) {
-                disuseMonitor.cancel(false);
-                disuseMonitor = null;
-            }
-        }
     }
 
     private void dropCones() {
@@ -227,7 +133,7 @@ public class Field implements AutoCloseable {
     private void dropMogos() {
         dropBlueMogos();
         dropRedMogos();
-        mogos.stream().peek(this::register).map(MobileGoal::getNode).forEach(center.getChildren()::add);
+        mogos.stream().peek(m -> register(m.getReporter())).map(MobileGoal::getNode).forEach(center.getChildren()::add);
     }
 
     private void addLoaders() {
@@ -241,8 +147,8 @@ public class Field implements AutoCloseable {
     private void addStats() {
         redStat();
         blueStat();
-        register(rStat);
-        register(bStat);
+        register(rStat.getReporter());
+        register(bStat.getReporter());
         center.getChildren().add(1, rStat.getNode());
         center.getChildren().add(1, bStat.getNode());
     }
@@ -427,42 +333,127 @@ public class Field implements AutoCloseable {
         getRobots().add(r);
     }
 
-    /**
-     * Resets this field to its initial starting positions. Also clears
-     * user-added objects, destacks all stacks, and preloads cones. Also brings
-     * back all vanished objects.
+    /*
+    ============================================================================
+    
+    Pulse management/optimization
+    
+    ============================================================================
      */
-    public void reset() {
-        try {
-            stop();
-            clearAdded();
-            if (mode == null) {
-                mode = ControlMode.FREE_PLAY;
-            }
-            setMode(mode);
-            bStat.reset();
-            rStat.reset();
-            getRobots().forEach(Robot::reset);
-            mogos.forEach(MobileGoal::reset);
-            redDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
-            blueDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
-            onField.forEach(Cone::reset);
-            load(getRobots().get(0));
-            load(getRobots().get(1));
-            List<Cone> c = new ArrayList<>(preloads);
-            getRobots().forEach(r -> {
-                r.forceIntake(preloads.remove(0));
-                if (r.getController().equals(KeyControl.Defaults.BLANK.getKC())) {
-                    r.vanish();
+    private PulseManager pulseManager;
+
+    private class PulseManager {
+
+        private final ScheduledExecutorService executor;
+        private long lastTimeChecked;
+        private final Runnable inputTask = () -> {
+            if (KeyBuffer.pulse()) {
+                lastTimeChecked = System.currentTimeMillis();
+                if (this.scorePulser == null || this.collisionPulser == null) {
+                    beginScorePulsing();
+                    beginCollisionPulsing();
                 }
-                r.getNode().setRotate(r.getNode().getRotate() + 0.01);
-            });
-            preloads.addAll(c);
-            pulseManager.beginScorePulsing();
-        } catch (Exception ex) {
+            }
+        };
+        private final Runnable scoreTask = () -> {
+            if (sbc != null && modeProperty.get() != null) {
+                Platform.runLater(() -> {
+                    switch (modeProperty.get()) {
+                        case AUTON:
+                            sbc.pulseAuton();
+                            break;
+                        default:
+                            sbc.pulse();
+                            break;
+                    }
+                });
+            }
+        };
+        private final Runnable collisionTask = Hitbox::pulse;
+        private ScheduledFuture<?> inputPulser;
+        private ScheduledFuture<?> scorePulser;
+        private ScheduledFuture<?> collisionPulser;
+        private ScheduledFuture<?> disuseMonitor;
+
+        public PulseManager(ScheduledExecutorService executor) {
+            this.executor = executor;
+        }
+
+        public void begin() {
+            if (disuseMonitor == null) {
+                inputPulser = executor.scheduleWithFixedDelay(inputTask, 0, 18, TimeUnit.MILLISECONDS);
+                disuseMonitor = executor.scheduleWithFixedDelay(() -> {
+                    if (lastTimeChecked + 1000 < System.currentTimeMillis()) {
+                        stopScorePulsing();
+                        stopCollisionPulsing();
+                    }
+                }, 10, 5, TimeUnit.SECONDS);
+                beginCollisionPulsing();
+                beginScorePulsing();
+            }
+        }
+
+        public void autonPulsing() {
+            ScheduledFuture<?> collisions = executor.scheduleAtFixedRate(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+            ScheduledFuture<?> scores = executor.scheduleAtFixedRate(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+            Start.PULSER.schedule(() -> {
+                collisions.cancel(false);
+                scores.cancel(false);
+            }, 17, TimeUnit.SECONDS);
+        }
+
+        private void beginScorePulsing() {
+            if (scorePulser == null) {
+                scorePulser = executor.scheduleWithFixedDelay(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+            }
+        }
+
+        private void beginCollisionPulsing() {
+            if (collisionPulser == null) {
+                collisionPulser = executor.scheduleWithFixedDelay(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+            }
+        }
+
+        private void stopCollisionPulsing() {
+            if (collisionPulser != null) {
+                collisionPulser.cancel(false);
+                collisionPulser = null;
+            }
+        }
+
+        private void stopScorePulsing() {
+            if (scorePulser != null) {
+                scorePulser.cancel(false);
+                scorePulser = null;
+            }
+        }
+
+        private void stopInputPulsing() {
+            if (inputPulser != null) {
+                inputPulser.cancel(false);
+                inputPulser = null;
+            }
+        }
+
+        public void stop() {
+            stopInputPulsing();
+            stopScorePulsing();
+            stopCollisionPulsing();
+            if (disuseMonitor != null) {
+                disuseMonitor.cancel(false);
+                disuseMonitor = null;
+            }
         }
     }
 
+    /*
+    ============================================================================
+    
+    Field locating for game stuff to determing which field can accept their
+    commands
+    
+    ============================================================================
+     */
     /**
      * Returns the field that the given {@link Robot Robot} has been placed on.
      * This enables robot-field communication.
@@ -514,26 +505,30 @@ public class Field implements AutoCloseable {
         return field.isEmpty() ? null : field.get(0);
     }
 
-    /**
-     * Registers a {@link MobileGoal Mobile Goal}'s
-     * {@link ScoreReport score report} with this field's scorer.
-     *
-     * @param mg the mobile goal to register
+    /*
+    ============================================================================
+    
+    Score report registration methods
+    
+    ============================================================================
      */
-    public final void register(MobileGoal mg) {
-        scores.registerReport(mg.getReporter());
+    /**
+     * Registers a {@link ScoreReport score report} with this field's scorer.
+     *
+     * @param sr the mobile goal to register
+     */
+    public final void register(ScoreReport sr) {
+        scores.registerReport(sr);
     }
 
-    /**
-     * Registers a {@link StationaryGoal Stationary Goal}'s
-     * {@link ScoreReport score report} with this field's scorer.
-     *
-     * @param sg the stationary goal to register
+    /*
+    ============================================================================
+    
+    Scoring object locating methods (for getting cones/mobile goals/stationary
+    goals)
+    
+    ============================================================================
      */
-    public final void register(StationaryGoal sg) {
-        scores.registerReport(sg.getReporter());
-    }
-
     /**
      * Returns a {@link MobileGoal mobile goal} near the given center point in
      * the direction of the pointing vector at about the distance of the
@@ -551,11 +546,13 @@ public class Field implements AutoCloseable {
      */
     public MobileGoal huntMogo(Point2D center, Point2D pointingVector, boolean red) {
         return mogos.stream()
-                .filter(m -> (mode != ControlMode.DRIVER_CONTROL && mode != ControlMode.AUTON) || m.isRed() == red)
+                .filter(m -> (modeProperty.get() != ControlMode.DRIVER_CONTROL
+                && modeProperty.get() != ControlMode.AUTON) || m.isRed() == red)
                 .filter(m -> !m.isVanished())
                 .filter(m -> {
                     Point2D realVector = new Point2D(m.getCenterX(), m.getCenterY()).subtract(center);
-                    return Math.abs(realVector.getX() - pointingVector.getX()) < 15 && Math.abs(realVector.getY() - pointingVector.getY()) < 15;
+                    return Math.abs(realVector.getX() - pointingVector.getX()) < 15
+                            && Math.abs(realVector.getY() - pointingVector.getY()) < 15;
                 }).findAny().orElse(null);
     }
 
@@ -597,7 +594,7 @@ public class Field implements AutoCloseable {
      * this method returns null.
      */
     public StationaryGoal huntStat(Point2D center, Point2D pointingVector, boolean red) {
-        if (mode == ControlMode.AUTON || mode == ControlMode.DRIVER_CONTROL) {
+        if (modeProperty.get() == ControlMode.AUTON || modeProperty.get() == ControlMode.DRIVER_CONTROL) {
             if (red) {
                 return checkRedStat(center, pointingVector);
             } else {
@@ -627,6 +624,18 @@ public class Field implements AutoCloseable {
     }
 
     /**
+     * Determines whether the given loader already has a {@link Cone cone}
+     * stacked on it.
+     *
+     * @param l the given loader being checked for a cone
+     * @return true if there is already a cone on this loader
+     */
+    public boolean hasCone(Loader l) {
+        Point2D loadCenter = l.getCenter();
+        return onField.stream().filter(c -> !c.isVanished()).anyMatch(c -> c.getCenterX() == loadCenter.getX() && c.getCenterY() == loadCenter.getY());
+    }
+
+    /**
      * Tries to load a {@link Cone cone} on the loader belonging to the alliance
      * that the given robot belongs to.
      *
@@ -648,18 +657,6 @@ public class Field implements AutoCloseable {
     }
 
     /**
-     * Determines whether the given loader already has a {@link Cone cone}
-     * stacked on it.
-     *
-     * @param l the given loader being checked for a cone
-     * @return true if there is already a cone on this loader
-     */
-    public boolean hasCone(Loader l) {
-        Point2D loadCenter = l.getCenter();
-        return onField.stream().filter(c -> !c.isVanished()).anyMatch(c -> c.getCenterX() == loadCenter.getX() && c.getCenterY() == loadCenter.getY());
-    }
-
-    /**
      * Finds a driver load {@link Cone cone} of the specified alliance, if any
      * are still present.
      *
@@ -678,19 +675,14 @@ public class Field implements AutoCloseable {
         }
     }
 
-    private final ScoreAggregator scores = new ScoreAggregator();
-
-    /**
-     * Gets the internal {@link ScoreAggregator scorer} used by the injected
-     * {@link ScoringBoxController}. This is mainly so {@link Robot robots} can
-     * register their own private {@link MobileGoal mobile goals} for scoring
-     * purposes.
-     *
-     * @return the Score Aggregator associated with this field
+    /*
+    ============================================================================
+    
+    Scoring
+    
+    ============================================================================
      */
-    public ScoreAggregator getAggregator() {
-        return scores;
-    }
+    private final ScoreAggregator scores = new ScoreAggregator();
 
     private ScoringBoxController sbc;
 
@@ -704,20 +696,111 @@ public class Field implements AutoCloseable {
     public void inject(ScoringBoxController sbc) {
         this.sbc = sbc;
         sbc.getControlModeSelectionModel().selectedItemProperty().addListener((o, b, s) -> doSetMode(s));
-        System.out.println(sbc);
         sbc.setAggregator(scores);
-        time = sbc.getTime();
+        timeManager.timeProperty = sbc.getTime();
         setMode(ControlMode.AUTON);
         setMode(ControlMode.FREE_PLAY);
         reset();
-        KeyBuffer.registerMulti(k -> play_pause(), KeyCode.SPACE, System.getProperty("os.name").toLowerCase()
-                .contains("windows") ? KeyCode.CONTROL : KeyCode.META);
-        System.out.println(System.getProperty("os.name"));
+//        System.out.println(System.getProperty("os.name"));
     }
 
-    private DoubleProperty time;
+    /*
+    ============================================================================
+    
+    Timing
+    
+    ============================================================================
+     */
+    private final TimeManager timeManager = new TimeManager();
 
-    private ControlMode mode;
+    private class TimeManager {
+
+        private final Timeline timer = new Timeline();
+
+        private DoubleProperty timeProperty;
+
+        private final ChangeListener<Number> sec30Listener = (o, b, s) -> {
+            if (b.intValue() > 30 && s.intValue() < 30) {
+                sounds.play(Sounds.WARNING);
+            }
+        };
+
+        public TimeManager() {
+        }
+
+        public void setTime(ControlMode cm) {
+            timeProperty.set(cm.getTime());
+        }
+
+        private void resetTimer(ControlMode cm) {
+            timer.stop();
+            timer.getKeyFrames().clear();
+            timeManager.setTime(cm);
+            timer.getKeyFrames().add(new KeyFrame(Duration.seconds(cm.getTime()), Field.this::lockout, new KeyValue(timeProperty, 0)));
+            sbc.getTime().removeListener(sec30Listener);
+            switch (cm) {
+                case DRIVER_SKILLS:
+                case PROGRAMMING_SKILLS:
+                    sbc.emphasizeSkills();
+                    break;
+                case DRIVER_CONTROL:
+                    sbc.getTime().addListener(sec30Listener);
+                case AUTON:
+                    sbc.emphasizeTeams();
+                    break;
+                default:
+                    sbc.emphasizeNone();
+            }
+        }
+
+        public void play() {
+            timer.play();
+        }
+
+        public void pause() {
+            timer.pause();
+        }
+
+        public void stop() {
+            timer.stop();
+        }
+    }
+    
+    /**
+     * Stops the field/match timer, and resets the time.
+     */
+    public void stop() {
+        timeManager.stop();
+        reregisterMode(modeProperty.get());
+    }
+
+    /**
+     * Begins counting down the field/match timer. Also resumes all robot
+     * movement, if it has not been enabled already.
+     */
+    public void play() {
+        sounds.play(Sounds.START);
+        robots.forEach(Robot::resume);
+        timeManager.play();
+        robots.forEach(Robot::deprime);
+    }
+
+    /**
+     * Temporarily pauses gameplay. Also prevents robots from moving.
+     */
+    public void pause() {
+        robots.forEach(Robot::pause);
+        timeManager.pause();
+    }
+
+    /*
+    ============================================================================
+    
+    Gameplay
+    
+    ============================================================================
+     */
+    private final ObjectProperty<ControlMode> modeProperty = new SimpleObjectProperty<>();
 
     /**
      * Sets the {@link ControlMode mode} of this field. Also updates the timer
@@ -730,17 +813,77 @@ public class Field implements AutoCloseable {
     }
 
     private void doSetMode(ControlMode cm) {
-        this.mode = cm;
+        modeProperty.set(cm);
         reregisterMode(cm);
         switchToDriver = false;
     }
+
+    private Future<?> autostartTask;
+
+    private void reregisterMode(ControlMode cm) {
+        if (cm != null) {
+            timeManager.resetTimer(cm);
+            prepareRobots(cm);
+        }
+    }
+
+    private void prepareRobots(ControlMode cm) {
+        KeyBuffer.unlock();
+        getRobots().stream().peek(Robot::resume).forEach(Robot::prime);
+        switch (cm) {
+            case AUTON:
+            case PROGRAMMING_SKILLS:
+                getRobots().forEach(r -> {
+                    r.eraseController();
+                    r.prime();
+                });
+                if (autostartTask == null || autostartTask.isDone()) {
+                    autostartTask = Start.PULSER.schedule(() -> {
+                        if (robots.get(0).isPrimed()) {
+                            play();
+                        }
+                    }, 3, TimeUnit.SECONDS);
+                }
+                getRobots().forEach(Robot::runProgram);
+                pulseManager.autonPulsing();
+                break;
+            default:
+                getRobots().forEach(Robot::driverControl);
+        }
+    }
+
+    private boolean switchToDriver;
+
+    private void lockout(ActionEvent e) {
+        e.consume();
+        if (modeProperty.get() == ControlMode.AUTON) {
+            sbc.determineAutonWinner();
+        }
+        robots.forEach(Robot::pause);
+        if (switchToDriver) {
+            setMode(ControlMode.DRIVER_CONTROL);
+            robots.stream().peek(Robot::pause).forEach(Robot::prime);
+            sounds.play(Sounds.AUTON_OVER);
+            Start.PULSER.schedule(this::play, 5000, TimeUnit.MILLISECONDS);
+        } else {
+            sounds.play(Sounds.END);
+        }
+    }
+
+    /*
+    ============================================================================
+    
+    Match stuff
+    
+    ============================================================================
+     */
+    private final MatchManager matchManager = new MatchManager();
 
     /**
      * Prepares the field for a match scenario.
      */
     public void preMatch() {
-        reset();
-        setMode(ControlMode.FREE_PLAY);
+        matchManager.prestart();
     }
 
     /**
@@ -765,113 +908,61 @@ public class Field implements AutoCloseable {
      * 5. Game finishes. Match is visible on the score sheet.
      */
     public void startMatch() {
-        setMode(ControlMode.AUTON);
-        switchToDriver = true;
+        matchManager.start();
+
     }
 
-    private final Timeline timer = new Timeline();
+    private class MatchManager {
 
-    private boolean switchToDriver;
+        private final ObjectProperty<MatchState> matchState = new SimpleObjectProperty<>();
 
-    private void lockout(ActionEvent e) {
-        e.consume();
-        if (mode == ControlMode.AUTON) {
-            sbc.determineAutonWinner();
+        public MatchManager() {
         }
-        robots.forEach(r -> r.pause());
-        if (switchToDriver) {
-            setMode(ControlMode.DRIVER_CONTROL);
-            robots.stream().peek(Robot::pause).forEach(Robot::prime);
-            Start.PULSER.schedule(() -> robots.forEach(Robot::resume), 5000, TimeUnit.MILLISECONDS);
+
+        public void addMatchStateListener(ChangeListener<? super MatchState> cl) {
+            matchState.addListener(cl);
         }
-    }
 
-    /**
-     * Stops the field/match timer, and resets the time.
-     */
-    public void stop() {
-        timer.stop();
-        reregisterMode(mode);
-    }
+        public void prestart() {
+            reset();
+            matchState.set(MatchState.PREPPED);
+            matchInProgress = true;
+            setMode(ControlMode.FREE_PLAY);
+        }
 
-    private long lastPlay_Pause;
+        public void start() {
+            setMode(ControlMode.AUTON);
+            matchState.set(MatchState.AUTON);
+            switchToDriver = true;
+        }
 
-    private void play_pause() {
-        if (lastPlay_Pause + 200 < System.currentTimeMillis()) {
-            if (timer.getStatus() == Animation.Status.RUNNING) {
-                pause();
-            } else {
-                play();
-            }
-            lastPlay_Pause = System.currentTimeMillis();
+        private boolean matchInProgress;
+
+        public boolean matchInProgress() {
+            return matchInProgress;
+        }
+
+        public void reset() {
+            matchInProgress = false;
         }
     }
 
-    /**
-     * Begins counting down the field/match timer. Also resumes all robot
-     * movement, if it has not been enabled already.
+    /*
+    ============================================================================
+    
+    Sounds
+    
+    ============================================================================
      */
-    public void play() {
-        robots.forEach(Robot::resume);
-        timer.play();
-        robots.forEach(Robot::deprime);
-    }
+    private final SoundHandler sounds = new SoundHandler();
 
-    /**
-     * Temporarily pauses gameplay. Also prevents robots from moving.
+    /*
+    ============================================================================
+    
+    Custom object generation (unused)
+    
+    ============================================================================
      */
-    public void pause() {
-        robots.forEach(Robot::pause);
-        timer.pause();
-    }
-
-    private void reregisterMode(ControlMode cm) {
-        timer.stop();
-        timer.getKeyFrames().clear();
-        if (time != null && cm != null) {
-            time.set(cm.getTime());
-            timer.getKeyFrames().add(new KeyFrame(Duration.seconds(time.get()), this::lockout, new KeyValue(time, 0)));
-            KeyBuffer.unlock();
-            getRobots().stream().peek(Robot::resume).forEach(Robot::prime);
-            switch (cm) {
-                case AUTON:
-                case PROGRAMMING_SKILLS:
-                    for (Robot r : getRobots()) {
-                        r.eraseController();
-                        r.prime();
-                    }
-                    getRobots().forEach(Robot::runProgram);
-                    pulseManager.autonPulsing();
-                    break;
-                default:
-                    getRobots().forEach(Robot::driverControl);
-            }
-            switch (cm) {
-                case DRIVER_SKILLS:
-                case PROGRAMMING_SKILLS:
-                    sbc.emphasizeSkills();
-                    break;
-                case DRIVER_CONTROL:
-                case AUTON:
-                    sbc.emphasizeTeams();
-                    break;
-                default:
-                    sbc.emphasizeNone();
-            }
-        }
-    }
-
-    /**
-     * Closes this field. Cancels all tasks maintaining this field, and clears
-     * the {@link Hitbox#COLLIDABLE hitbox list} maintaining collisions.
-     */
-    @Override
-    public void close() {
-        timer.stop();
-        Hitbox.clear();
-        pulseManager.stop();
-    }
-
     /**
      * Creates a new {@link Cone cone} at the specified coordinates. This is
      * meant for user-induced cone placement.
@@ -916,6 +1007,13 @@ public class Field implements AutoCloseable {
         added.stream().peek(Mobile::reset).map(Mobile::getNode).forEach(center.getChildren()::remove);
     }
 
+    /*
+    ============================================================================
+    
+    Utility methods
+    
+    ============================================================================
+     */
     /**
      * Gets the list of robots playing on this field.
      *
@@ -923,5 +1021,55 @@ public class Field implements AutoCloseable {
      */
     public List<Robot> getRobots() {
         return robots;
+    }
+
+    /**
+     * Resets this field to its initial starting positions. Also clears
+     * user-added objects, destacks all stacks, and preloads cones. Also brings
+     * back all vanished objects.
+     */
+    public void reset() {
+        try {
+            stop();
+            clearAdded();
+            if (modeProperty.get() == null) {
+                modeProperty.set(ControlMode.FREE_PLAY);
+            }
+            setMode(modeProperty.get());
+            if (autostartTask != null) {
+                autostartTask.cancel(true);
+            }
+            bStat.reset();
+            rStat.reset();
+            getRobots().forEach(Robot::reset);
+            mogos.forEach(MobileGoal::reset);
+            redDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
+            blueDriverLoads.stream().peek(onField::remove).forEach(Cone::reset);
+            onField.forEach(Cone::reset);
+            load(getRobots().get(0));
+            load(getRobots().get(1));
+            List<Cone> c = new ArrayList<>(preloads);
+            getRobots().forEach(r -> {
+                r.forceIntake(preloads.remove(0));
+                if (r.getController().equals(KeyControl.Defaults.BLANK.getKC())) {
+                    r.vanish();
+                }
+                r.getNode().setRotate(r.getNode().getRotate() + 0.01);
+            });
+            preloads.addAll(c);
+            pulseManager.beginScorePulsing();
+        } catch (Exception ex) {
+        }
+    }
+
+    /**
+     * Closes this field. Cancels all tasks maintaining this field, and clears
+     * the {@link Hitbox#COLLIDABLE hitbox list} maintaining collisions.
+     */
+    @Override
+    public void close() {
+        timeManager.stop();
+        Hitbox.clear();
+        pulseManager.stop();
     }
 }

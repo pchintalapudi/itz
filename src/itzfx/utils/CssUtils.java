@@ -38,7 +38,6 @@ public class CssUtils {
             if (LocalTime.now().getHour() < 22 && LocalTime.now().getHour() > 5) {
                 switchStyleSheet("default");
                 long a = Math.abs(LocalTime.now().until(LocalTime.of(22, 0), ChronoUnit.MILLIS));
-                System.out.println(a);
                 synchronized (STYLESHEET) {
                     try {
                         STYLESHEET.wait(a);
@@ -48,7 +47,6 @@ public class CssUtils {
             } else {
                 switchStyleSheet("dark");
                 long a = Math.abs(LocalTime.now().until(LocalTime.of(6, 0), ChronoUnit.MILLIS));
-                System.out.println(a);
                 synchronized(STYLESHEET) {
                     try {
                         STYLESHEET.wait(a);

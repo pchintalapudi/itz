@@ -51,7 +51,6 @@ public class KeyBinder {
                 "Intake/Outtake a Cone  " + keys[6], "Stack on a Stationary Goal  " + keys[7], "Load a Driver Load  " + keys[8]);
         Arrays.stream(keys).peek(keyboard::selected).forEach(k -> keyboard.save());
         left.addEventFilter(KeyEvent.KEY_PRESSED, k -> {
-            System.out.println(k);
             int index = left.getSelectionModel().getSelectedIndex();
             if (index != -1) {
                 String replace = left.getItems().get(index).split("  ")[0];

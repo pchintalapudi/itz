@@ -133,7 +133,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     private void register() {
-        Field.getOwner(this).getAggregator().registerReport(sr);
+        Field.getOwner(this).register(sr);
     }
 
     /**
@@ -141,8 +141,8 @@ public final class Robot extends Mobile implements Scoreable {
      * the robot has been added to the field.
      */
     public void registerMogos() {
-        Field.getOwner(this).register(redMogo);
-        Field.getOwner(this).register(blueMogo);
+        Field.getOwner(this).register(redMogo.getReporter());
+        Field.getOwner(this).register(blueMogo.getReporter());
         register();
     }
 
@@ -415,7 +415,6 @@ public final class Robot extends Mobile implements Scoreable {
             }
         }
         List<String> recorded = Command.encode(saved);
-        System.out.println(recorded);
         saved.clear();
         return recorded;
     }

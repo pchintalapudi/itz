@@ -39,7 +39,7 @@ public class ScoreAggregator {
 
     private final List<ScoreReport> reports;
 
-    private Boolean autonomous;
+    private Alliance autonomous = Alliance.NONE;
 
     /**
      * Constructs a new ScoreAggregator.
@@ -143,7 +143,11 @@ public class ScoreAggregator {
      */
     public void determineAutonWinner() {
         int[] temp = calculateAuton();
-        autonomous = temp[0] > temp[1] ? true : temp[1] > temp[0] ? false : null;
+        autonomous = temp[0] > temp[1] ? Alliance.RED : (temp[1] > temp[0] ? Alliance.BLUE : Alliance.NONE);
+    }
+    
+    private static enum Alliance {
+        RED, BLUE, NONE;
     }
 
     /**
@@ -233,8 +237,8 @@ public class ScoreAggregator {
                 }
             }
         }
-        if (autonomous != null) {
-            scores[autonomous ? 12 : 13].set(1);
+        if (autonomous != Alliance.NONE) {
+            scores[autonomous == Alliance.RED ? 12 : 13].set(1);
         }
         return Arrays.stream(scores).mapToInt(AtomicInteger::intValue).toArray();
     }
