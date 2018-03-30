@@ -96,6 +96,5 @@ public class MatchController {
 
     public void insertField(Field f) {
         this.f = f;
-        reset(new ActionEvent());
     }
 }

@@ -6,11 +6,12 @@
 package itzfx;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 import java.util.function.Consumer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -26,31 +27,32 @@ import javafx.scene.input.KeyEvent;
  */
 public final class KeyBuffer {
 
-    private static final Map<KeyCode, Boolean> KEYBUFFER;
+    private static final Set<KeyCode> KEYBUFFER;
 
     private static final Map<KeyCode, List<Consumer<KeyCode>>> ONACTION;
-    private static final Map<KeyCode[], List<Consumer<KeyCode[]>>> ONMULTI;
 
     static {
-        KEYBUFFER = new HashMap<>();
-        Arrays.asList(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
-        ONACTION = new HashMap<>();
-        ONMULTI = new TreeMap<>((k1, k2) -> k1.length > k2.length ? 1 : k1.length < k2.length ? -1 : 0);
+        KEYBUFFER = EnumSet.noneOf(KeyCode.class);
+        ONACTION = new EnumMap<>(KeyCode.class);
     }
 
     private static boolean locked;
 
     private static Scene scene;
 
+    //It's a lambda; it's not called immediately
+    @SuppressWarnings("StaticNonFinalUsedInInitialization")
     private static final EventHandler<KeyEvent> PRESS = k -> {
         if (!locked && !isModified(k)) {
-            KEYBUFFER.put(k.getCode(), true);
+            KEYBUFFER.add(k.getCode());
         }
     };
 
+    //It's a lambda; it's not called immediately
+    @SuppressWarnings("StaticNonFinalUsedInInitialization")
     private static final EventHandler<KeyEvent> RELEASE = k -> {
         if (!locked && !isModified(k)) {
-            KEYBUFFER.put(k.getCode(), false);
+            KEYBUFFER.remove(k.getCode());
         }
     };
     
@@ -93,31 +95,9 @@ public final class KeyBuffer {
      * @return true if any keys were pressed
      */
     public static boolean pulse() {
-        boolean actionOccurred = ONACTION.entrySet().parallelStream().filter(e -> KEYBUFFER.get(e.getKey()))
-                .peek(e -> e.getValue().forEach(c -> c.accept(e.getKey()))).count() != 0;
-        if (!ONMULTI.isEmpty()) {
-            actionOccurred = pulseMulti() || actionOccurred;
-        }
+        boolean actionOccurred = KEYBUFFER.size() > 0;
+        KEYBUFFER.forEach(k -> ONACTION.get(k).forEach(c -> c.accept(k)));
         return actionOccurred;
-    }
-
-    /**
-     * Registers an action that requires multiple keys to be pressed.
-     *
-     * @param c the action to perform
-     * @param k the keys required to be pressed at the same time
-     */
-    public static void registerMulti(Consumer<KeyCode[]> c, KeyCode... k) {
-        if (ONMULTI.containsKey(k)) {
-            ONMULTI.get(k).add(c);
-        } else {
-            ONMULTI.put(k, new ArrayList<>(Arrays.asList(c)));
-        }
-    }
-
-    private static boolean pulseMulti() {
-        return ONMULTI.entrySet().parallelStream().filter(e -> Arrays.stream(e.getKey()).allMatch(k -> KEYBUFFER.get(k)))
-                .peek(e -> e.getValue().forEach(c -> c.accept(e.getKey()))).count() != 0;
     }
 
     /**
@@ -137,7 +117,7 @@ public final class KeyBuffer {
      * @return true if the key is being held down
      */
     public static boolean isActive(KeyCode k) {
-        return KEYBUFFER.get(k);
+        return KEYBUFFER.contains(k);
     }
 
     /**
@@ -147,7 +127,7 @@ public final class KeyBuffer {
      */
     public static void lock() {
         locked = true;
-        Arrays.asList(KeyCode.values()).forEach(k -> KEYBUFFER.put(k, false));
+        KEYBUFFER.clear();
     }
 
     /**

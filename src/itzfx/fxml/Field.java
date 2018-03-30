@@ -700,7 +700,6 @@ public class Field implements AutoCloseable {
         timeManager.timeProperty = sbc.getTime();
         setMode(ControlMode.AUTON);
         setMode(ControlMode.FREE_PLAY);
-        reset();
 //        System.out.println(System.getProperty("os.name"));
     }
 
@@ -718,6 +717,10 @@ public class Field implements AutoCloseable {
         private final Timeline timer = new Timeline();
 
         private DoubleProperty timeProperty;
+        
+        private final SoundHandler sounds = new SoundHandler();
+
+        private Future<?> autostartTask;
 
         private final ChangeListener<Number> sec30Listener = (o, b, s) -> {
             if (b.intValue() > 30 && s.intValue() < 30) {
@@ -728,15 +731,11 @@ public class Field implements AutoCloseable {
         public TimeManager() {
         }
 
-        public void setTime(ControlMode cm) {
-            timeProperty.set(cm.getTime());
-        }
-
-        private void resetTimer(ControlMode cm) {
+        public void resetTimer(ControlMode cm) {
             timer.stop();
             timer.getKeyFrames().clear();
-            timeManager.setTime(cm);
-            timer.getKeyFrames().add(new KeyFrame(Duration.seconds(cm.getTime()), Field.this::lockout, new KeyValue(timeProperty, 0)));
+            timeProperty.set(cm.getTime());
+            timer.getKeyFrames().add(new KeyFrame(Duration.seconds(cm.getTime()), this::lockout, new KeyValue(timeProperty, 0)));
             sbc.getTime().removeListener(sec30Listener);
             switch (cm) {
                 case DRIVER_SKILLS:
@@ -753,19 +752,70 @@ public class Field implements AutoCloseable {
             }
         }
 
+        private MatchState prev;
+
+        void clearPrev() {
+            prev = null;
+        }
+
         public void play() {
             timer.play();
+            if (prev != null) {
+                matchManager.matchState.set(prev);
+            }
+            sounds.play(Sounds.START);
         }
 
         public void pause() {
             timer.pause();
+            sounds.play(Sounds.PAUSED);
+            if (matchManager.matchInProgress()) {
+                prev = matchManager.matchState.get();
+                matchManager.matchState.set(MatchState.PAUSED);
+            }
+        }
+        
+        private void stopQuietly() {
+            timer.stop();
         }
 
         public void stop() {
-            timer.stop();
+            stopQuietly();
+            sounds.play(Sounds.END);
+        }
+
+        public void autostart() {
+            if (autostartTask == null || autostartTask.isDone()) {
+                autostartTask = Start.PULSER.schedule(() -> {
+                    if (robots.get(0).isPrimed()) {
+                        play();
+                    }
+                }, 3, TimeUnit.SECONDS);
+            }
+        }
+
+        public void cancelAll() {
+            autostartTask.cancel(true);
+            stopQuietly();
+        }
+
+        private void lockout(ActionEvent e) {
+            e.consume();
+            if (modeProperty.get() == ControlMode.AUTON) {
+                sbc.determineAutonWinner();
+            }
+            robots.forEach(Robot::pause);
+            if (modeProperty.get() == ControlMode.AUTON && matchManager.matchInProgress()) {
+                setMode(ControlMode.DRIVER_CONTROL);
+                robots.stream().peek(Robot::pause).forEach(Robot::prime);
+                sounds.play(Sounds.PAUSED);
+                Start.PULSER.schedule(this::play, 5000, TimeUnit.MILLISECONDS);
+            } else {
+                sounds.play(Sounds.END);
+            }
         }
     }
-    
+
     /**
      * Stops the field/match timer, and resets the time.
      */
@@ -779,7 +829,6 @@ public class Field implements AutoCloseable {
      * movement, if it has not been enabled already.
      */
     public void play() {
-        sounds.play(Sounds.START);
         robots.forEach(Robot::resume);
         timeManager.play();
         robots.forEach(Robot::deprime);
@@ -815,10 +864,7 @@ public class Field implements AutoCloseable {
     private void doSetMode(ControlMode cm) {
         modeProperty.set(cm);
         reregisterMode(cm);
-        switchToDriver = false;
     }
-
-    private Future<?> autostartTask;
 
     private void reregisterMode(ControlMode cm) {
         if (cm != null) {
@@ -837,36 +883,12 @@ public class Field implements AutoCloseable {
                     r.eraseController();
                     r.prime();
                 });
-                if (autostartTask == null || autostartTask.isDone()) {
-                    autostartTask = Start.PULSER.schedule(() -> {
-                        if (robots.get(0).isPrimed()) {
-                            play();
-                        }
-                    }, 3, TimeUnit.SECONDS);
-                }
+                timeManager.autostart();
                 getRobots().forEach(Robot::runProgram);
                 pulseManager.autonPulsing();
                 break;
             default:
                 getRobots().forEach(Robot::driverControl);
-        }
-    }
-
-    private boolean switchToDriver;
-
-    private void lockout(ActionEvent e) {
-        e.consume();
-        if (modeProperty.get() == ControlMode.AUTON) {
-            sbc.determineAutonWinner();
-        }
-        robots.forEach(Robot::pause);
-        if (switchToDriver) {
-            setMode(ControlMode.DRIVER_CONTROL);
-            robots.stream().peek(Robot::pause).forEach(Robot::prime);
-            sounds.play(Sounds.AUTON_OVER);
-            Start.PULSER.schedule(this::play, 5000, TimeUnit.MILLISECONDS);
-        } else {
-            sounds.play(Sounds.END);
         }
     }
 
@@ -909,14 +931,18 @@ public class Field implements AutoCloseable {
      */
     public void startMatch() {
         matchManager.start();
-
     }
 
-    private class MatchManager {
+    private final class MatchManager {
 
-        private final ObjectProperty<MatchState> matchState = new SimpleObjectProperty<>();
+        private final ObjectProperty<MatchState> matchState = new SimpleObjectProperty<>(MatchState.NONE);
 
         public MatchManager() {
+            addMatchStateListener((o, b, s) -> {
+                if (s == MatchState.NONE) {
+                    timeManager.clearPrev();
+                }
+            });
         }
 
         public void addMatchStateListener(ChangeListener<? super MatchState> cl) {
@@ -933,7 +959,6 @@ public class Field implements AutoCloseable {
         public void start() {
             setMode(ControlMode.AUTON);
             matchState.set(MatchState.AUTON);
-            switchToDriver = true;
         }
 
         private boolean matchInProgress;
@@ -946,15 +971,6 @@ public class Field implements AutoCloseable {
             matchInProgress = false;
         }
     }
-
-    /*
-    ============================================================================
-    
-    Sounds
-    
-    ============================================================================
-     */
-    private final SoundHandler sounds = new SoundHandler();
 
     /*
     ============================================================================
@@ -1030,15 +1046,14 @@ public class Field implements AutoCloseable {
      */
     public void reset() {
         try {
-            stop();
+            timeManager.stopQuietly();
+            reregisterMode(modeProperty.get());
             clearAdded();
             if (modeProperty.get() == null) {
                 modeProperty.set(ControlMode.FREE_PLAY);
             }
             setMode(modeProperty.get());
-            if (autostartTask != null) {
-                autostartTask.cancel(true);
-            }
+            timeManager.cancelAll();
             bStat.reset();
             rStat.reset();
             getRobots().forEach(Robot::reset);
@@ -1068,7 +1083,7 @@ public class Field implements AutoCloseable {
      */
     @Override
     public void close() {
-        timeManager.stop();
+        timeManager.stopQuietly();
         Hitbox.clear();
         pulseManager.stop();
     }

@@ -11,5 +11,5 @@ package itzfx.media;
  */
 public enum Sounds {
     
-    START, AUTON_OVER, END, WARNING;
+    START, PAUSED, END, WARNING;
 }
