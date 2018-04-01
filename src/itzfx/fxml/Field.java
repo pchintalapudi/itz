@@ -764,7 +764,9 @@ public class Field implements AutoCloseable {
             if (prev != null) {
                 matchManager.matchState.set(prev);
             }
-            sounds.play(Sounds.START);
+            if (modeProperty().get() != ControlMode.FREE_PLAY) {
+                sounds.play(Sounds.START);
+            }
         }
 
         public void pause() {
@@ -805,6 +807,7 @@ public class Field implements AutoCloseable {
             if (modeProperty().get() == ControlMode.AUTON) {
                 sbc.determineAutonWinner();
             }
+            KeyBuffer.lock();
             if (modeProperty().get() == ControlMode.AUTON && matchManager.matchInProgress()) {
                 sounds.play(Sounds.PAUSED);
                 Start.PULSER.schedule(() -> {
