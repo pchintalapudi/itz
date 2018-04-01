@@ -255,6 +255,34 @@ public final class Robot extends Mobile implements Scoreable {
         actions.add(k -> load());
     }
 
+    /**
+     * Adds "Enable Driver Control" and "Set Robot Image" options.
+     *
+     * @param rightClick {@inheritDoc}
+     */
+    @Override
+    protected void rightClickOptions(ContextMenu rightClick) {
+        MenuItem dc = new MenuItem("Enable Driver Control");
+        dc.setOnAction(e -> {
+            e.consume();
+            driverControl();
+        });
+        rightClick.getItems().add(dc);
+        MenuItem si = new MenuItem("Set Robot Image");
+        si.setOnAction(e -> {
+            e.consume();
+            switchImage();
+        });
+        rightClick.getItems().add(si);
+    }
+
+    /*
+    ============================================================================
+    
+    Controller things
+    
+    ============================================================================
+     */
     private final List<Consumer<KeyCode>> actions = new ArrayList<>(9);
 
     private KeyControl controller;
@@ -291,6 +319,13 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
+    /*
+    ============================================================================
+    
+    Collisions
+    
+    ============================================================================
+     */
     /**
      * {@inheritDoc}
      */
@@ -326,6 +361,13 @@ public final class Robot extends Mobile implements Scoreable {
         Hitbox.unregister(hb);
     }
 
+    /*
+    ============================================================================
+    
+    Alliancing
+    
+    ============================================================================
+     */
     /**
      * Sets this robot to the specified alliance.
      *
@@ -348,8 +390,19 @@ public final class Robot extends Mobile implements Scoreable {
         return red;
     }
 
+    /*
+    ============================================================================
+    
+    Rerun/Replay recording
+    
+    ============================================================================
+     */
     private boolean recording;
     private ScheduledFuture<?> recordingTask;
+
+    private final Deque<List<Command>> saved = new ArrayDeque<>(1000);
+
+    private List<Command> pulse = new ArrayList<>(2);
 
     /**
      * Every call, if this robot is recording a rerun, a new set of commands is
@@ -419,6 +472,13 @@ public final class Robot extends Mobile implements Scoreable {
         return recorded;
     }
 
+    /*
+    ============================================================================
+    
+    Rerun/Replay read back
+    
+    ============================================================================
+     */
     /**
      * Sets the autonomous program to run from a list of strings representing a
      * past rerun. This is generally pulled from a rerun file (*.rrn).
@@ -440,38 +500,13 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
-    /**
-     * Enables driver control of the robot.
+    /*
+    ============================================================================
+    
+    Robot movement methods
+    
+    ============================================================================
      */
-    public void driverControl() {
-        if (rerun != null) {
-            rerun.pause();
-        }
-        setController(controller);
-    }
-
-    /**
-     * Adds "Set Autonomous", "Run Autonomous", and "Enable Driver Control"
-     * options.
-     *
-     * @param rightClick {@inheritDoc}
-     */
-    @Override
-    protected void rightClickOptions(ContextMenu rightClick) {
-        MenuItem dc = new MenuItem("Enable Driver Control");
-        dc.setOnAction(e -> {
-            e.consume();
-            driverControl();
-        });
-        rightClick.getItems().add(dc);
-        MenuItem si = new MenuItem("Set Robot Image");
-        si.setOnAction(e -> {
-            e.consume();
-            switchImage();
-        });
-        rightClick.getItems().add(si);
-    }
-
     /**
      * Moves the robot forwards. This does take into account robot speed.
      */
@@ -551,7 +586,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     /**
-     * MOves the robot to the right. This does take into account robot speed.
+     * Moves the robot to the right. This does take into account robot speed.
      */
     public void rightTurn() {
         if (active.get() && driveBaseMovable.get()) {
@@ -566,15 +601,13 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
-    /**
-     * Gets the robot's movement speed.
-     *
-     * @return the speed of the robot
+    /*
+    ============================================================================
+    
+    Mobile goal methods/animation
+    
+    ============================================================================
      */
-    public float getSpeed() {
-        return properties.getRobotSpeed();
-    }
-
     private final BooleanProperty movingMogo = new SimpleBooleanProperty();
 
     private final Timeline mogoAnimation = new Timeline();
@@ -655,6 +688,13 @@ public final class Robot extends Mobile implements Scoreable {
         movingMogo.set(false);
     }
 
+    /*
+    ============================================================================
+    
+    Cone methods/animation
+    
+    ============================================================================
+     */
     private final BooleanProperty movingCone = new SimpleBooleanProperty();
 
     private final Cone privateCone;
@@ -685,6 +725,18 @@ public final class Robot extends Mobile implements Scoreable {
                 pulse.add(Command.CONE);
             }
         }
+    }
+
+    /**
+     * @param cone the cone to intake
+     * @deprecated only public for field reset
+     */
+    @Deprecated
+    public void forceIntake(Cone cone) {
+        heldCone.set(cone);
+        cone.vanish();
+        privateCone.setX(90);
+        privateCone.reappear();
     }
 
     private void coneIntake() {
@@ -811,18 +863,13 @@ public final class Robot extends Mobile implements Scoreable {
         pulse.add(Command.LOAD);
     }
 
-    /**
-     * @param cone the cone to intake
-     * @deprecated only public for field reset
+    /*
+    ============================================================================
+    
+    Robot priming (field starts timer only when a robot moves/is deprimed)
+    
+    ============================================================================
      */
-    @Deprecated
-    public void forceIntake(Cone cone) {
-        heldCone.set(cone);
-        cone.vanish();
-        privateCone.setX(90);
-        privateCone.reappear();
-    }
-
     private final BooleanProperty primed = new SimpleBooleanProperty();
 
     /**
@@ -850,6 +897,13 @@ public final class Robot extends Mobile implements Scoreable {
         primed.set(false);
     }
 
+    /*
+    ============================================================================
+    
+    Pause/resume methods (retains state of animations)
+    
+    ============================================================================
+     */
     private boolean mogoWas;
     private boolean stackWas;
     private boolean rerunWas;
@@ -891,50 +945,6 @@ public final class Robot extends Mobile implements Scoreable {
             stackWas = false;
         }
         active.set(true);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void resetProperties() {
-        mogoWas = false;
-        stackWas = false;
-        rerunWas = false;
-        mogoAnimation.stop();
-        stackAnimation.stop();
-        if (heldMogo.get() != null) {
-            privateMogo.get().shiftStack(heldMogo.get());
-            heldMogo.get().reset();
-            heldMogo.set(null);
-        }
-        if (heldCone.get() != null) {
-            heldCone.get().reset();
-            heldCone.set(null);
-        }
-        privateCone.vanish();
-        redMogo.vanish();
-        blueMogo.vanish();
-        movingMogo.set(false);
-        movingCone.set(false);
-        if (rerun != null) {
-            rerun.stop();
-        }
-        setController(controller);
-        active.set(true);
-        if (heldCone.get() != null) {
-            Cone c = heldCone.get();
-            heldCone.set(null);
-            forceIntake(c);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public StackPane getNode() {
-        return node;
     }
 
     /**
@@ -1004,10 +1014,13 @@ public final class Robot extends Mobile implements Scoreable {
         r.acceptValues(RobotProperties.create(rs, rmit, rat, rst, rmms, rsms, rmf ? 1 : -1));
     }
 
-    private final Deque<List<Command>> saved = new ArrayDeque<>(1000);
-
-    private List<Command> pulse = new ArrayList<>(2);
-
+    /*
+    ============================================================================
+    
+    Making controller observable (for tabs)
+    
+    ============================================================================
+     */
     //Link to controller table.
     private final ObservableKeyCodeStruct okcs = new ObservableKeyCodeStruct();
 
@@ -1068,6 +1081,13 @@ public final class Robot extends Mobile implements Scoreable {
         return okcs.keys()[8];
     }
 
+    /*
+    ============================================================================
+    
+    Making robot properties observable (for tabs)
+    
+    ============================================================================
+     */
     private final ObservableRobotPropertiesStruct orps = new ObservableRobotPropertiesStruct();
 
     private class ObservableRobotPropertiesStruct {
@@ -1166,5 +1186,66 @@ public final class Robot extends Mobile implements Scoreable {
 
     public BooleanProperty mogoFrontProperty() {
         return orps.getMogofront();
+    }
+
+    /*
+    ============================================================================
+    
+    Utility methods
+    
+    ============================================================================
+     */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void resetProperties() {
+        mogoWas = false;
+        stackWas = false;
+        rerunWas = false;
+        mogoAnimation.stop();
+        stackAnimation.stop();
+        if (heldMogo.get() != null) {
+            privateMogo.get().shiftStack(heldMogo.get());
+            heldMogo.get().reset();
+            heldMogo.set(null);
+        }
+        if (heldCone.get() != null) {
+            heldCone.get().reset();
+            heldCone.set(null);
+        }
+        privateCone.vanish();
+        redMogo.vanish();
+        blueMogo.vanish();
+        movingMogo.set(false);
+        movingCone.set(false);
+        if (rerun != null) {
+            rerun.stop();
+        }
+        setController(controller);
+        active.set(true);
+        if (heldCone.get() != null) {
+            Cone c = heldCone.get();
+            heldCone.set(null);
+            forceIntake(c);
+        }
+    }
+
+    /**
+     * Enables driver control of the robot.
+     */
+    public void driverControl() {
+        if (rerun != null) {
+            rerun.pause();
+        }
+        setController(controller);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public StackPane getNode() {
+        return node;
     }
 }

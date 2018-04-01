@@ -8,6 +8,7 @@ package itzfx;
 import com.sun.javafx.application.LauncherImpl;
 import itzfx.fxml.FXMLController;
 import itzfx.preload.Prestart;
+import itzfx.rerun.Translate;
 import itzfx.utils.CssUtils;
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -141,7 +142,7 @@ public class Start extends Application {
     }
 
     private boolean dark = true;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -158,8 +159,15 @@ public class Start extends Application {
         Scene scene = new Scene(windowScale, width, height);
         CssUtils.addStyleSheet(scene);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, k -> {
-            if (k.isControlDown() && k.isShiftDown() && k.getCode() == KeyCode.I) {
-                CssUtils.switchStyleSheet((dark = !dark) ? "default" : "dark");
+            if (k.isControlDown() && k.isShiftDown()) {
+                switch (k.getCode()) {
+                    case I:
+                        CssUtils.switchStyleSheet((dark = !dark) ? "default" : "dark");
+                        break;
+                    case T:
+                        Translate.userTranslateToTime(primaryStage);
+                        break;
+                }
             }
         });
         addRotateListeners(scene);
