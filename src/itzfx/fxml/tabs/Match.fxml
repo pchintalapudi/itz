@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/" fx:controller="itzfx.fxml.tabs.MatchController">
+<AnchorPane id="AnchorPane" prefHeight="250.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.tabs.MatchController">
     <children>
         <GridPane alignment="CENTER" prefHeight="250.0" prefWidth="700.0">
             <columnConstraints>
@@ -19,37 +18,26 @@
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <StackPane>
                     <children>
-                        <Button mnemonicParsing="false" text="Reset Field" fx:id="resetButton" onAction="#reset"/>
+                        <Button fx:id="resetButton" mnemonicParsing="false" onAction="#reset" text="Reset Field" />
                     </children>
                 </StackPane>
                 <StackPane GridPane.rowIndex="1">
                     <children>
-                        <Button mnemonicParsing="false" text="Pre-Autonomous" fx:id="preAutonButton" onAction="#preAuton"/>
-                    </children>
-                </StackPane>
-                <StackPane GridPane.rowIndex="2">
-                    <children>
-                        <Button mnemonicParsing="false" text="Autonomous" fx:id="autonButton" onAction="#auton"/>
-                    </children>
-                </StackPane>
-                <StackPane GridPane.columnIndex="1" GridPane.rowIndex="2">
-                    <children>
-                        <Button mnemonicParsing="false" text="Driver Control" fx:id="dcButton" onAction="#dc"/>
+                        <Button fx:id="preAutonButton" mnemonicParsing="false" onAction="#preAuton" text="Pre-Autonomous" />
                     </children>
                 </StackPane>
                 <StackPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
-                        <ToggleButton mnemonicParsing="false" text="Playing" fx:id="playingButton"/>
+                        <ToggleButton fx:id="playingButton" mnemonicParsing="false" text="Playing" />
                     </children>
                 </StackPane>
                 <StackPane GridPane.columnIndex="1">
                     <children>
-                        <Button mnemonicParsing="false" text="Begin Match" fx:id="beginButton" onAction="#begin"/>
+                        <Button fx:id="beginButton" mnemonicParsing="false" onAction="#begin" text="Begin Match" />
                     </children>
                 </StackPane>
             </children>

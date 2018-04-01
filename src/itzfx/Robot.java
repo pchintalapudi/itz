@@ -64,10 +64,10 @@ import javafx.util.Duration;
  * @author Prem Chintalapudi 5776E
  */
 public final class Robot extends Mobile implements Scoreable {
-    
+
     private static final PseudoClass RED = PseudoClass.getPseudoClass("red");
     private static final PseudoClass BLUE = PseudoClass.getPseudoClass("blue");
-    
+
     private final StackPane node;
     private final StackPane realRobot;
 
@@ -90,7 +90,7 @@ public final class Robot extends Mobile implements Scoreable {
     {
         iv.setFitWidth(90);
         iv.setFitHeight(90);
-        iv.getStyleClass().add("image");
+        iv.setImage(new Image(Robot.class.getResourceAsStream("/itzfx/images/topviewicon.png")));
         iv.setCache(true);
     }
 
@@ -258,16 +258,6 @@ public final class Robot extends Mobile implements Scoreable {
      */
     public KeyControl getController() {
         return controller;
-    }
-
-    /**
-     * Temporarily erases the control format associated with this robot. The
-     * intent of this method is to disable driver control during autonomous and
-     * programming skills.
-     */
-    public void eraseController() {
-        Iterator<KeyCode> iteratorOld = Arrays.asList(this.controller.keys()).iterator();
-        actions.stream().forEach(a -> KeyBuffer.remove(iteratorOld.next(), a));
     }
 
     /**

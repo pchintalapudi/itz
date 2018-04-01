@@ -7,6 +7,7 @@ package itzfx.rerun;
 
 import itzfx.Robot;
 import itzfx.Start;
+import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.Future;
@@ -35,6 +36,7 @@ public final class Rerun {
     public Rerun(Robot r, List<String> commands) {
         this.r = r;
         this.commands = Command.decode(commands);
+        read = new ArrayDeque<>();
     }
 
     private Future<?> readBackTask;
@@ -49,12 +51,18 @@ public final class Rerun {
             readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(commands), 0, 17, TimeUnit.MILLISECONDS);
         }
     }
+    
+    private final Queue<List<Command>> read;
 
     private void interpret(Queue<List<Command>> commands) {
         try {
-            commands.poll().forEach(this::translate);
-        } catch (Exception ex) {
+            List<Command> next = commands.poll();
+            next.forEach(this::translate);
+            read.add(next);
+        } catch (NullPointerException ex) {
             readBackTask.cancel(true);
+            this.commands.addAll(read);
+            read.clear();
         }
     }
 

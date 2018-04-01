@@ -6,6 +6,7 @@
 package itzfx.fxml.tabs;
 
 import itzfx.ControlMode;
+import itzfx.MatchState;
 import itzfx.fxml.Field;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,10 +24,6 @@ public class MatchController {
     private Button resetButton;
     @FXML
     private Button preAutonButton;
-    @FXML
-    private Button autonButton;
-    @FXML
-    private Button dcButton;
     @FXML
     private ToggleButton playingButton;
     @FXML
@@ -47,54 +44,55 @@ public class MatchController {
     private void reset(ActionEvent event) {
         event.consume();
         f.reset();
-        autonButton.setDisable(false);
-        dcButton.setDisable(false);
-        preAutonButton.setDisable(false);
-        playingButton.selectedProperty().set(false);
-        playingButton.setDisable(true);
-        beginButton.setDisable(true);
     }
 
     @FXML
     private void preAuton(ActionEvent event) {
         event.consume();
         f.preMatch();
-        beginButton.setDisable(false);
     }
 
     @FXML
     private void auton(ActionEvent event) {
         event.consume();
         f.setMode(ControlMode.AUTON);
-        beginButton.setDisable(true);
-        preAutonButton.setDisable(true);
-        playingButton.setDisable(true);
     }
 
     @FXML
     private void dc(ActionEvent event) {
         event.consume();
         f.setMode(ControlMode.DRIVER_CONTROL);
-        beginButton.setDisable(true);
-        preAutonButton.setDisable(true);
-        playingButton.setDisable(true);
     }
 
     @FXML
     private void begin(ActionEvent event) {
         event.consume();
         f.startMatch();
-        autonButton.setDisable(true);
-        dcButton.setDisable(true);
-        preAutonButton.setDisable(true);
-        beginButton.setDisable(true);
-        playingButton.selectedProperty().set(true);
-        playingButton.setDisable(false);
     }
 
     private Field f;
 
     public void insertField(Field f) {
         this.f = f;
+        f.onMatchStateChanged((o, b, s) -> {
+            switch (s) {
+                case NONE:
+                    preAutonButton.setDisable(false);
+                    playingButton.selectedProperty().set(false);
+                    playingButton.setDisable(true);
+                    beginButton.setDisable(true);
+                    break;
+                case PREPPED:
+                    preAutonButton.setDisable(true);
+                    beginButton.setDisable(false);
+                    break;
+                case AUTON:
+                    preAutonButton.setDisable(true);
+                    beginButton.setDisable(true);
+                    playingButton.selectedProperty().set(true);
+                    playingButton.setDisable(false);
+                    break;
+            }
+        });
     }
 }

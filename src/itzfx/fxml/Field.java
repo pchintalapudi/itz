@@ -37,6 +37,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
@@ -356,9 +357,9 @@ public class Field implements AutoCloseable {
             }
         };
         private final Runnable scoreTask = () -> {
-            if (sbc != null && modeProperty.get() != null) {
+            if (sbc != null && modeProperty().get() != null) {
                 Platform.runLater(() -> {
-                    switch (modeProperty.get()) {
+                    switch (modeProperty().get()) {
                         case AUTON:
                             sbc.pulseAuton();
                             break;
@@ -399,7 +400,7 @@ public class Field implements AutoCloseable {
             Start.PULSER.schedule(() -> {
                 collisions.cancel(false);
                 scores.cancel(false);
-            }, 17, TimeUnit.SECONDS);
+            }, 25, TimeUnit.SECONDS);
         }
 
         private void beginScorePulsing() {
@@ -546,8 +547,8 @@ public class Field implements AutoCloseable {
      */
     public MobileGoal huntMogo(Point2D center, Point2D pointingVector, boolean red) {
         return mogos.stream()
-                .filter(m -> (modeProperty.get() != ControlMode.DRIVER_CONTROL
-                && modeProperty.get() != ControlMode.AUTON) || m.isRed() == red)
+                .filter(m -> (modeProperty().get() != ControlMode.DRIVER_CONTROL
+                && modeProperty().get() != ControlMode.AUTON) || m.isRed() == red)
                 .filter(m -> !m.isVanished())
                 .filter(m -> {
                     Point2D realVector = new Point2D(m.getCenterX(), m.getCenterY()).subtract(center);
@@ -594,7 +595,7 @@ public class Field implements AutoCloseable {
      * this method returns null.
      */
     public StationaryGoal huntStat(Point2D center, Point2D pointingVector, boolean red) {
-        if (modeProperty.get() == ControlMode.AUTON || modeProperty.get() == ControlMode.DRIVER_CONTROL) {
+        if (modeProperty().get() == ControlMode.AUTON || modeProperty().get() == ControlMode.DRIVER_CONTROL) {
             if (red) {
                 return checkRedStat(center, pointingVector);
             } else {
@@ -695,7 +696,7 @@ public class Field implements AutoCloseable {
      */
     public void inject(ScoringBoxController sbc) {
         this.sbc = sbc;
-        sbc.getControlModeSelectionModel().selectedItemProperty().addListener((o, b, s) -> doSetMode(s));
+        sbc.getControlModeSelectionModel().selectedItemProperty().addListener((o, b, s) -> reregisterMode());
         sbc.setAggregator(scores);
         timeManager.timeProperty = sbc.getTime();
         setMode(ControlMode.AUTON);
@@ -717,7 +718,7 @@ public class Field implements AutoCloseable {
         private final Timeline timer = new Timeline();
 
         private DoubleProperty timeProperty;
-        
+
         private final SoundHandler sounds = new SoundHandler();
 
         private Future<?> autostartTask;
@@ -774,7 +775,7 @@ public class Field implements AutoCloseable {
                 matchManager.matchState.set(MatchState.PAUSED);
             }
         }
-        
+
         private void stopQuietly() {
             timer.stop();
         }
@@ -788,7 +789,7 @@ public class Field implements AutoCloseable {
             if (autostartTask == null || autostartTask.isDone()) {
                 autostartTask = Start.PULSER.schedule(() -> {
                     if (robots.get(0).isPrimed()) {
-                        play();
+                        Field.this.play();
                     }
                 }, 3, TimeUnit.SECONDS);
             }
@@ -801,15 +802,15 @@ public class Field implements AutoCloseable {
 
         private void lockout(ActionEvent e) {
             e.consume();
-            if (modeProperty.get() == ControlMode.AUTON) {
+            if (modeProperty().get() == ControlMode.AUTON) {
                 sbc.determineAutonWinner();
             }
-            robots.forEach(Robot::pause);
-            if (modeProperty.get() == ControlMode.AUTON && matchManager.matchInProgress()) {
-                setMode(ControlMode.DRIVER_CONTROL);
-                robots.stream().peek(Robot::pause).forEach(Robot::prime);
+            if (modeProperty().get() == ControlMode.AUTON && matchManager.matchInProgress()) {
                 sounds.play(Sounds.PAUSED);
-                Start.PULSER.schedule(this::play, 5000, TimeUnit.MILLISECONDS);
+                Start.PULSER.schedule(() -> {
+                    setMode(ControlMode.DRIVER_CONTROL);
+                    play();
+                }, 5000, TimeUnit.MILLISECONDS);
             } else {
                 sounds.play(Sounds.END);
             }
@@ -821,7 +822,7 @@ public class Field implements AutoCloseable {
      */
     public void stop() {
         timeManager.stop();
-        reregisterMode(modeProperty.get());
+        reregisterMode();
     }
 
     /**
@@ -849,8 +850,6 @@ public class Field implements AutoCloseable {
     
     ============================================================================
      */
-    private final ObjectProperty<ControlMode> modeProperty = new SimpleObjectProperty<>();
-
     /**
      * Sets the {@link ControlMode mode} of this field. Also updates the timer
      * with the mode's alloted time.
@@ -858,16 +857,18 @@ public class Field implements AutoCloseable {
      * @param cm the mode to set
      */
     public void setMode(ControlMode cm) {
-        sbc.getControlModeSelectionModel().select(cm);
+        Platform.runLater(() -> {
+            sbc.getControlModeSelectionModel().select(cm);
+        });
     }
 
-    private void doSetMode(ControlMode cm) {
-        modeProperty.set(cm);
-        reregisterMode(cm);
+    private ReadOnlyObjectProperty<ControlMode> modeProperty() {
+        return sbc.getControlModeSelectionModel().selectedItemProperty();
     }
 
-    private void reregisterMode(ControlMode cm) {
-        if (cm != null) {
+    private void reregisterMode() {
+        ControlMode cm;
+        if ((cm = modeProperty().get()) != null) {
             timeManager.resetTimer(cm);
             prepareRobots(cm);
         }
@@ -875,14 +876,14 @@ public class Field implements AutoCloseable {
 
     private void prepareRobots(ControlMode cm) {
         KeyBuffer.unlock();
-        getRobots().stream().peek(Robot::resume).forEach(Robot::prime);
+        getRobots().forEach(r -> {
+            r.resume();
+            r.prime();
+        });
         switch (cm) {
             case AUTON:
             case PROGRAMMING_SKILLS:
-                getRobots().forEach(r -> {
-                    r.eraseController();
-                    r.prime();
-                });
+                KeyBuffer.lock();
                 timeManager.autostart();
                 getRobots().forEach(Robot::runProgram);
                 pulseManager.autonPulsing();
@@ -931,6 +932,10 @@ public class Field implements AutoCloseable {
      */
     public void startMatch() {
         matchManager.start();
+    }
+
+    public void onMatchStateChanged(ChangeListener<? super MatchState> cl) {
+        matchManager.addMatchStateListener(cl);
     }
 
     private final class MatchManager {
@@ -1047,12 +1052,8 @@ public class Field implements AutoCloseable {
     public void reset() {
         try {
             timeManager.stopQuietly();
-            reregisterMode(modeProperty.get());
             clearAdded();
-            if (modeProperty.get() == null) {
-                modeProperty.set(ControlMode.FREE_PLAY);
-            }
-            setMode(modeProperty.get());
+            setMode(ControlMode.FREE_PLAY);
             timeManager.cancelAll();
             bStat.reset();
             rStat.reset();

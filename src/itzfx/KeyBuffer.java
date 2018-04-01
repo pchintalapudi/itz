@@ -7,9 +7,12 @@ package itzfx;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -55,7 +58,7 @@ public final class KeyBuffer {
             KEYBUFFER.remove(k.getCode());
         }
     };
-    
+
     private static boolean isModified(KeyEvent k) {
         return k.isAltDown() || k.isShiftDown() || k.isShortcutDown();
     }
@@ -83,20 +86,148 @@ public final class KeyBuffer {
      * @param c the action to perform when the key is pressed
      */
     public static void register(KeyCode k, Consumer<KeyCode> c) {
-        if (ONACTION.containsKey(k)) {
-            ONACTION.get(k).add(c);
-        } else {
-            ONACTION.put(k, new ArrayList<>(Arrays.asList(c)));
-        }
+        ONACTION.computeIfAbsent(k, kc -> new ArrayList<>()).add(c);
     }
+
+    //Private list implementation that serves as default when no actions exist.
+    private static final List<Consumer<KeyCode>> EMPTY_LIST = new List<Consumer<KeyCode>>() {
+        @Override
+        public int size() {
+            return 0;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return true;
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            return false;
+        }
+
+        @Override
+        public Iterator<Consumer<KeyCode>> iterator() {
+            return null;
+        }
+
+        @Override
+        public Object[] toArray() {
+            return null;
+        }
+
+        @Override
+        public <T> T[] toArray(T[] a) {
+            return null;
+        }
+
+        @Override
+        public boolean add(Consumer<KeyCode> e) {
+            return false;
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            return false;
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends Consumer<KeyCode>> c) {
+            return false;
+        }
+
+        @Override
+        public boolean addAll(int index, Collection<? extends Consumer<KeyCode>> c) {
+            return false;
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public void clear() {
+        }
+
+        @Override
+        @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+        public boolean equals(Object o) {
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return 0;
+        }
+
+        @Override
+        public Consumer<KeyCode> get(int index) {
+            return null;
+        }
+
+        @Override
+        public Consumer<KeyCode> set(int index, Consumer<KeyCode> element) {
+            return null;
+        }
+
+        @Override
+        public void add(int index, Consumer<KeyCode> element) {
+        }
+
+        @Override
+        public Consumer<KeyCode> remove(int index) {
+            return null;
+        }
+
+        @Override
+        public int indexOf(Object o) {
+            return -1;
+        }
+
+        @Override
+        public int lastIndexOf(Object o) {
+            return -1;
+        }
+
+        @Override
+        public ListIterator<Consumer<KeyCode>> listIterator() {
+            return null;
+        }
+
+        @Override
+        public ListIterator<Consumer<KeyCode>> listIterator(int index) {
+            return null;
+        }
+
+        @Override
+        public List<Consumer<KeyCode>> subList(int fromIndex, int toIndex) {
+            return null;
+        }
+        
+        @Override
+        public void forEach(Consumer<? super Consumer<KeyCode>> action) {
+        }
+    };
 
     /**
      * Runs through the keys and performs all actions registered to the key.
+     *
      * @return true if any keys were pressed
      */
     public static boolean pulse() {
         boolean actionOccurred = KEYBUFFER.size() > 0;
-        KEYBUFFER.forEach(k -> ONACTION.get(k).forEach(c -> c.accept(k)));
+        KEYBUFFER.forEach(k -> ONACTION.getOrDefault(k, EMPTY_LIST).forEach(c -> c.accept(k)));
         return actionOccurred;
     }
 
@@ -107,7 +238,7 @@ public final class KeyBuffer {
      * @param c the action to be removed
      */
     public static void remove(KeyCode k, Consumer<KeyCode> c) {
-        ONACTION.get(k).remove(c);
+        ONACTION.getOrDefault(k, EMPTY_LIST).remove(c);
     }
 
     /**
