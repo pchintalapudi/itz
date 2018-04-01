@@ -52,4 +52,12 @@ public class SoundHandler implements AutoCloseable {
     public void close() {
         soundPlayers.values().forEach(MediaPlayer::dispose);
     }
+    
+    public void mute() {
+        soundPlayers.values().forEach(mp -> mp.setMute(true));
+    }
+    
+    public void unmute() {
+        soundPlayers.values().forEach(mp -> mp.setMute(false));
+    }
 }

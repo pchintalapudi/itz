@@ -97,6 +97,13 @@ public final class Robot extends Mobile implements Scoreable {
         iv.setCache(true);
     }
 
+    /*
+    ============================================================================
+    
+    Construction
+    
+    ============================================================================
+     */
     /**
      * Creates a robot at the specified coordinates with the specified initial
      * rotation. No layout properties (layoutX, layoutY) are adjusted, just the
@@ -217,10 +224,6 @@ public final class Robot extends Mobile implements Scoreable {
         }
     }
 
-    private void switchImage() {
-        FileUI.load(iv.getScene().getWindow(), f -> iv.setImage(new Image(f.toURI().toString(), 90, 90, true, true)), "Image", "*.jpg", "*.png");
-    }
-
     private void hitboxing() {
         hb.setXSupplier(super.centerXProperty()::get);
         hb.setYSupplier(super.centerYProperty()::get);
@@ -234,6 +237,10 @@ public final class Robot extends Mobile implements Scoreable {
         super.centerXProperty().addListener(super.exclude20(65));
         super.centerYProperty().addListener(super.exclude20(65));
         super.registerProperties();
+    }
+
+    private void switchImage() {
+        FileUI.load(iv.getScene().getWindow(), f -> iv.setImage(new Image(f.toURI().toString(), 90, 90, true, true)), "Image", "*.jpg", "*.png");
     }
 
     private void linkActions() {

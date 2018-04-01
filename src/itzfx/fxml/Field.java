@@ -102,6 +102,7 @@ public class Field implements AutoCloseable {
         preloads = new ArrayList<>();
         mogos = new ArrayList<>();
         added = new ArrayList<>();
+        toggleMute();
     }
 
     @FXML
@@ -1056,7 +1057,7 @@ public class Field implements AutoCloseable {
         try {
             timeManager.stopQuietly();
             clearAdded();
-            setMode(ControlMode.FREE_PLAY);
+            reregisterMode();
             timeManager.cancelAll();
             bStat.reset();
             rStat.reset();
@@ -1090,5 +1091,16 @@ public class Field implements AutoCloseable {
         timeManager.stopQuietly();
         Hitbox.clear();
         pulseManager.stop();
+    }
+    
+    private boolean mute;
+    
+    public void toggleMute() {
+        if (mute) {
+            timeManager.sounds.unmute();
+        } else {
+            timeManager.sounds.mute();
+        }
+        mute = !mute;
     }
 }

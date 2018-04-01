@@ -14,13 +14,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="default-background" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="default-background" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.FXMLController">
     <top>
         <MenuBar styleClass="flat-menu-bar" BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#close" text="Close" styleClass="redden">
+                        <MenuItem mnemonicParsing="false" onAction="#close" styleClass="redden" text="Close">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
@@ -49,6 +49,11 @@
                                 <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
                             </accelerator>
                         </CheckMenuItem>
+                  <CheckMenuItem mnemonicParsing="false" onAction="#mute" selected="true" text="Muted">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="M" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator>
+                  </CheckMenuItem>
                         <Menu mnemonicParsing="false" text="Mode">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#auton" text="Autonomous">
