@@ -47,11 +47,13 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -91,6 +93,7 @@ public final class Robot extends Mobile implements Scoreable {
         iv.setFitWidth(90);
         iv.setFitHeight(90);
         iv.setImage(new Image(Robot.class.getResourceAsStream("/itzfx/images/topviewicon.png")));
+        iv.setEffect(new DropShadow(15, Color.BLACK));
         iv.setCache(true);
     }
 
