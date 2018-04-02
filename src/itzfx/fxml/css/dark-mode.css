@@ -469,3 +469,20 @@ Other
     -fx-text-fill:-green-base;
     -fx-fill:-green-base;
 }
+
+.link .text {
+    -fx-fill:derive(#00bbff, -20%);
+}
+
+.link:hover .text {
+    -fx-fill:derive(#00bbff, -10%);
+    -fx-cursor:hand;
+}
+
+.link:pressed .text {
+    -fx-fill:#00bbff;
+}
+
+.link:visited .text {
+    -fx-fill:derive(#8844ff, -20%);
+}

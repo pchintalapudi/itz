@@ -65,6 +65,7 @@ public final class StationaryGoal implements Scoreable {
         });
         stackLabel.visibleProperty().bind(Bindings.createBooleanBinding(() -> stacked.size() + countModifier.get() > 0, stacked, countModifier));
         stackLabel.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(stacked.size() + countModifier.intValue()), stacked, countModifier));
+        stackLabel.getStyleClass().add("stack-label");
         this.hitbox = new Hitbox(12.5f, Hitbox.CollisionType.STRONG, statGoal, Float.POSITIVE_INFINITY);
         Hitbox.register(hitbox);
         try {

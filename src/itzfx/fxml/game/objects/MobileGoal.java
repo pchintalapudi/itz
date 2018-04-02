@@ -68,9 +68,9 @@ public abstract class MobileGoal extends Mobile implements Scoreable {
             getNode().getChildren().add(cone);
         } catch (IOException ex) {
         }
-        stackLabel.setEffect(new InnerShadow());
         stackLabel.visibleProperty().bind(Bindings.createBooleanBinding(() -> stacked.size() + countModifier.intValue() > 0, stacked, countModifier));
         stackLabel.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(stacked.size() + countModifier.intValue()), stacked, countModifier));
+        stackLabel.getStyleClass().add("stack-label");
         stacked.addListener((Change<? extends Cone> change) -> {
             change.next();
             if (change.wasAdded()) {

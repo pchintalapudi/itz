@@ -40,7 +40,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 /**
@@ -175,12 +174,12 @@ public class FXMLController implements AutoCloseable {
     private void about() {
         FXMLLoader loader = new FXMLLoader(FXMLController.class.getResource("About.fxml"));
         try {
-            TextFlow tf = loader.load();
+            Parent p = loader.load();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             CssUtils.styleDialog(alert);
             alert.setHeaderText("About this simulation");
             alert.setTitle("About");
-            alert.getDialogPane().setContent(tf);
+            alert.getDialogPane().setContent(p);
             alert.showAndWait();
         } catch (IOException ex) {
             Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);

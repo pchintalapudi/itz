@@ -149,6 +149,10 @@ Mobile Goal Stuff
     -fx-fill:-red-mobile-goal;
 }
 
+.stack-label {
+    -fx-fill:black;
+}
+
 /*
 Stationary goal
 */
