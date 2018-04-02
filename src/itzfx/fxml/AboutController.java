@@ -21,6 +21,6 @@ public class AboutController {
     
     @FXML
     private void github() {
-        Start.navigate("https://github.com/pchintalapudi/itz");
+        Start.navigate("https://github.com/5776E/In-The-Zone-Simulation");
     }
 }

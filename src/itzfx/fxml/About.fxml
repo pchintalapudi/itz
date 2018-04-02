@@ -33,13 +33,13 @@
             </Text>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="This software is free to use, distribute, and modify, with the condition that the original author be credited with the following: &#10;&#10;" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Name: " />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="pchintalapudi&#10;">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Prem Chintalapudi - 5776E&#10;">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Text>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Github Link: " />
-            <Hyperlink onAction="#github" styleClass="link" text="https://github.com/pchintalapudi/itz" />
+            <Hyperlink onAction="#github" styleClass="link" text="https://github.com/5776E/In-The-Zone-Simulation" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="&#10;&#10;" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="In addition, a copy of the above section (Usage/Modifications)" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text=" must ">
