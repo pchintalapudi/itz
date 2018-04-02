@@ -16,7 +16,7 @@ public class RobotProperties {
     }
 
     public static RobotProperties getDefault() {
-        return create(24, 2.2f, 2, 2.5f, 12, 5, -1);
+        return create(27.0f, 0.5f, 1.5f, 1.5f, 13, 4, 1);
     }
 
     public static RobotProperties getFilledVersion(RobotProperties unsafe, RobotProperties original) {
