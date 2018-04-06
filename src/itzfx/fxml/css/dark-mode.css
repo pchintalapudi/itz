@@ -461,7 +461,11 @@ Quick fixes
 }
 
 .list-view .list-cell:even {
-    -fx-background-color:-off-black;
+    -fx-background-color:derive(-off-black, 15%);
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color:-blue-base-half;
 }
 
 /*
