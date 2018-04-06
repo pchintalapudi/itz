@@ -49,11 +49,6 @@
                                 <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
                             </accelerator>
                         </CheckMenuItem>
-                        <CheckMenuItem mnemonicParsing="false" onAction="#mute" selected="true" text="Muted">
-                            <accelerator>
-                                <KeyCodeCombination alt="UP" code="M" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                            </accelerator>
-                        </CheckMenuItem>
                         <Menu mnemonicParsing="false" text="Mode">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#auton" text="Autonomous">

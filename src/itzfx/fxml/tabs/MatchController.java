@@ -5,8 +5,6 @@
  */
 package itzfx.fxml.tabs;
 
-import itzfx.ControlMode;
-import itzfx.MatchState;
 import itzfx.fxml.Field;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,6 +41,7 @@ public class MatchController {
     @FXML
     private void reset(ActionEvent event) {
         event.consume();
+        preAutonButton.setDisable(false);
         f.reset();
     }
 
@@ -53,20 +52,9 @@ public class MatchController {
     }
 
     @FXML
-    private void auton(ActionEvent event) {
-        event.consume();
-        f.setMode(ControlMode.AUTON);
-    }
-
-    @FXML
-    private void dc(ActionEvent event) {
-        event.consume();
-        f.setMode(ControlMode.DRIVER_CONTROL);
-    }
-
-    @FXML
     private void begin(ActionEvent event) {
         event.consume();
+        preAutonButton.setDisable(true);
         f.startMatch();
     }
 
@@ -74,24 +62,16 @@ public class MatchController {
 
     public void insertField(Field f) {
         this.f = f;
-        f.onMatchStateChanged((o, b, s) -> {
+        f.onGameStateChanged((b, s) -> {
             switch (s) {
-                case NONE:
+                case PAUSED:
+                    playingButton.setSelected(false);
+                    break;
+                case PLAYING:
+                    playingButton.setSelected(true);
+                    break;
+                case STOPPED:
                     preAutonButton.setDisable(false);
-                    playingButton.selectedProperty().set(false);
-                    playingButton.setDisable(true);
-                    beginButton.setDisable(true);
-                    break;
-                case PREPPED:
-                    preAutonButton.setDisable(true);
-                    beginButton.setDisable(false);
-                    break;
-                case AUTON:
-                    preAutonButton.setDisable(true);
-                    beginButton.setDisable(true);
-                    playingButton.selectedProperty().set(true);
-                    playingButton.setDisable(false);
-                    break;
             }
         });
     }

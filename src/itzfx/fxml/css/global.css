@@ -149,8 +149,9 @@ Mobile Goal Stuff
     -fx-fill:-red-mobile-goal;
 }
 
-.stack-label {
+.label .stack-label {
     -fx-fill:black;
+    -fx-text-fill:black;
 }
 
 /*

@@ -456,6 +456,14 @@ Quick fixes
     -fx-background-color:-black-base;
 }
 
+.list-view .list-cell:odd {
+    -fx-background-color:-black-base;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color:-off-black;
+}
+
 /*
 Other
 */

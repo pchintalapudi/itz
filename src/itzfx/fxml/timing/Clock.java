@@ -5,8 +5,8 @@
  */
 package itzfx.fxml.timing;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -45,7 +45,7 @@ public class Clock {
     @FXML
     private Circle period;
 
-    private final DoubleProperty time = new SimpleDoubleProperty();
+    private final IntegerProperty time = new SimpleIntegerProperty();
 
     @FXML
     private void initialize() {
@@ -59,17 +59,21 @@ public class Clock {
     }
 
     private void display(ObservableValue<? extends Number> obs, Number old, Number next) {
-        int minutes = next.intValue() / 60;
-        float seconds = next.floatValue() % 60;
-        int decaSeconds = (int) (seconds) / 10;
-        float singles = seconds % 10;
-        int secs = (int) singles;
-        float dsecs = singles % 1;
-        int deciSeconds = (int) (dsecs * 10);
-        min.display(minutes);
-        secD.display(decaSeconds);
-        sec.display(secs);
-        secd.display(deciSeconds);
+        if (next.intValue() != 8888) {
+            int minutes = next.intValue() / 600;
+            int decaSeconds = next.intValue() % 600 / 100;
+            int secs = next.intValue() % 100 / 10;
+            int deciSeconds = next.intValue() % 10;
+            min.display(minutes);
+            secD.display(decaSeconds);
+            sec.display(secs);
+            secd.display(deciSeconds);
+        } else {
+            min.display(8);
+            secD.display(8);
+            sec.display(8);
+            secd.display(8);
+        }
     }
 
     /**
@@ -78,7 +82,7 @@ public class Clock {
      *
      * @return the property observed by this clock
      */
-    public DoubleProperty getTime() {
+    public IntegerProperty getTime() {
         return time;
     }
 }

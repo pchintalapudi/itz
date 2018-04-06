@@ -5,9 +5,12 @@
  */
 package itzfx.fxml;
 
+import itzfx.LazyModeManager;
+import itzfx.LazyModeManagerImpl;
 import itzfx.Start;
 import itzfx.scoring.ScoreAggregator;
 import itzfx.ControlMode;
+import itzfx.GameState;
 import itzfx.fxml.game.objects.MobileGoal;
 import itzfx.fxml.game.objects.RedMobileGoal;
 import itzfx.fxml.game.objects.Loader;
@@ -17,37 +20,24 @@ import itzfx.fxml.game.objects.StationaryGoal;
 import itzfx.Hitbox;
 import itzfx.KeyBuffer;
 import itzfx.KeyControl;
-import itzfx.MatchState;
 import itzfx.Mobile;
 import itzfx.Robot;
-import itzfx.media.SoundHandler;
-import itzfx.media.Sounds;
 import itzfx.scoring.ScoreReport;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
 
 /**
  * FXML Controller class. Controls file "Field.fxml". Handles all field-related
@@ -102,7 +92,29 @@ public class Field implements AutoCloseable {
         preloads = new ArrayList<>();
         mogos = new ArrayList<>();
         added = new ArrayList<>();
-        toggleMute();
+
+        lazyModeManager.onGameStateChanged((b, s) -> {
+            switch (s) {
+                case WAITING:
+                    if (lazyModeManager.getControlMode() != ControlMode.AUTON && lazyModeManager.getControlMode() != ControlMode.PROGRAMMING_SKILLS) {
+                        KeyBuffer.unlock();
+                        robots.forEach(Robot::prime);
+                        robots.forEach(Robot::resume);
+                    } else {
+                        KeyBuffer.lock();
+                        robots.forEach(Robot::prime);
+                        robots.forEach(Robot::runProgram);
+                    }
+                    break;
+                case PLAYING:
+                    robots.forEach(Robot::deprime);
+                    robots.forEach(Robot::resume);
+                    break;
+                case PAUSED:
+                    robots.forEach(Robot::pause);
+                    break;
+            }
+        });
     }
 
     @FXML
@@ -310,26 +322,26 @@ public class Field implements AutoCloseable {
     }
 
     private void robot1() {
-        Robot r = new Robot(67.5f, 480, 90);
+        Robot r = new Robot(67.5f, 480, 270);
         r.setController(KeyControl.Defaults.DUAL_1.getKC());
         getRobots().add(r);
     }
 
     private void robot2() {
-        Robot r = new Robot(652.5f, 240, -90);
+        Robot r = new Robot(652.5f, 240, 90);
         r.setController(KeyControl.Defaults.DUAL_2.getKC());
         r.setRed(false);
         getRobots().add(r);
     }
 
     private void robot3() {
-        Robot r = new Robot(240, 652.5f, 180);
+        Robot r = new Robot(240, 652.5f, 0);
         r.setController(KeyControl.Defaults.QUAD_3.getKC());
         getRobots().add(r);
     }
 
     private void robot4() {
-        Robot r = new Robot(480, 67.5f, 0);
+        Robot r = new Robot(480, 67.5f, 180);
         r.setController(KeyControl.Defaults.QUAD_4.getKC());
         r.setRed(false);
         getRobots().add(r);
@@ -358,9 +370,9 @@ public class Field implements AutoCloseable {
             }
         };
         private final Runnable scoreTask = () -> {
-            if (sbc != null && modeProperty().get() != null) {
+            if (sbc != null) {
                 Platform.runLater(() -> {
-                    switch (modeProperty().get()) {
+                    switch (lazyModeManager.getControlMode()) {
                         case AUTON:
                             sbc.pulseAuton();
                             break;
@@ -548,8 +560,8 @@ public class Field implements AutoCloseable {
      */
     public MobileGoal huntMogo(Point2D center, Point2D pointingVector, boolean red) {
         return mogos.stream()
-                .filter(m -> (modeProperty().get() != ControlMode.DRIVER_CONTROL
-                && modeProperty().get() != ControlMode.AUTON) || m.isRed() == red)
+                .filter(m -> (lazyModeManager.getControlMode() != ControlMode.DRIVER_CONTROL
+                && lazyModeManager.getControlMode() != ControlMode.AUTON) || m.isRed() == red)
                 .filter(m -> !m.isVanished())
                 .filter(m -> {
                     Point2D realVector = new Point2D(m.getCenterX(), m.getCenterY()).subtract(center);
@@ -596,7 +608,7 @@ public class Field implements AutoCloseable {
      * this method returns null.
      */
     public StationaryGoal huntStat(Point2D center, Point2D pointingVector, boolean red) {
-        if (modeProperty().get() == ControlMode.AUTON || modeProperty().get() == ControlMode.DRIVER_CONTROL) {
+        if (lazyModeManager.getControlMode() == ControlMode.AUTON || lazyModeManager.getControlMode() == ControlMode.DRIVER_CONTROL) {
             if (red) {
                 return checkRedStat(center, pointingVector);
             } else {
@@ -697,154 +709,13 @@ public class Field implements AutoCloseable {
      */
     public void inject(ScoringBoxController sbc) {
         this.sbc = sbc;
-        sbc.getControlModeSelectionModel().selectedItemProperty().addListener((o, b, s) -> reregisterMode());
+        lazyModeManager.onControlModeChange((b, s) -> sbc.getControlModeSelectionModel().select(s));
+        sbc.getControlModeSelectionModel().selectedItemProperty().addListener((o, b, s) -> lazyModeManager.setControlMode(s));
         sbc.setAggregator(scores);
-        timeManager.timeProperty = sbc.getTime();
-        setMode(ControlMode.AUTON);
-        setMode(ControlMode.FREE_PLAY);
+        sbc.getTime().bind(lazyModeManager.timeRemainingProperty());
+        lazyModeManager.setControlMode(ControlMode.AUTON);
+        lazyModeManager.setControlMode(ControlMode.FREE_PLAY);
 //        System.out.println(System.getProperty("os.name"));
-    }
-
-    /*
-    ============================================================================
-    
-    Timing
-    
-    ============================================================================
-     */
-    private final TimeManager timeManager = new TimeManager();
-
-    private class TimeManager {
-
-        private final Timeline timer = new Timeline();
-
-        private DoubleProperty timeProperty;
-
-        private final SoundHandler sounds = new SoundHandler();
-
-        private Future<?> autostartTask;
-
-        private final ChangeListener<Number> sec30Listener = (o, b, s) -> {
-            if (b.intValue() > 30 && s.intValue() < 30) {
-                sounds.play(Sounds.WARNING);
-            }
-        };
-
-        public TimeManager() {
-        }
-
-        public void resetTimer(ControlMode cm) {
-            timer.stop();
-            timer.getKeyFrames().clear();
-            timeProperty.set(cm.getTime());
-            timer.getKeyFrames().add(new KeyFrame(Duration.seconds(cm.getTime()), this::lockout, new KeyValue(timeProperty, 0)));
-            sbc.getTime().removeListener(sec30Listener);
-            switch (cm) {
-                case DRIVER_SKILLS:
-                case PROGRAMMING_SKILLS:
-                    sbc.emphasizeSkills();
-                    break;
-                case DRIVER_CONTROL:
-                    sbc.getTime().addListener(sec30Listener);
-                case AUTON:
-                    sbc.emphasizeTeams();
-                    break;
-                default:
-                    sbc.emphasizeNone();
-            }
-        }
-
-        private MatchState prev;
-
-        void clearPrev() {
-            prev = null;
-        }
-
-        public void play() {
-            timer.play();
-            if (prev != null) {
-                matchManager.matchState.set(prev);
-            }
-            if (modeProperty().get() != ControlMode.FREE_PLAY) {
-                sounds.play(Sounds.START);
-            }
-        }
-
-        public void pause() {
-            timer.pause();
-            sounds.play(Sounds.PAUSED);
-            if (matchManager.matchInProgress()) {
-                prev = matchManager.matchState.get();
-                matchManager.matchState.set(MatchState.PAUSED);
-            }
-        }
-
-        private void stopQuietly() {
-            timer.stop();
-        }
-
-        public void stop() {
-            stopQuietly();
-            sounds.play(Sounds.END);
-        }
-
-        public void autostart() {
-            if (autostartTask == null || autostartTask.isDone()) {
-                autostartTask = Start.PULSER.schedule(() -> {
-                    if (robots.get(0).isPrimed()) {
-                        Field.this.play();
-                    }
-                }, 3, TimeUnit.SECONDS);
-            }
-        }
-
-        public void cancelAll() {
-            autostartTask.cancel(true);
-            stopQuietly();
-        }
-
-        private void lockout(ActionEvent e) {
-            e.consume();
-            if (modeProperty().get() == ControlMode.AUTON) {
-                sbc.determineAutonWinner();
-            }
-            KeyBuffer.lock();
-            if (modeProperty().get() == ControlMode.AUTON && matchManager.matchInProgress()) {
-                sounds.play(Sounds.PAUSED);
-                Start.PULSER.schedule(() -> {
-                    setMode(ControlMode.DRIVER_CONTROL);
-                    play();
-                }, 5000, TimeUnit.MILLISECONDS);
-            } else {
-                sounds.play(Sounds.END);
-            }
-        }
-    }
-
-    /**
-     * Stops the field/match timer, and resets the time.
-     */
-    public void stop() {
-        timeManager.stop();
-        reregisterMode();
-    }
-
-    /**
-     * Begins counting down the field/match timer. Also resumes all robot
-     * movement, if it has not been enabled already.
-     */
-    public void play() {
-        robots.forEach(Robot::resume);
-        timeManager.play();
-        robots.forEach(Robot::deprime);
-    }
-
-    /**
-     * Temporarily pauses gameplay. Also prevents robots from moving.
-     */
-    public void pause() {
-        robots.forEach(Robot::pause);
-        timeManager.pause();
     }
 
     /*
@@ -854,63 +725,39 @@ public class Field implements AutoCloseable {
     
     ============================================================================
      */
+    private final LazyModeManager lazyModeManager = new LazyModeManagerImpl();
+
+    public void setMode(ControlMode mode) {
+        lazyModeManager.setControlMode(mode);
+    }
+
     /**
-     * Sets the {@link ControlMode mode} of this field. Also updates the timer
-     * with the mode's alloted time.
-     *
-     * @param cm the mode to set
+     * Stops the field/match timer, and resets the time.
      */
-    public void setMode(ControlMode cm) {
-        Platform.runLater(() -> {
-            sbc.getControlModeSelectionModel().select(cm);
-        });
+    public void stop() {
+        lazyModeManager.reset();
     }
 
-    private ReadOnlyObjectProperty<ControlMode> modeProperty() {
-        return sbc.getControlModeSelectionModel().selectedItemProperty();
-    }
-
-    private void reregisterMode() {
-        ControlMode cm;
-        if ((cm = modeProperty().get()) != null) {
-            timeManager.resetTimer(cm);
-            prepareRobots(cm);
-        }
-    }
-
-    private void prepareRobots(ControlMode cm) {
-        KeyBuffer.unlock();
-        getRobots().forEach(r -> {
-            r.resume();
-            r.prime();
-        });
-        switch (cm) {
-            case AUTON:
-            case PROGRAMMING_SKILLS:
-                KeyBuffer.lock();
-                timeManager.autostart();
-                getRobots().forEach(Robot::runProgram);
-                pulseManager.autonPulsing();
-                break;
-            default:
-                getRobots().forEach(Robot::driverControl);
-        }
-    }
-
-    /*
-    ============================================================================
-    
-    Match stuff
-    
-    ============================================================================
+    /**
+     * Begins counting down the field/match timer. Also resumes all robot
+     * movement, if it has not been enabled already.
      */
-    private final MatchManager matchManager = new MatchManager();
+    public void play() {
+        lazyModeManager.play();
+    }
+
+    /**
+     * Temporarily pauses gameplay. Also prevents robots from moving.
+     */
+    public void pause() {
+        lazyModeManager.pause();
+    }
 
     /**
      * Prepares the field for a match scenario.
      */
     public void preMatch() {
-        matchManager.prestart();
+        lazyModeManager.reset();
     }
 
     /**
@@ -935,50 +782,11 @@ public class Field implements AutoCloseable {
      * 5. Game finishes. Match is visible on the score sheet.
      */
     public void startMatch() {
-        matchManager.start();
+        lazyModeManager.startMatch();
     }
 
-    public void onMatchStateChanged(ChangeListener<? super MatchState> cl) {
-        matchManager.addMatchStateListener(cl);
-    }
-
-    private final class MatchManager {
-
-        private final ObjectProperty<MatchState> matchState = new SimpleObjectProperty<>(MatchState.NONE);
-
-        public MatchManager() {
-            addMatchStateListener((o, b, s) -> {
-                if (s == MatchState.NONE) {
-                    timeManager.clearPrev();
-                }
-            });
-        }
-
-        public void addMatchStateListener(ChangeListener<? super MatchState> cl) {
-            matchState.addListener(cl);
-        }
-
-        public void prestart() {
-            reset();
-            matchState.set(MatchState.PREPPED);
-            matchInProgress = true;
-            setMode(ControlMode.FREE_PLAY);
-        }
-
-        public void start() {
-            setMode(ControlMode.AUTON);
-            matchState.set(MatchState.AUTON);
-        }
-
-        private boolean matchInProgress;
-
-        public boolean matchInProgress() {
-            return matchInProgress;
-        }
-
-        public void reset() {
-            matchInProgress = false;
-        }
+    public void onGameStateChanged(BiConsumer<GameState, GameState> action) {
+        lazyModeManager.onGameStateChanged(action);
     }
 
     /*
@@ -1055,10 +863,8 @@ public class Field implements AutoCloseable {
      */
     public void reset() {
         try {
-            timeManager.stopQuietly();
+            lazyModeManager.reset();
             clearAdded();
-            reregisterMode();
-            timeManager.cancelAll();
             bStat.reset();
             rStat.reset();
             getRobots().forEach(Robot::reset);
@@ -1088,19 +894,8 @@ public class Field implements AutoCloseable {
      */
     @Override
     public void close() {
-        timeManager.stopQuietly();
+        lazyModeManager.reset();
         Hitbox.clear();
         pulseManager.stop();
-    }
-    
-    private boolean mute;
-    
-    public void toggleMute() {
-        if (mute) {
-            timeManager.sounds.unmute();
-        } else {
-            timeManager.sounds.mute();
-        }
-        mute = !mute;
     }
 }

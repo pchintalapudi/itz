@@ -161,11 +161,6 @@ public class FXMLController implements AutoCloseable {
     private void fp() {
         fieldController.setMode(ControlMode.FREE_PLAY);
     }
-    
-    @FXML
-    private void mute() {
-        fieldController.toggleMute();
-    }
 
     @FXML
     private CheckMenuItem showHitboxes;

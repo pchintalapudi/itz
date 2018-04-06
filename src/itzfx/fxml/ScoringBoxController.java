@@ -87,7 +87,7 @@ public class ScoringBoxController {
      *
      * @return the time property that is monitored by the clock
      */
-    public DoubleProperty getTime() {
+    public IntegerProperty getTime() {
         return clock.getTime();
     }
 

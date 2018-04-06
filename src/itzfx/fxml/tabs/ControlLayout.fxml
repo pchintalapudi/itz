@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.tabs.ControlLayoutController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="250.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="itzfx.fxml.tabs.ControlLayoutController">
     <children>
         <GridPane hgap="10.0" layoutX="100.0" layoutY="25.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
             <columnConstraints>
@@ -75,64 +75,64 @@
         <Group cache="true" cacheHint="QUALITY">
             <children>
                 <Circle centerX="180.0" centerY="30.0" radius="5.0" strokeType="INSIDE" styleClass="indicator" />
-                <Line endX="177.0" endY="27.0" startX="155.0" startY="15.0" />
-                <Line endX="155.0" endY="15.0" startX="87.5" startY="15.0" />
+                <Line endX="177.0" endY="27.0" startX="155.0" startY="15.0" styleClass="indicator" />
+                <Line endX="155.0" endY="15.0" startX="87.5" startY="15.0" styleClass="indicator" />
             </children>
         </Group>
         <Group cache="true" cacheHint="QUALITY" layoutY="70.5">
             <children>
                 <Circle centerX="175.0" centerY="30.0" radius="5.0" strokeType="INSIDE" styleClass="indicator" />
-                <Line endX="172.0" endY="27.0" startX="155.0" startY="22.0" />
-                <Line endX="155.0" endY="22.0" startX="100.0" startY="22.0" />
-            <Line endX="100.0" endY="22.0" startX="87.5" startY="30.0" />
+                <Line endX="172.0" endY="27.0" startX="155.0" startY="22.0" styleClass="indicator" />
+                <Line endX="155.0" endY="22.0" startX="100.0" startY="22.0" styleClass="indicator" />
+            <Line endX="100.0" endY="22.0" startX="87.5" startY="30.0" styleClass="indicator" />
             </children>
         </Group>
         <Group cache="true" cacheHint="QUALITY" layoutX="40.0" layoutY="140.0">
             <children>
                 <Circle centerX="180.0" centerY="30.0" radius="5.0" strokeType="INSIDE" styleClass="indicator" />
-                <Line endX="183.0" endY="27.0" startX="205.0" startY="20.0" />
-                <Line endX="205.0" endY="20.0" startX="275.0" startY="20.0" />
+                <Line endX="183.0" endY="27.0" startX="205.0" startY="20.0" styleClass="indicator" />
+                <Line endX="205.0" endY="20.0" startX="275.0" startY="20.0" styleClass="indicator" />
             </children>
         </Group>
         <Group cache="true" cacheHint="QUALITY" layoutX="80.0" layoutY="190.0">
             <children>
                 <Circle centerX="180.0" centerY="30.0" radius="5.0" strokeType="INSIDE" styleClass="indicator" />
-                <Line endX="183.0" endY="33.0" startX="205.0" startY="45.0" />
-                <Line endX="205.0" endY="45.0" startX="235.0" startY="45.0" />
+                <Line endX="183.0" endY="33.0" startX="205.0" startY="45.0" styleClass="indicator" />
+                <Line endX="205.0" endY="45.0" startX="235.0" startY="45.0" styleClass="indicator" />
             </children>
         </Group>
       <Group cache="true" cacheHint="QUALITY" layoutX="80.0" layoutY="70.0">
          <children>
             <Circle centerX="180.0" centerY="30.0" radius="5.0" strokeType="INSIDE" styleClass="indicator" />
-            <Line endX="183.0" endY="27.0" startX="205.0" startY="20.0" />
-            <Line endX="205.0" endY="20.0" startX="235.0" startY="20.0" />
+            <Line endX="183.0" endY="27.0" startX="205.0" startY="20.0" styleClass="indicator" />
+            <Line endX="205.0" endY="20.0" startX="235.0" startY="20.0" styleClass="indicator" />
          </children>
       </Group>
       <Group cache="true" cacheHint="QUALITY" layoutX="80.0">
          <children>
             <Circle centerX="180.0" centerY="30.0" radius="5.0" strokeType="INSIDE" styleClass="indicator" />
-            <Line endX="183.0" endY="27.0" startX="205.0" startY="20.0" />
-            <Line endX="205.0" endY="20.0" startX="235.0" startY="20.0" />
+            <Line endX="183.0" endY="27.0" startX="205.0" startY="20.0" styleClass="indicator" />
+            <Line endX="205.0" endY="20.0" startX="235.0" startY="20.0" styleClass="indicator" />
          </children>
       </Group>
       <Group cache="true" cacheHint="QUALITY" layoutX="-50.0" layoutY="190.0">
          <children>
             <Circle centerX="180.0" centerY="30.0" radius="5.0" strokeType="INSIDE" styleClass="indicator" />
-            <Line endX="178.0" endY="33.0" startX="165.0" startY="45.0" />
-            <Line endX="165.0" endY="45.0" startX="135.0" startY="45.0" />
+            <Line endX="178.0" endY="33.0" startX="165.0" startY="45.0" styleClass="indicator" />
+            <Line endX="165.0" endY="45.0" startX="135.0" startY="45.0" styleClass="indicator" />
          </children>
       </Group>
       <Group cache="true" cacheHint="QUALITY" layoutX="-50.0" layoutY="120.0">
          <children>
             <Circle centerX="180.0" centerY="30.0" radius="5.0" strokeType="INSIDE" styleClass="indicator" />
-            <Line endX="178.0" endY="33.0" startX="165.0" startY="40.0" />
-            <Line endX="165.0" endY="40.0" startX="135.0" startY="40.0" />
+            <Line endX="178.0" endY="33.0" startX="165.0" startY="40.0" styleClass="indicator" />
+            <Line endX="165.0" endY="40.0" startX="135.0" startY="40.0" styleClass="indicator" />
          </children>
       </Group>
       <Group cache="true" cacheHint="QUALITY" layoutX="-75.0" layoutY="31.0">
          <children>
             <Circle centerX="180.0" centerY="30.0" radius="5.0" strokeType="INSIDE" styleClass="indicator" />
-            <Line endX="165.0" endY="40.0" layoutX="10.0" layoutY="-10.0" startX="150.0" startY="40.0" />
+            <Line endX="165.0" endY="40.0" layoutX="10.0" layoutY="-10.0" startX="150.0" startY="40.0" styleClass="indicator" />
          </children>
       </Group>
         <Label cache="true" cacheHint="QUALITY" layoutX="10.0" text="Forward">

@@ -6,6 +6,7 @@
 package itzfx.fxml.game.objects;
 
 import itzfx.Hitbox;
+import itzfx.Mobile;
 import itzfx.scoring.ScoreType;
 import itzfx.scoring.ScoreReport;
 import itzfx.scoring.Scoreable;
@@ -23,10 +24,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
 /**
  *
@@ -53,7 +54,7 @@ public final class StationaryGoal implements Scoreable {
     public StationaryGoal(float layoutX, float layoutY, boolean red) {
         this.stacked = FXCollections.observableList(new ArrayList<>());
         this.countModifier = new SimpleIntegerProperty();
-        Label stackLabel = new Label();
+        Text stackLabel = new Text();
         statGoal = new StackPane();
         ContextMenu rightClick = rightClick();
         statGoal.setOnMousePressed(m -> {
