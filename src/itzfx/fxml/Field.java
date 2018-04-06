@@ -111,6 +111,7 @@ public class Field implements AutoCloseable {
                     robots.forEach(Robot::resume);
                     break;
                 case PAUSED:
+                case STOPPED:
                     robots.forEach(Robot::pause);
                     break;
             }
@@ -715,6 +716,21 @@ public class Field implements AutoCloseable {
         sbc.getTime().bind(lazyModeManager.timeRemainingProperty());
         lazyModeManager.setControlMode(ControlMode.AUTON);
         lazyModeManager.setControlMode(ControlMode.FREE_PLAY);
+        lazyModeManager.onControlModeChange((b, s) -> {
+            switch (s) {
+                case DRIVER_CONTROL:
+                case AUTON:
+                    sbc.emphasizeTeams();
+                    break;
+                case DRIVER_SKILLS:
+                case PROGRAMMING_SKILLS:
+                    sbc.emphasizeSkills();
+                    break;
+                default:
+                    sbc.emphasizeNone();
+                    break;
+            }
+        });
 //        System.out.println(System.getProperty("os.name"));
     }
 

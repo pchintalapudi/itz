@@ -69,10 +69,10 @@ public class Clock {
             sec.display(secs);
             secd.display(deciSeconds);
         } else {
-            min.display(8);
-            secD.display(8);
-            sec.display(8);
-            secd.display(8);
+            min.display(0);
+            secD.display(0);
+            sec.display(0);
+            secd.display(0);
         }
     }
 

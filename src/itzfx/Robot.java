@@ -490,6 +490,10 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     private Rerun rerun;
+    
+    public Rerun getRerun() {
+        return rerun;
+    }
 
     /**
      * Runs the saved autonomous routine.

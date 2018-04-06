@@ -125,4 +125,10 @@ public final class Rerun {
             readBackTask.cancel(false);
         }
     }
+    
+    public static Queue<List<Command>> getCommands(Rerun r) {
+        Queue<List<Command>> commands = new ArrayDeque<>(r.read);
+        commands.addAll(r.commands);
+        return commands;
+    }
 }

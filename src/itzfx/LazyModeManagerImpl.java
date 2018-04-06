@@ -7,10 +7,13 @@ package itzfx;
 
 import itzfx.media.Sounds;
 import itzfx.media.SoundHandler;
+import java.util.EnumSet;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -25,8 +28,13 @@ public class LazyModeManagerImpl implements LazyModeManager {
 
     private final SoundHandler soundHandler = new SoundHandler();
 
+    private boolean shutUp;
+
     public LazyModeManagerImpl() {
         Timeline runDownClock = new Timeline();
+        soundHandler.mute();
+        EnumSet.allOf(Sounds.class).forEach(soundHandler::play);
+        Start.PULSER.schedule(soundHandler::unmute, 5, TimeUnit.SECONDS);
         onGameStateChanged((b, s) -> {
             switch (s) {
                 case WAITING:
@@ -34,7 +42,9 @@ public class LazyModeManagerImpl implements LazyModeManager {
                     runDownClock.getKeyFrames().setAll(new KeyFrame(Duration.millis(getTimeRemaining() * 100), e -> finished(), new KeyValue(timeRemainingProperty, 0)));
                     break;
                 case PLAYING:
-                    soundHandler.play(Sounds.START);
+                    if (getControlMode() != ControlMode.FREE_PLAY) {
+                        soundHandler.play(Sounds.START);
+                    }
                     if (timerActive(getControlMode())) {
                         runDownClock.play();
                     }
@@ -47,10 +57,17 @@ public class LazyModeManagerImpl implements LazyModeManager {
                     runDownClock.stop();
                     if (switchOver) {
                         soundHandler.play(Sounds.PAUSED);
-                        setControlMode(ControlMode.DRIVER_CONTROL);
-                        runDownClock.getKeyFrames().add(new KeyFrame(Duration.seconds(75), e -> soundHandler.play(Sounds.WARNING)));
+                        Start.PULSER.schedule(() -> Platform.runLater(() -> {
+                            setControlMode(ControlMode.DRIVER_CONTROL);
+                            runDownClock.getKeyFrames().add(new KeyFrame(Duration.seconds(75), e -> soundHandler.play(Sounds.WARNING)));
+                        }), 5, TimeUnit.SECONDS);
                     } else {
-                        soundHandler.play(Sounds.END);
+                        if (shutUp) {
+                            //I will not be silenced more
+                            shutUp = false;
+                        } else {
+                            soundHandler.play(Sounds.END);
+                        }
                     }
                     break;
                 default:
@@ -136,8 +153,8 @@ public class LazyModeManagerImpl implements LazyModeManager {
     private void beginLoading() {
         cancelled = true;
         stopLoading();
-        startingInProperty.set(5);
-        loadingTimeline.getKeyFrames().setAll(new KeyFrame(Duration.seconds(6), e -> stopLoading(), new KeyValue(startingInProperty, -1)));
+        startingInProperty.set(2);
+        loadingTimeline.getKeyFrames().setAll(new KeyFrame(Duration.seconds(3), e -> stopLoading(), new KeyValue(startingInProperty, -1)));
         loadingTimeline.play();
     }
 
@@ -154,6 +171,7 @@ public class LazyModeManagerImpl implements LazyModeManager {
     @Override
     public void reset() {
         cancelled = true;
+        shutUp = true;
         stopLoading();
         stopMatch();
         timeRemainingProperty.set(timeRemainingHashTable(getControlMode()));

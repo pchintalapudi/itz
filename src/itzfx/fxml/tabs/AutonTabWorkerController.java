@@ -7,6 +7,7 @@ package itzfx.fxml.tabs;
 
 import itzfx.Robot;
 import itzfx.data.FileUI;
+import itzfx.rerun.Translate;
 import java.io.File;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -22,8 +23,6 @@ public class AutonTabWorkerController {
 
     @FXML
     private CheckBox recordingCheckBox;
-    @FXML
-    private ToggleButton pausedButton;
     @FXML
     private Text autonName;
 
@@ -63,5 +62,10 @@ public class AutonTabWorkerController {
             String text = f.getName();
             autonName.setText(text.substring(0, text.indexOf('.')));
         }
+    }
+    
+    @FXML
+    private void translateTime() {
+        Translate.userTranslateToTime(autonName.getScene().getWindow());
     }
 }
