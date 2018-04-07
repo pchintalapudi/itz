@@ -180,6 +180,17 @@ public class LazyModeManagerImpl implements LazyModeManager {
         }
         setGameState(GameState.WAITING);
     }
+    
+    private boolean muted;
+    
+    @Override
+    public void mute() {
+        if (muted) {
+            soundHandler.mute();
+        } else {
+            soundHandler.unmute();
+        }
+    }
 
     private static boolean isAutostart(ControlMode mode) {
         return mode == ControlMode.AUTON || mode == ControlMode.PROGRAMMING_SKILLS;

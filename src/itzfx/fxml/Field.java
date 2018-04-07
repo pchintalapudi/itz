@@ -914,4 +914,8 @@ public class Field implements AutoCloseable {
         Hitbox.clear();
         pulseManager.stop();
     }
+    
+    public void mute() {
+        lazyModeManager.mute();
+    }
 }

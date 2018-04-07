@@ -266,6 +266,8 @@ public final class Robot extends Mobile implements Scoreable {
         dc.setOnAction(e -> {
             e.consume();
             driverControl();
+            resume();
+            KeyBuffer.unlock();
         });
         rightClick.getItems().add(dc);
         MenuItem si = new MenuItem("Set Robot Image");

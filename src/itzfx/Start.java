@@ -74,7 +74,6 @@ public class Start extends Application {
             p.setOnMousePressed(m -> p.requestFocus());
 //            addZoomListeners(p);
             fxml = loader.getController();
-            fxml.inject(this);
             long start = System.currentTimeMillis();
             do {
                 LockSupport.parkUntil(this, 3500 + start - System.currentTimeMillis());

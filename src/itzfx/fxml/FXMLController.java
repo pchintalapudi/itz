@@ -112,31 +112,6 @@ public class FXMLController implements AutoCloseable {
         copy(takeScreenshot(root));
     }
 
-    /**
-     * Allows a {@link Start} that initializes this object to insert itself for
-     * the purposes of restarting this program, on user request.
-     *
-     * @param ignition the Start that began this program
-     */
-    public void inject(Start ignition) {
-        this.ignition = ignition;
-    }
-
-    @FXML
-    private void restart() {
-        Stage primaryStage = (Stage) root.getScene().getWindow();
-        close();
-        Prestart p;
-        (p = new Prestart()).start(new Stage());
-        Start.PULSER.submit(() -> {
-            ignition.init();
-            Platform.runLater(() -> {
-                ignition.restart(primaryStage);
-                p.close();
-            });
-        });
-    }
-
     @FXML
     private void dc() {
         fieldController.setMode(ControlMode.DRIVER_CONTROL);
@@ -179,6 +154,11 @@ public class FXMLController implements AutoCloseable {
         } catch (IOException ex) {
             Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @FXML
+    private void mute() {
+        fieldController.mute();
     }
 
     public void setRotate(double rotate) {

@@ -30,11 +30,6 @@
                                 <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#restart" text="Restart">
-                            <accelerator>
-                                <KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
-                            </accelerator>
-                        </MenuItem>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Field">
@@ -47,6 +42,11 @@
                         <CheckMenuItem fx:id="showHitboxes" mnemonicParsing="false" text="Show Hitboxes">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                            </accelerator>
+                        </CheckMenuItem>
+                        <CheckMenuItem mnemonicParsing="false" text="Muted">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="M" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </CheckMenuItem>
                         <Menu mnemonicParsing="false" text="Mode">

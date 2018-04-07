@@ -21,4 +21,6 @@ public interface LazyModeManager extends ModeManager {
     }
 
     IntegerProperty startingInProperty();
+
+    void mute();
 }
