@@ -180,9 +180,9 @@ public class LazyModeManagerImpl implements LazyModeManager {
         }
         setGameState(GameState.WAITING);
     }
-    
+
     private boolean muted;
-    
+
     @Override
     public void mute() {
         if (muted) {

@@ -410,7 +410,7 @@ public final class Robot extends Mobile implements Scoreable {
      * Every call, if this robot is recording a rerun, a new set of commands is
      * buffered to the rerun.
      */
-    public void pulse() {
+    private void pulse() {
         if (pulse.isEmpty()) {
             pulse.add(Command.NONE);
         }
@@ -426,6 +426,7 @@ public final class Robot extends Mobile implements Scoreable {
             pulse.clear();
             saved.clear();
         }
+        driverControl();
         recording = true;
         recordingTask = Start.PULSER.scheduleAtFixedRate(this::pulse, 0, 17, TimeUnit.MILLISECONDS);
     }
@@ -1241,7 +1242,7 @@ public final class Robot extends Mobile implements Scoreable {
      */
     public void driverControl() {
         if (rerun != null) {
-            rerun.pause();
+            rerun.stop();
         }
         setController(controller);
     }
