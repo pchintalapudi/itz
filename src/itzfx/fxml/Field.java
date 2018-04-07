@@ -26,6 +26,7 @@ import itzfx.scoring.ScoreReport;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -96,14 +97,30 @@ public class Field implements AutoCloseable {
         lazyModeManager.onGameStateChanged((b, s) -> {
             switch (s) {
                 case WAITING:
-                    if (lazyModeManager.getControlMode() != ControlMode.AUTON && lazyModeManager.getControlMode() != ControlMode.PROGRAMMING_SKILLS) {
-                        KeyBuffer.unlock();
-                        robots.forEach(Robot::prime);
-                        robots.forEach(Robot::resume);
-                    } else {
-                        KeyBuffer.lock();
-                        robots.forEach(Robot::prime);
-                        robots.forEach(Robot::runProgram);
+                    switch (lazyModeManager.getControlMode()) {
+                        default:
+                            KeyBuffer.unlock();
+                            robots.forEach(Robot::prime);
+                            robots.forEach(Robot::resume);
+                            break;
+                        case AUTON:
+                            KeyBuffer.lock();
+                            robots.forEach(Robot::prime);
+                            try {
+                                Start.PULSER.schedule(() -> robots.forEach(Robot::runProgram), 3, TimeUnit.SECONDS);
+                            } catch (RejectedExecutionException ex) {
+                            }
+                            pulseManager.autonPulsing();
+                            break;
+                        case PROGRAMMING_SKILLS:
+                            KeyBuffer.lock();
+                            robots.forEach(Robot::prime);
+                            try {
+                                Start.PULSER.schedule(() -> robots.forEach(Robot::runProgram), 3, TimeUnit.SECONDS);
+                            } catch (RejectedExecutionException ex) {
+                            }
+                            pulseManager.programmingSkillsPulsing();
+                            break;
                     }
                     break;
                 case PLAYING:
@@ -396,7 +413,7 @@ public class Field implements AutoCloseable {
 
         public void begin() {
             if (disuseMonitor == null) {
-                inputPulser = executor.scheduleWithFixedDelay(inputTask, 0, 18, TimeUnit.MILLISECONDS);
+                inputPulser = executor.scheduleWithFixedDelay(inputTask, 0, 17, TimeUnit.MILLISECONDS);
                 disuseMonitor = executor.scheduleWithFixedDelay(() -> {
                     if (lastTimeChecked + 1000 < System.currentTimeMillis()) {
                         stopScorePulsing();
@@ -409,12 +426,27 @@ public class Field implements AutoCloseable {
         }
 
         public void autonPulsing() {
-            ScheduledFuture<?> collisions = executor.scheduleAtFixedRate(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
-            ScheduledFuture<?> scores = executor.scheduleAtFixedRate(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
-            Start.PULSER.schedule(() -> {
-                collisions.cancel(false);
-                scores.cancel(false);
-            }, 25, TimeUnit.SECONDS);
+            try {
+                ScheduledFuture<?> collisions = executor.scheduleAtFixedRate(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+                ScheduledFuture<?> scores = executor.scheduleAtFixedRate(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+                executor.schedule(() -> {
+                    collisions.cancel(false);
+                    scores.cancel(false);
+                }, 25, TimeUnit.SECONDS);
+            } catch (RejectedExecutionException ex) {
+            }
+        }
+
+        public void programmingSkillsPulsing() {
+            try {
+                ScheduledFuture<?> collisions = executor.scheduleAtFixedRate(collisionTask, 0, 17, TimeUnit.MILLISECONDS);
+                ScheduledFuture<?> scores = executor.scheduleAtFixedRate(scoreTask, 0, 17, TimeUnit.MILLISECONDS);
+                executor.schedule(() -> {
+                    collisions.cancel(false);
+                    scores.cancel(false);
+                }, 70, TimeUnit.SECONDS);
+            } catch (RejectedExecutionException ex) {
+            }
         }
 
         private void beginScorePulsing() {
@@ -914,7 +946,7 @@ public class Field implements AutoCloseable {
         Hitbox.clear();
         pulseManager.stop();
     }
-    
+
     public void mute() {
         lazyModeManager.mute();
     }

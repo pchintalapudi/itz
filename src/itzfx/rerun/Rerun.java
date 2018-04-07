@@ -11,6 +11,7 @@ import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,10 +49,15 @@ public final class Rerun {
      */
     public void readBack() {
         if (commands != null && !commands.isEmpty()) {
-            readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(commands), 0, 17, TimeUnit.MILLISECONDS);
+            try {
+                if (readBackTask == null || readBackTask.isDone()) {
+                    readBackTask = Start.PULSER.scheduleAtFixedRate(() -> interpret(commands), 0, 17, TimeUnit.MILLISECONDS);
+                }
+            } catch (RejectedExecutionException ex) {
+            }
         }
     }
-    
+
     private final Queue<List<Command>> read;
 
     private void interpret(Queue<List<Command>> commands) {
@@ -61,8 +67,9 @@ public final class Rerun {
             read.add(next);
         } catch (NullPointerException ex) {
             readBackTask.cancel(true);
-            this.commands.addAll(read);
-            read.clear();
+            while (read.size() > 0) {
+                commands.add(read.poll());
+            }
         }
     }
 
@@ -126,6 +133,15 @@ public final class Rerun {
         }
     }
     
+    public void reset() {
+        while(!commands.isEmpty()) {
+            read.add(commands.poll());
+        }
+        while(!read.isEmpty()) {
+            commands.add(read.poll());
+        }
+    }
+
     public static Queue<List<Command>> getCommands(Rerun r) {
         Queue<List<Command>> commands = new ArrayDeque<>(r.read);
         commands.addAll(r.commands);

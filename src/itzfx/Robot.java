@@ -411,13 +411,11 @@ public final class Robot extends Mobile implements Scoreable {
      * buffered to the rerun.
      */
     public void pulse() {
-        if (recording) {
-            if (pulse.isEmpty()) {
-                pulse.add(Command.NONE);
-            }
-            saved.add(pulse);
-            pulse = new ArrayList<>(2);
+        if (pulse.isEmpty()) {
+            pulse.add(Command.NONE);
         }
+        saved.add(pulse);
+        pulse = new ArrayList<>(2);
     }
 
     /**
@@ -492,7 +490,7 @@ public final class Robot extends Mobile implements Scoreable {
     }
 
     private Rerun rerun;
-    
+
     public Rerun getRerun() {
         return rerun;
     }
@@ -1227,6 +1225,7 @@ public final class Robot extends Mobile implements Scoreable {
         movingCone.set(false);
         if (rerun != null) {
             rerun.stop();
+            rerun.reset();
         }
         setController(controller);
         active.set(true);
