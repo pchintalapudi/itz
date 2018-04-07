@@ -24,13 +24,13 @@ import javafx.scene.control.Dialog;
  */
 public class CssUtils {
 
-    private static final ObjectProperty<String> STYLESHEET = new SimpleObjectProperty<>("/itzfx/fxml/css/default-mode.css");
+    private static final ObjectProperty<String> STYLESHEET = new SimpleObjectProperty<>("/itzfx/fxml/css/default-mode.bss");
     private static final Map<String, String> STYLESHEETS = new HashMap<>();
-    private static final String FIELD_COLORS = "/itzfx/fxml/css/global.css";
+    private static final String FIELD_COLORS = "/itzfx/fxml/css/global.bss";
 
     static {
-        STYLESHEETS.put("default", "/itzfx/fxml/css/default-mode.css");
-        STYLESHEETS.put("dark", "/itzfx/fxml/css/dark-mode.css");
+        STYLESHEETS.put("default", "/itzfx/fxml/css/default-mode.bss");
+        STYLESHEETS.put("dark", "/itzfx/fxml/css/dark-mode.bss");
     }
 
     private static final Thread THEME_AUTO_SWITCHER = new Thread(() -> {
@@ -64,7 +64,7 @@ public class CssUtils {
     }
 
     public static void switchStyleSheet(String key) {
-        STYLESHEET.set(STYLESHEETS.getOrDefault(key, "/itzfx/fxml/css/global.css"));
+        STYLESHEET.set(STYLESHEETS.getOrDefault(key, "/itzfx/fxml/css/global.bss"));
     }
 
     public static void addStyleSheet(Parent p) {
